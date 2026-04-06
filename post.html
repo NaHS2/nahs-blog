@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章详情 - 硫氢化钠</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- 引入 marked.js 解析 Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- 引入 highlight.js 高亮代码 (浅色主题) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- 左侧保持不变，增强一致性 -->
+        <aside class="sidebar">
+            <div class="profile-card">
+                <img src="assets/avatar.jpg" alt="硫氢化钠" class="avatar" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
+                <h1 class="author-name">硫氢化钠</h1>
+                <p class="author-bio">记录学习点滴，分享开源日常。关注技术，也热爱生活。</p>
+                <div class="social-links">
+                    <a href="https://github.com/NaHS2" target="_blank">
+                        <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.46-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+                        </svg>
+                        @NaHS2
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 右侧详情页 -->
+        <main class="main-content">
+            <a href="index.html" class="back-btn">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+                返回文章列表
+            </a>
+            
+            <article class="article-header">
+                <h1 id="post-title">加载中...</h1>
+                <div class="post-meta" id="post-meta">
+                    <!-- 动态插入标签和时间 -->
+                </div>
+            </article>
+
+            <div id="content" class="markdown-body">
+                <p style="text-align: center; color: var(--text-muted);">...</p>
+            </div>
+            
+            <footer class="footer">
+                <p>&copy; 2026 硫氢化钠 | Code & Life</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        marked.setOptions({
+            highlight: function(code, lang) {
+                const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+                return hljs.highlight(code, { language }).value;
+            },
+            langPrefix: 'hljs language-'
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+
+        if (postId) {
+            // 同步加载 posts.json 以获取元数据（标题、时间、标签）
+            fetch('posts.json')
+                .then(res => res.json())
+                .then(posts => {
+                    const currentPost = posts.find(p => p.id === postId);
+                    if (currentPost) {
+                        document.title = `${currentPost.title} - 硫氢化钠`;
+                        document.getElementById('post-title').innerText = currentPost.title;
+                        
+                        let tagsHtml = '';
+                        if (currentPost.tags && currentPost.tags.length > 0) {
+                            tagsHtml = `<div class="tags">` + 
+                                currentPost.tags.map(tag => `<span class="tag">${tag}</span>`).join('') + 
+                                `</div>`;
+                        }
+                        const readTimeHtml = currentPost.readTime ? `<span class="meta-item">⏱️ ${currentPost.readTime}</span>` : '';
+                        
+                        document.getElementById('post-meta').innerHTML = `
+                            <span class="meta-item">📅 ${currentPost.date}</span>
+                            ${readTimeHtml}
+                            ${tagsHtml}
+                        `;
+                    }
+                });
+
+            // 加载 Markdown 正文
+            fetch(`posts/${postId}.md`)
+                .then(response => {
+                    if (!response.ok) throw new Error('文章未找到');
+                    return response.text();
+                })
+                .then(text => {
+                    // 如果 markdown 文件第一行是标题 (例如 # 标题)，我们把它去掉，因为我们在 article-header 里已经展示了标题
+                    const lines = text.split('\n');
+                    if(lines[0].startsWith('# ')) {
+                        lines.shift();
+                    }
+                    document.getElementById('content').innerHTML = marked.parse(lines.join('\n'));
+                })
+                .catch(error => {
+                    document.getElementById('content').innerHTML = `<p>找不到对应的文章内容，或网络加载失败。</p>`;
+                    console.error('Error loading post:', error);
+                });
+            
+        } else {
+            document.getElementById('content').innerHTML = '<p>未提供文章 ID</p>';
+        }
+    </script>
+</body>
+</html>
