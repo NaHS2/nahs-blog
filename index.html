@@ -3,38 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>硫氢化钠的博客 - 学习与开源分享</title>
+    <title>硫氢化钠 - 工程师与创作者</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-wrapper">
-        <!-- 左侧：个人信息侧边栏 -->
+        <!-- 侧边栏：极简人物卡片 -->
         <aside class="sidebar">
-            <div class="profile-card">
+            <div class="profile">
                 <img src="assets/avatar.jpg" alt="硫氢化钠" class="avatar" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
                 <h1 class="author-name">硫氢化钠</h1>
                 <p class="author-bio">记录学习点滴，分享开源日常。关注技术，也热爱生活。</p>
                 <div class="social-links">
                     <a href="https://github.com/NaHS2" target="_blank">
-                        <!-- GitHub Icon -->
-                        <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.46-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
-                        </svg>
+                        <!-- Feather Icon: GitHub -->
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                         @NaHS2
                     </a>
                 </div>
             </div>
         </aside>
 
-        <!-- 右侧：文章列表 -->
+        <!-- 主内容区：排版干净的列表 -->
         <main class="main-content">
+            <!-- 专属超级符号 (破晓行舟·徽章版 Final) -->
+            <div class="brand-header" style="display: flex; align-items: center; gap: 20px; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--gray-200);">
+                <!-- 背景：回归极简高级深色背景，带有一丝丝的夜色紫调 -->
+                <div class="logo-display" style="width: 56px; height: 56px; background: linear-gradient(135deg, #09090b 0%, #1e1b4b 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(15,23,42,0.2);">
+                    <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 
+                             真正的超级符号：完美几何平衡
+                             四角平衡设计优化：
+                             - L 更加硬朗、粗壮，提供视觉底座
+                             - S 曲率更加优雅饱满
+                             - 月亮位置微调，呼应整体对角线
+                        -->
+                        <!-- 月：破晓之光 (左上)，稍微增加呼吸感的光晕 -->
+                        <circle cx="30" cy="30" r="7" fill="#ffffff" filter="drop-shadow(0 0 4px rgba(255,255,255,0.6))"/>
+                        
+                        <!-- L：坚韧的桅杆与舟底 (右下)，增加线条重量以稳住底盘 -->
+                        <path d="M 45 20 L 45 80 L 80 80" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                        
+                        <!-- S：被风吹满的船帆 (右上与左下)，稍微调细一点，与 L 形成刚柔对比 -->
+                        <path d="M 45 20 C 85 20, 85 50, 45 50 C 5 50, 5 80, 45 80" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.6rem; letter-spacing: -0.02em; color: var(--gray-900);">NaHS</h2>
+                    <p style="margin: 4px 0 0 0; color: var(--gray-500); font-size: 0.95rem; font-style: italic;">月下梦行舟</p>
+                </div>
+            </div>
+
             <h2 class="section-title">最新文章</h2>
-            <ul id="post-list" class="post-list">
-                <p style="text-align: center; color: var(--text-muted);">数据加载中...</p>
-            </ul>
+            
+            <div id="post-list" class="post-list">
+                <p style="color: var(--gray-400);">数据加载中...</p>
+            </div>
             
             <footer class="footer">
-                <p>&copy; 2026 硫氢化钠 | Code & Life</p>
+                <p>&copy; 2026 硫氢化钠. Crafted with focus.</p>
             </footer>
         </main>
     </div>
@@ -47,10 +74,11 @@
                 postList.innerHTML = ''; 
                 
                 posts.forEach(post => {
-                    const li = document.createElement('li');
-                    li.className = 'post-item';
+                    // 整块卡片作为一个 <a> 标签包裹，点击体验更好
+                    const a = document.createElement('a');
+                    a.href = `post.html?id=${post.id}`;
+                    a.className = 'post-item';
                     
-                    // 生成标签 HTML
                     let tagsHtml = '';
                     if (post.tags && post.tags.length > 0) {
                         tagsHtml = `<div class="tags">` + 
@@ -58,23 +86,23 @@
                             `</div>`;
                     }
                     
-                    // 阅读时间
-                    const readTimeHtml = post.readTime ? `<span class="meta-item">⏱️ ${post.readTime}</span>` : '';
+                    // Feather Icons for metadata
+                    const readTimeHtml = post.readTime ? `<span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ${post.readTime}</span>` : '';
 
-                    li.innerHTML = `
-                        <h3 class="post-title"><a href="post.html?id=${post.id}">${post.title}</a></h3>
+                    a.innerHTML = `
+                        <h3 class="post-title">${post.title}</h3>
+                        <p class="post-excerpt">${post.excerpt}</p>
                         <div class="post-meta">
-                            <span class="meta-item">📅 ${post.date}</span>
+                            <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> ${post.date}</span>
                             ${readTimeHtml}
                             ${tagsHtml}
                         </div>
-                        <p class="post-excerpt">${post.excerpt}</p>
                     `;
-                    postList.appendChild(li);
+                    postList.appendChild(a);
                 });
             })
             .catch(error => {
-                document.getElementById('post-list').innerHTML = '<p style="text-align: center; color: red;">加载文章列表失败，请检查网络或配置。</p>';
+                document.getElementById('post-list').innerHTML = '<p style="color: red;">加载失败，请检查网络或配置。</p>';
                 console.error('Error loading posts:', error);
             });
     </script>

@@ -6,52 +6,61 @@
     <title>文章详情 - 硫氢化钠</title>
     <link rel="stylesheet" href="styles.css">
     
-    <!-- 引入 marked.js 解析 Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
-    <!-- 引入 highlight.js 高亮代码 (浅色主题) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
     <div class="app-wrapper">
-        <!-- 左侧保持不变，增强一致性 -->
         <aside class="sidebar">
-            <div class="profile-card">
+            <div class="profile">
                 <img src="assets/avatar.jpg" alt="硫氢化钠" class="avatar" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
                 <h1 class="author-name">硫氢化钠</h1>
                 <p class="author-bio">记录学习点滴，分享开源日常。关注技术，也热爱生活。</p>
                 <div class="social-links">
                     <a href="https://github.com/NaHS2" target="_blank">
-                        <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
-                            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.46-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                         @NaHS2
                     </a>
                 </div>
             </div>
         </aside>
 
-        <!-- 右侧详情页 -->
         <main class="main-content">
-            <a href="index.html" class="back-btn">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
-                返回文章列表
-            </a>
+            <!-- 顶部：返回按钮与 Logo 品牌区 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <a href="index.html" class="back-btn" style="margin-bottom: 0;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    返回列表
+                </a>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="text-align: right;">
+                        <div style="font-weight: 600; font-size: 1.1rem; letter-spacing: -0.02em;">NaHS</div>
+                        <div style="color: var(--gray-400); font-size: 0.75rem;">月下梦行舟</div>
+                    </div>
+                    <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #09090b 0%, #1e1b4b 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(15,23,42,0.2);">
+                        <svg width="28" height="28" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="30" cy="30" r="7" fill="#ffffff" filter="drop-shadow(0 0 4px rgba(255,255,255,0.6))"/>
+                            <path d="M 45 20 L 45 80 L 80 80" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M 45 20 C 85 20, 85 50, 45 50 C 5 50, 5 80, 45 80" stroke="#3b82f6" stroke-width="6" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
             
             <article class="article-header">
                 <h1 id="post-title">加载中...</h1>
                 <div class="post-meta" id="post-meta">
-                    <!-- 动态插入标签和时间 -->
+                    <!-- 动态插入 -->
                 </div>
             </article>
 
             <div id="content" class="markdown-body">
-                <p style="text-align: center; color: var(--text-muted);">...</p>
+                <p style="color: var(--gray-400);">文章解析中...</p>
             </div>
             
             <footer class="footer">
-                <p>&copy; 2026 硫氢化钠 | Code & Life</p>
+                <p>&copy; 2026 硫氢化钠. Crafted with focus.</p>
             </footer>
         </main>
     </div>
@@ -69,7 +78,6 @@
         const postId = urlParams.get('id');
 
         if (postId) {
-            // 同步加载 posts.json 以获取元数据（标题、时间、标签）
             fetch('posts.json')
                 .then(res => res.json())
                 .then(posts => {
@@ -84,24 +92,22 @@
                                 currentPost.tags.map(tag => `<span class="tag">${tag}</span>`).join('') + 
                                 `</div>`;
                         }
-                        const readTimeHtml = currentPost.readTime ? `<span class="meta-item">⏱️ ${currentPost.readTime}</span>` : '';
+                        const readTimeHtml = currentPost.readTime ? `<span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ${currentPost.readTime}</span>` : '';
                         
                         document.getElementById('post-meta').innerHTML = `
-                            <span class="meta-item">📅 ${currentPost.date}</span>
+                            <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> ${currentPost.date}</span>
                             ${readTimeHtml}
                             ${tagsHtml}
                         `;
                     }
                 });
 
-            // 加载 Markdown 正文
             fetch(`posts/${postId}.md`)
                 .then(response => {
                     if (!response.ok) throw new Error('文章未找到');
                     return response.text();
                 })
                 .then(text => {
-                    // 如果 markdown 文件第一行是标题 (例如 # 标题)，我们把它去掉，因为我们在 article-header 里已经展示了标题
                     const lines = text.split('\n');
                     if(lines[0].startsWith('# ')) {
                         lines.shift();
