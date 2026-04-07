@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="app-wrapper">
+    <div class="app-wrapper page-transition">
         <!-- 侧边栏：极简人物卡片 -->
         <aside class="sidebar">
             <div class="profile">
@@ -57,11 +57,14 @@
                 const postList = document.getElementById('post-list');
                 postList.innerHTML = ''; 
                 
-                posts.forEach(post => {
+                posts.forEach((post, index) => {
                     // 整块卡片作为一个 <a> 标签包裹，点击体验更好
                     const a = document.createElement('a');
                     a.href = `post.html?id=${post.id}`;
                     a.className = 'post-item';
+                    
+                    // 页面切换逻辑：为每个卡片添加交错的加载动画延迟
+                    a.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${index * 0.1}s`;
                     
                     let tagsHtml = '';
                     if (post.tags && post.tags.length > 0) {

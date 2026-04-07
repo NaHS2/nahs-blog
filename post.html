@@ -12,23 +12,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
-<body>
-    <div class="app-wrapper">
-        <aside class="sidebar">
-            <div class="profile">
-                <img src="assets/avatar.jpg" alt="硫氢化钠" class="avatar" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
-                <h1 class="author-name">硫氢化钠</h1>
-                <p class="author-bio">记录学习点滴，分享开源日常。关注技术，也热爱生活。</p>
-                <div class="social-links">
-                    <a href="https://github.com/NaHS2" target="_blank">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                        @NaHS2
-                    </a>
-                </div>
-            </div>
-        </aside>
+<body class="post-page">
+    <!-- 顶部横向进度条：月下行舟 -->
+    <header class="scroll-header">
+        <div class="scroll-track-horizontal">
+            <!-- 破晓之月 -->
+            <svg class="scroll-moon-horizontal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            
+            <!-- 水波涟漪 (江面) -->
+            <div class="scroll-water"></div>
 
-        <main class="main-content">
+            <!-- 孤舟 SVG (随滚动横向移动) -->
+            <svg id="scroll-boat" class="scroll-boat-horizontal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 18 L22 18"/>
+                <path d="M5 18 C5 18, 8 22, 14 22 C17 22, 19 18, 19 18"/>
+                <path d="M9 18 L9 6"/>
+                <path d="M9 6 L17 12 L9 14"/>
+            </svg>
+        </div>
+    </header>
+
+    <!-- 文章页不再使用两栏布局，而是居中单栏 -->
+    <div class="app-wrapper page-transition" style="display: block; max-width: 900px; margin: 0 auto; position: relative;">
+
+        <main class="main-content" style="max-width: 100%; margin: 0 auto;">
             <!-- 顶部：返回按钮与 Logo 品牌区 -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
                 <a href="index.html" class="back-btn" style="margin-bottom: 0;">
@@ -102,6 +111,9 @@
                         lines.shift();
                     }
                     document.getElementById('content').innerHTML = marked.parse(lines.join('\n'));
+
+                    // 初始化侧边小舟滚动逻辑
+                    initScrollBoat();
                 })
                 .catch(error => {
                     document.getElementById('content').innerHTML = `<p>找不到对应的文章内容，或网络加载失败。</p>`;
@@ -110,6 +122,27 @@
             
         } else {
             document.getElementById('content').innerHTML = '<p>未提供文章 ID</p>';
+        }
+
+        // 顶部横向小舟滚动进度指示器逻辑
+        function initScrollBoat() {
+            const boat = document.getElementById('scroll-boat');
+            if (!boat) return;
+
+            window.addEventListener('scroll', () => {
+                // 计算当前滚动的百分比
+                const scrollTop = window.scrollY;
+                const docHeight = document.body.scrollHeight - window.innerHeight;
+                
+                if (docHeight <= 0) return; // 页面不够滚动
+                
+                // 限制在 0% ~ 100% 之间
+                let scrollPercent = (scrollTop / docHeight) * 100;
+                scrollPercent = Math.max(0, Math.min(100, scrollPercent));
+                
+                // 随着滚动，改变小舟的 left 位置 (横向滑动)
+                boat.style.left = `${scrollPercent}%`;
+            });
         }
     </script>
 </body>
