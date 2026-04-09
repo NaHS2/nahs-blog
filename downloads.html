@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资料下载 - 硫氢化钠</title>
+    <!-- 网页标签图标 (Favicon) - 极简几何帆船与明显的弯月 (高空悬挂) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20 L22 20'/%3E%3Cpath d='M5 20 C5 20, 8 23, 14 23 C17 23, 19 20, 19 20'/%3E%3Cpath d='M9 20 L9 9'/%3E%3Cpath d='M9 9 L17 15 L9 17'/%3E%3Cpath d='M10 2 A 4 4 0 0 0 5 5 A 5 5 0 0 1 10 2'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .download-section {
+            margin-bottom: 60px;
+        }
+        .download-section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .download-section-title svg {
+            color: var(--gray-500);
+        }
+        .subcategory-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin: 24px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .subcategory-title::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 14px;
+            background: var(--gray-300);
+            border-radius: 2px;
+        }
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+    </style>
+</head>
+<body class="post-page">
+    <div class="app-wrapper page-transition" style="display: block; max-width: 900px; margin: 0 auto; position: relative; padding-top: 80px;">
+        <main class="main-content" style="max-width: 100%; margin: 0 auto;">
+            <!-- 返回按钮 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <a href="index.html" class="back-btn" style="margin-bottom: 0;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    返回主页
+                </a>
+            </div>
+            
+            <article class="article-header">
+                <h1 id="post-title">资料下载中心</h1>
+                <div class="post-meta">
+                    <span class="meta-item">在这里获取开源代码、工程模板与常用开发工具。</span>
+                </div>
+            </article>
+
+            <!-- 代码类 (Code) -->
+            <section class="download-section">
+                <h2 class="download-section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    代码类 (Code)
+                </h2>
+                
+                <!-- 预留细分类别 -->
+                <!-- <h3 class="subcategory-title">分类标题</h3> -->
+                <div class="downloads-grid" id="code-downloads-container">
+                    <p style="color: var(--gray-400); font-style: italic;">暂无代码资源上传</p>
+                </div>
+            </section>
+
+            <!-- 工具类 (Tools) -->
+            <section class="download-section">
+                <h2 class="download-section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                    工具类 (Tools)
+                </h2>
+                
+                <!-- 预留细分类别 -->
+                <!-- <h3 class="subcategory-title">分类标题</h3> -->
+                <div class="downloads-grid" id="tools-downloads-container">
+                    <p style="color: var(--gray-400); font-style: italic;">暂无工具资源上传</p>
+                </div>
+            </section>
+            
+            <footer class="footer">
+                <p>&copy; 2026 硫氢化钠. Crafted with focus.</p>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>
