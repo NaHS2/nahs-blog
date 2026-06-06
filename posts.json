@@ -20,7 +20,7 @@
   {
     "id": "computer-room-monitoring",
     "title": "从零搭建分布式机房监控系统：STM32 + ESP32 + OneNET + 全平台应用",
-    "date": "2025-10-15",
+    "date": "2026-03-20",
     "tags": ["嵌入式", "物联网", "开发", "开源", "STM32", "ESP32"],
     "collection": "从零到一物联网项目实战",
     "readTime": "大约 10 分钟",
