@@ -124,25 +124,27 @@
             document.getElementById('content').innerHTML = '<p>未提供文章 ID</p>';
         }
 
-        // 顶部横向小舟滚动进度指示器逻辑
+        // 顶部横向小舟滚动进度指示器逻辑（RAF 节流 + GPU 加速）
         function initScrollBoat() {
             const boat = document.getElementById('scroll-boat');
             if (!boat) return;
 
+            let ticking = false;
+
             window.addEventListener('scroll', () => {
-                // 计算当前滚动的百分比
-                const scrollTop = window.scrollY;
-                const docHeight = document.body.scrollHeight - window.innerHeight;
-                
-                if (docHeight <= 0) return; // 页面不够滚动
-                
-                // 限制在 0% ~ 100% 之间
-                let scrollPercent = (scrollTop / docHeight) * 100;
-                scrollPercent = Math.max(0, Math.min(100, scrollPercent));
-                
-                // 随着滚动，改变小舟的 left 位置 (横向滑动)
-                boat.style.left = `${scrollPercent}%`;
-            });
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        const scrollTop = window.scrollY;
+                        const docHeight = document.body.scrollHeight - window.innerHeight;
+                        if (docHeight > 0) {
+                            const scrollPercent = Math.max(0, Math.min(100, (scrollTop / docHeight) * 100));
+                            boat.style.left = scrollPercent + '%';
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
         }
     </script>
 </body>
