@@ -26,9 +26,9 @@ PCB 外形按标准信用卡尺寸画（85.60mm × 53.98mm），板厚选 0.8mm�
 
 焊好芯片后，在板子正面放了 CSUFT 的校徽——手机 NFC 一靠近就能读取，拿给室友扫了一下，屏幕上弹出学校官网，几个人围着看了半天都觉得神奇。
 
-![PCB设计图](https://raw.githubusercontent.com/NaHS2/CSUFT-PCB-campus-card/master/%E5%AE%9E%E7%89%A9%E5%9B%BE/pcb%E5%9B%BE.png)
+![PCB设计图](../assets/campus-card-pcb.png)
 
-![实物展示](https://raw.githubusercontent.com/NaHS2/CSUFT-PCB-campus-card/master/%E5%AE%9E%E7%89%A9%E5%9B%BE/%E5%AE%9E%E7%89%A9%E5%9B%BE1.jpg)
+![实物展示](../assets/campus-card-photo.jpg)
 
 ---
 
