@@ -157,7 +157,9 @@ ESP32-S3 虽然带了一点向量加速指令，但距离能跑 YOLO 还差着�
 - **报警** — 异常事件按时间记录，未读已读标记
 - **设置** — OneNET 参数配置 + 自定义数据模型
 
-没有任何后端服务器——页面直接浏览器端调用 OneNET 的 HTTP API，配置和数据都存在浏览器的 `localStorage` 里。部署只需要扔到 Vercel 或者任何静态托管平台，几秒钟就能上线。
+没有任何后端服务器——页面直接浏览器端调用 OneNET 的 HTTP API，配置和数据都存在浏览器的 `localStorage` 里。部署在 Netlify 上，无需服务器，几秒钟就能上线。
+
+> 在线体验：[https://iot-nahs.netlify.app](https://iot-nahs.netlify.app)
 
 ### 6.2 动态数据模型
 
@@ -168,6 +170,8 @@ ESP32-S3 虽然带了一点向量加速指令，但距离能跑 YOLO 还差着�
 App 走了 Kotlin + WebView 的混合路线。原生层只做三件事：加载 `assets` 里的 Web 页面、用 `JavascriptInterface` 桥接原生文件分享、适配状态栏和安全区。核心监控逻辑完全复用 PC 端的同一套 Web 代码。
 
 这样更新页面不用重新打包 APK，改完 HTML 直接替换 `assets` 目录即可。唯一需要写原生代码的场景就是 CSV 导出——WebView 里下载文件体验很差，所以通过 `FileProvider` + `Intent.ACTION_SEND` 调用系统分享面板，直接发给微信或者另存到本地。
+
+> App 下载、项目源码以及各模块资料均已整理在博客的[资料下载页](/downloads.html)。
 
 ### 6.4 报警不轰炸
 
