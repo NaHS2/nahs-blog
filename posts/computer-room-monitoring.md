@@ -1,5 +1,8 @@
 # 从零搭建分布式机房监控系统：STM32 + ESP32 + OneNET + 全平台应用
 
+> 源码：[github.com/NaHS2/computer-room-monitoring-system](https://github.com/NaHS2/computer-room-monitoring-system)  
+> 在线演示：[iot-nahs.netlify.app](https://iot-nahs.netlify.app)
+
 机房里的设备不怕用，就怕环境出问题——温度高了服务器降频，湿度大了主板腐蚀，漏水更是灾难性的。市面上的动环监控系统动不动就是五位数的报价，对于学生实验室和创业团队的微型机房来说实在不划算。
 
 于是我给自己定了一个目标：用最便宜的物料，从零搭一套能用的分布式机房监控系统。
