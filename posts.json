@@ -1,5 +1,14 @@
 [
   {
+    "id": "auto-clock-in",
+    "title": "写了个自动晚点名打卡工具：从忘记打卡到全自动托管",
+    "date": "2026-06-06",
+    "tags": ["开发", "开源", "工具", "Python", "FastAPI", "逆向"],
+    "collection": "独立项目",
+    "readTime": "大约 8 分钟",
+    "excerpt": "总是忘记晚点名打卡？花几天时间逆向分析了学校打卡系统接口，从零搭建了一套全自动打卡系统——CLI工具 + FastAPI后端 + 云服务器定时托管，支持多用户、随机延迟、GPS偏移伪装。"
+  },
+  {
     "id": "keil-vscode",
     "title": "Keil 与 VS Code 配合使用",
     "date": "2026-04-07",
