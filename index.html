@@ -67,6 +67,8 @@
             .then(response => response.json())
             .then(posts => {
                 allPosts = posts;
+                // 按日期降序排列，保证首页始终按时间顺序展示
+                allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
                 renderPosts('all'); // 默认显示全部文章
             })
             .catch(error => {

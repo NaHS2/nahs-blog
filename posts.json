@@ -2,7 +2,7 @@
   {
     "id": "auto-clock-in",
     "title": "写了个自动晚点名打卡工具：从忘记打卡到全自动托管",
-    "date": "2026-05-25",
+    "date": "2026-06-02",
     "tags": ["开发", "开源", "工具", "Python", "FastAPI", "逆向"],
     "collection": "独立项目",
     "readTime": "大约 8 分钟",
