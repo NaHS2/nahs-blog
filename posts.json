@@ -1,5 +1,14 @@
 [
   {
+    "id": "computer-room-monitoring",
+    "title": "从零搭建分布式机房监控系统：STM32 + ESP32 + OneNET + 全平台应用",
+    "date": "2026-06-06",
+    "tags": ["嵌入式", "物联网", "开发", "开源", "STM32", "ESP32"],
+    "collection": "从零到一物联网项目实战",
+    "readTime": "大约 10 分钟",
+    "excerpt": "一套完整的物联网全链路实战项目：STM32主从机采集控制 + ESP32-CAM视觉识别 + OneNET云平台 + PC网页 + Android App。覆盖传感器驱动、通信协议、云平台对接、前端可视化的全流程设计思路。"
+  },
+  {
     "id": "auto-clock-in",
     "title": "写了个自动晚点名打卡工具：从忘记打卡到全自动托管",
     "date": "2026-06-06",
