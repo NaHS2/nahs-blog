@@ -27,6 +27,15 @@
     "excerpt": "一套完整的物联网全链路实战项目：STM32主从机采集控制 + ESP32-CAM视觉识别 + OneNET云平台 + PC网页 + Android App。覆盖传感器驱动、通信协议、云平台对接、前端可视化的全流程设计思路。"
   },
   {
+    "id": "campus-card-pcb",
+    "title": "用嘉立创EDA画了一张支持NFC的PCB校园卡",
+    "date": "2025-08-15",
+    "tags": ["PCB", "NFC", "嘉立创EDA", "硬件"],
+    "collection": "独立项目",
+    "readTime": "大约 4 分钟",
+    "excerpt": "对NFC原理好奇，用嘉立创EDA免费打板画了一张PCB校园卡。环形铜线圈做天线，NXP NTAG芯片，手机一扫就能读写。从天线阻抗匹配到FR-4介电特性，一张卡片把NFC物理链路完整跑通了。"
+  },
+  {
     "id": "voting-circuit",
     "title": "基于51单片机的七人表决电路设计",
     "date": "2025-07-15",
