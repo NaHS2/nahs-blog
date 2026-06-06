@@ -1,5 +1,7 @@
 # 基于 51 单片机的电子万年历设计
 
+> 源码：[github.com/NaHS2/perpetual-calendar](https://github.com/NaHS2/perpetual-calendar)
+
 大二上学期末的单片机原理课程设计，题目是做一个**电子万年历**——用 51 单片机驱动 LCD 屏幕显示年月日时分秒，外加按键调时。看起来简单，但这是第一次完整地从电路仿真做到实物焊接调试，中间踩了不少坑。
 
 ---
