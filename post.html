@@ -285,6 +285,12 @@
                 const colors = getSkyColors(scrollPct);
                 header.style.setProperty('--sky-top', `rgb(${colors.top.join(',')})`);
 
+                // -- 全局环境色：8% 天空 + 92% 白，统一页面色调 --
+                const aR = Math.round(colors.top[0] * 0.08 + 245);
+                const aG = Math.round(colors.top[1] * 0.08 + 245);
+                const aB = Math.round(colors.top[2] * 0.08 + 245);
+                document.body.style.setProperty('--page-ambient', `rgb(${aR},${aG},${aB})`);
+
                 // -- 太阳 --
                 const sunRise = 0.03, sunSet = 0.90;
                 const sunVis = scrollPct >= sunRise && scrollPct <= sunSet ? 1 : 0;
