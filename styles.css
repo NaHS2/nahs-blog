@@ -501,10 +501,47 @@ body.post-page .app-wrapper {
 .markdown-body img {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: 12px;
   border: 1px solid var(--gray-200);
-  margin: 1.2em 0;
+  margin: 2em auto;
   display: block;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.markdown-body img:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+  transform: scale(1.01);
+}
+
+/* 图片横排容器 — JS 自动包裹连续两张图片 */
+.image-row {
+  display: flex;
+  gap: 16px;
+  margin: 2em 0;
+  align-items: flex-start;
+}
+
+.image-row img {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+/* 单张居中：普通图片不撑满全宽，保持视觉轻盈 */
+.markdown-body img:not(.image-row img) {
+  max-width: min(100%, 680px);
+}
+
+/* 手机上图片横排改回竖排 */
+@media (max-width: 767px) {
+  .image-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .markdown-body img:not(.image-row img) {
+    max-width: 100%;
+  }
 }
 
 /* ====== Horizontal Rule ====== */
@@ -520,38 +557,93 @@ body.post-page .app-wrapper {
   top: 0;
   left: 0;
   width: 100%;
-  height: 44px;
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  height: 52px;
+  background: var(--sky-top, #e8f4f8);
   z-index: 1000;
-  border-bottom: 1px solid var(--gray-100);
-}
-
-.scroll-track-horizontal {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
   overflow: hidden;
+  transition: background 1.2s ease;
 }
 
-.scroll-moon-horizontal {
+/* 天空画布 — 容纳日月星辰 */
+.sky-canvas {
   position: absolute;
-  top: 8px;
-  right: 5%;
-  width: 20px;
-  height: 20px;
-  color: #eab308;
-  opacity: 0.85;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
 }
 
+/* ---- 太阳 ---- */
+.sun-container {
+  position: absolute;
+  width: 22px; height: 22px;
+  left: 10%;
+  top: 14px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  will-change: left, top, opacity;
+  filter: blur(0.5px);
+}
+
+.sun-core {
+  width: 22px; height: 22px;
+  background: radial-gradient(circle at 40% 40%, #fffde7, #fbbf24);
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.55), 0 0 32px rgba(251, 180, 36, 0.25);
+}
+
+/* ---- 月亮 ---- */
+.moon-container {
+  position: absolute;
+  width: 18px; height: 18px;
+  right: 8%;
+  top: 10px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.moon-base {
+  fill: #cbd5e1;
+  opacity: 0.18;
+}
+
+.moon-lit {
+  fill: #fef9c3;
+  filter: drop-shadow(0 0 3px rgba(254, 249, 195, 0.5));
+}
+
+/* ---- 星星 ---- */
+.stars-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 80%;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+.star {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #ffffff;
+  border-radius: 50%;
+  animation: twinkle var(--twinkle-dur, 2.5s) ease-in-out infinite;
+  animation-delay: var(--twinkle-delay, 0s);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* ---- 水波 ---- */
 .scroll-water {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, rgba(0, 112, 243, 0.05), rgba(0, 112, 243, 0.4), rgba(0, 112, 243, 0.05));
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.08), rgba(56, 189, 248, 0.45), rgba(56, 189, 248, 0.08));
   background-size: 200% 100%;
   animation: water-ripple 4s linear infinite;
 }
@@ -804,13 +896,21 @@ body.post-page .app-wrapper {
   }
 
   .scroll-header {
-    height: 52px;
+    height: 60px;
   }
 
-  .scroll-moon-horizontal {
-    top: 10px;
-    width: 24px;
-    height: 24px;
+  .sun-container {
+    width: 26px; height: 26px;
+  }
+
+  .sun-core {
+    width: 26px; height: 26px;
+    box-shadow: 0 0 18px rgba(251, 191, 36, 0.55), 0 0 40px rgba(251, 180, 36, 0.25);
+  }
+
+  .moon-container {
+    width: 22px; height: 22px;
+    top: 12px;
   }
 
   .scroll-boat-horizontal {
@@ -819,7 +919,7 @@ body.post-page .app-wrapper {
   }
 
   body.post-page .app-wrapper {
-    padding-top: 88px;
+    padding-top: 96px;
   }
 
   .download-card {

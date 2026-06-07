@@ -13,25 +13,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body class="post-page">
-    <!-- 顶部横向进度条：月下行舟 -->
-    <header class="scroll-header">
-        <div class="scroll-track-horizontal">
-            <!-- 破晓之月 -->
-            <svg class="scroll-moon-horizontal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-            
-            <!-- 水波涟漪 (江面) -->
-            <div class="scroll-water"></div>
+    <!-- 顶部进度条：日月轮转 + 行舟 -->
+    <header class="scroll-header" id="scroll-header">
+        <div class="sky-canvas">
+            <!-- 星星（夜间可见） -->
+            <div class="stars-layer" id="stars-layer"></div>
 
-            <!-- 孤舟 SVG (随滚动横向移动) -->
-            <svg id="scroll-boat" class="scroll-boat-horizontal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 18 L22 18"/>
-                <path d="M5 18 C5 18, 8 22, 14 22 C17 22, 19 18, 19 18"/>
-                <path d="M9 18 L9 6"/>
-                <path d="M9 6 L17 12 L9 14"/>
+            <!-- 太阳 -->
+            <div class="sun-container" id="sun">
+                <div class="sun-core"></div>
+            </div>
+
+            <!-- 月亮（月相跟随农历） -->
+            <svg class="moon-container" id="moon" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" class="moon-base" />
+                <path id="moon-lit" class="moon-lit" d="M12 2 A10 10 0 0 1 12 22 A6 10 0 0 0 12 2" />
             </svg>
         </div>
+
+        <!-- 水波涟漪（江面） -->
+        <div class="scroll-water"></div>
+
+        <!-- 孤舟（随滚动横向移动） -->
+        <svg id="scroll-boat" class="scroll-boat-horizontal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 18 L22 18"/>
+            <path d="M5 18 C5 18, 8 22, 14 22 C17 22, 19 18, 19 18"/>
+            <path d="M9 18 L9 6"/>
+            <path d="M9 6 L17 12 L9 14"/>
+        </svg>
     </header>
 
     <!-- 文章页不再使用两栏布局，而是居中单栏 -->
@@ -112,8 +121,11 @@
                     }
                     document.getElementById('content').innerHTML = marked.parse(lines.join('\n'));
 
-                    // 初始化侧边小舟滚动逻辑
-                    initScrollBoat();
+                    // 图片排版优化：连续图片横排展示
+                    wrapConsecutiveImages();
+
+                    // 初始化日月轮转 + 行舟滚动
+                    initScrollSky();
                 })
                 .catch(error => {
                     document.getElementById('content').innerHTML = `<p>找不到对应的文章内容，或网络加载失败。</p>`;
@@ -124,27 +136,203 @@
             document.getElementById('content').innerHTML = '<p>未提供文章 ID</p>';
         }
 
-        // 顶部横向小舟滚动进度指示器逻辑（RAF 节流 + GPU 加速）
-        function initScrollBoat() {
-            const boat = document.getElementById('scroll-boat');
-            if (!boat) return;
+        // ---- 图片排版：连续两张图片自动横排 ----
+        function wrapConsecutiveImages() {
+            const content = document.getElementById('content');
+            if (!content) return;
 
+            // 查找内容中所有 <p>，如果段落内只有一个 <img>，视为图片段落
+            const paras = [...content.querySelectorAll('p')];
+            let i = 0;
+            while (i < paras.length) {
+                const p = paras[i];
+                const isImagePara = p.children.length === 1 && p.children[0].tagName === 'IMG';
+
+                if (isImagePara && i + 1 < paras.length) {
+                    const nextP = paras[i + 1];
+                    const nextIsImg = nextP.children.length === 1 && nextP.children[0].tagName === 'IMG';
+
+                    if (nextIsImg) {
+                        const img = p.children[0];
+                        const nextImg = nextP.children[0];
+                        // 创建横排容器
+                        const row = document.createElement('div');
+                        row.className = 'image-row';
+                        row.appendChild(img.cloneNode(true));
+                        row.appendChild(nextImg.cloneNode(true));
+                        p.replaceWith(row);
+                        nextP.remove();
+                        // DOM 已变，重新查询
+                        const fresh = [...content.querySelectorAll('p')];
+                        paras.length = 0;
+                        paras.push(...fresh);
+                        i = Math.max(-1, i - 2);
+                    }
+                }
+                i++;
+            }
+        }
+
+        // ---- 日月轮转 + 孤舟进度条 ----
+        function initScrollSky() {
+            const header = document.getElementById('scroll-header');
+            const boat = document.getElementById('scroll-boat');
+            const sunEl = document.getElementById('sun');
+            const moonEl = document.getElementById('moon');
+            const moonLit = document.getElementById('moon-lit');
+            const starsLayer = document.getElementById('stars-layer');
+            if (!header || !boat) return;
+
+            // ====== 天空色标 ======
+            const skyStops = [
+                { p: 0.00, top: [26, 26, 46],    bot: [45, 27, 78]   },  // 深夜
+                { p: 0.05, top: [200, 95, 80],   bot: [245, 180, 140] },  // 破晓
+                { p: 0.18, top: [135, 190, 220], bot: [200, 228, 242] },  // 早晨
+                { p: 0.48, top: [74, 144, 217],  bot: [175, 215, 240] },  // 正午
+                { p: 0.70, top: [240, 175, 85],  bot: [250, 218, 165] },  // 午后
+                { p: 0.88, top: [200, 85, 115],  bot: [235, 160, 178] },  // 黄昏
+                { p: 1.00, top: [26, 26, 46],    bot: [45, 27, 78]   },  // 入夜
+            ];
+
+            function lerpColor(a, b, t) {
+                return [
+                    Math.round(a[0] + (b[0] - a[0]) * t),
+                    Math.round(a[1] + (b[1] - a[1]) * t),
+                    Math.round(a[2] + (b[2] - a[2]) * t),
+                ];
+            }
+
+            function getSkyColors(scrollPct) {
+                const p = Math.max(0, Math.min(1, scrollPct));
+                let lo = skyStops[0], hi = skyStops[skyStops.length - 1];
+                for (let i = 0; i < skyStops.length - 1; i++) {
+                    if (p >= skyStops[i].p && p <= skyStops[i + 1].p) {
+                        lo = skyStops[i]; hi = skyStops[i + 1]; break;
+                    }
+                }
+                const range = hi.p - lo.p;
+                const t = range === 0 ? 0 : (p - lo.p) / range;
+                return { top: lerpColor(lo.top, hi.top, t), bot: lerpColor(lo.bot, hi.bot, t) };
+            }
+
+            // ====== 月相计算（简化天文算法） ======
+            function getMoonPhase(date) {
+                const y = date.getFullYear();
+                const m = date.getMonth() + 1;
+                const d = date.getDate();
+                let jd = Math.floor(365.25 * (y + 4716)) + Math.floor(30.6001 * (m + 1)) + d - 1524;
+                if (m <= 2) {
+                    jd = Math.floor(365.25 * (y + 4715)) + Math.floor(30.6001 * (m + 13)) + d - 1524;
+                }
+                const knownNewMoon = 2451550.1; // 2000-01-06 新月
+                const daysSince = jd - knownNewMoon;
+                let phase = (daysSince % 29.53058867) / 29.53058867;
+                if (phase < 0) phase += 1;
+                return phase; // 0=新月 0.25=上弦 0.5=满月 0.75=下弦
+            }
+
+            function getMoonPath(phase) {
+                const R = 10, cx = 12, cy = 12;
+                const cosT = Math.cos(2 * Math.PI * phase);
+                const rx = Math.abs(cosT) * R;
+
+                if (phase < 0.003 || phase > 0.997) {
+                    return ''; // 新月不可见
+                }
+                if (Math.abs(phase - 0.5) < 0.003) {
+                    // 满月：完整圆
+                    return `M ${cx} ${cy-R} A ${R} ${R} 0 1 1 ${cx} ${cy+R} A ${R} ${R} 0 1 1 ${cx} ${cy-R}`;
+                }
+                if (phase < 0.5) {
+                    // 盈月：右侧亮
+                    const sw = cosT >= 0 ? 0 : 1;
+                    return `M ${cx} ${cy-R} A ${R} ${R} 0 0 1 ${cx} ${cy+R} A ${rx} ${R} 0 0 ${sw} ${cx} ${cy-R}`;
+                } else {
+                    // 亏月：左侧亮
+                    const sw = cosT >= 0 ? 1 : 0;
+                    return `M ${cx} ${cy-R} A ${R} ${R} 0 0 0 ${cx} ${cy+R} A ${rx} ${R} 0 0 ${sw} ${cx} ${cy-R}`;
+                }
+            }
+
+            // 初始化月亮形态（当天真实月相）
+            const todayPhase = getMoonPhase(new Date());
+            moonLit.setAttribute('d', getMoonPath(todayPhase));
+
+            // ====== 生成星星 ======
+            const starCount = 28;
+            const starFrags = [];
+            for (let s = 0; s < starCount; s++) {
+                const left = Math.random() * 96 + 2;
+                const top = Math.random() * 55 + 4;
+                const dur = 1.8 + Math.random() * 3.5;
+                const delay = Math.random() * 4;
+                starFrags.push(
+                    `<div class="star" style="left:${left}%;top:${top}%;--twinkle-dur:${dur}s;--twinkle-delay:${delay}s"></div>`
+                );
+            }
+            starsLayer.innerHTML = starFrags.join('');
+
+            // ====== 滚动驱动 ======
             let ticking = false;
+
+            function update() {
+                const scrollTop = window.scrollY;
+                const docH = document.body.scrollHeight - window.innerHeight;
+                const scrollPct = docH > 0 ? Math.max(0, Math.min(1, scrollTop / docH)) : 0;
+                const hh = header.offsetHeight;
+
+                // -- 天空颜色 --
+                const colors = getSkyColors(scrollPct);
+                header.style.setProperty('--sky-top', `rgb(${colors.top.join(',')})`);
+
+                // -- 太阳 --
+                const sunRise = 0.03, sunSet = 0.90;
+                const sunVis = scrollPct >= sunRise && scrollPct <= sunSet ? 1 : 0;
+                sunEl.style.opacity = sunVis;
+                if (sunVis > 0) {
+                    const sunT = (scrollPct - sunRise) / (sunSet - sunRise);
+                    const sunX = 5 + sunT * 88; // % of header width
+                    const sunArc = Math.sin(Math.PI * sunT);
+                    const sunYmin = hh * 0.12, sunYmax = hh * 0.58;
+                    const sunY = sunYmax - sunArc * (sunYmax - sunYmin);
+                    sunEl.style.left = sunX + '%';
+                    sunEl.style.top = sunY + 'px';
+                }
+
+                // -- 月亮 & 星星 --
+                const night = scrollPct < 0.04 || scrollPct > 0.86 ? 1
+                    : scrollPct < 0.09 ? 1 - (scrollPct - 0.04) / 0.05
+                    : scrollPct > 0.80 ? (scrollPct - 0.80) / 0.06
+                    : 0;
+                moonEl.style.opacity = Math.max(0, Math.min(1, night)).toString();
+                starsLayer.style.opacity = Math.max(0, Math.min(1, night)).toString();
+
+                // 月亮夜间缓慢左移
+                if (night > 0.5) {
+                    const nightT = scrollPct > 0.5 ? (scrollPct - 0.86) / 0.14 : (0.04 - scrollPct) / 0.04;
+                    moonEl.style.right = (8 - nightT * 5) + '%';
+                }
+
+                // -- 小船 --
+                if (docH > 0) {
+                    boat.style.left = (scrollPct * 100) + '%';
+                }
+
+                ticking = false;
+            }
 
             window.addEventListener('scroll', () => {
                 if (!ticking) {
                     requestAnimationFrame(() => {
-                        const scrollTop = window.scrollY;
-                        const docHeight = document.body.scrollHeight - window.innerHeight;
-                        if (docHeight > 0) {
-                            const scrollPercent = Math.max(0, Math.min(100, (scrollTop / docHeight) * 100));
-                            boat.style.left = scrollPercent + '%';
-                        }
+                        update();
                         ticking = false;
                     });
                     ticking = true;
                 }
             }, { passive: true });
+
+            // 初始调用
+            update();
         }
     </script>
 </body>
