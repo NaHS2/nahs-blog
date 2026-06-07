@@ -157,25 +157,6 @@ body {
   color: var(--gray-500);
 }
 
-/* ====== 邮箱列表 ====== */
-.email-list {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.email-link {
-  font-size: 0.75rem;
-  color: var(--gray-400);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.email-link:hover {
-  color: var(--gray-600);
-}
-
 @media (min-width: 768px) {
   .profile-clock {
     margin: 22px 0 16px;

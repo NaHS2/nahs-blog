@@ -49,6 +49,14 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                         @NaHS2
                     </a>
+                    <a href="mailto:nahs.lql@outlook.com" class="social-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        nahs.lql@outlook.com
+                    </a>
+                    <a href="mailto:nahs.lql@gmail.com" class="social-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        nahs.lql@gmail.com
+                    </a>
                     <a href="https://space.bilibili.com/549713964" target="_blank" class="social-link">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="4" ry="4"></rect><polyline points="8 3 12 7 16 3"></polyline></svg>
                         Bilibili
@@ -57,11 +65,6 @@
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         资料下载
                     </a>
-                </div>
-
-                <div class="email-list">
-                    <a href="mailto:nahs.lql@outlook.com" class="email-link">nahs.lql@outlook.com</a>
-                    <a href="mailto:nahs.lql@gmail.com" class="email-link">nahs.lql@gmail.com</a>
                 </div>
             </div>
         </aside>
@@ -85,37 +88,6 @@
     </div>
 
     <script>
-        // ==== 根据当前时刻渲染页面环境氛围 ====
-        (function() {
-            const hour = new Date().getHours();
-            let p;
-            if (hour >= 5 && hour < 7)       p = 0.05 + (hour - 5) / 2 * 0.05;
-            else if (hour >= 7 && hour < 11)  p = 0.10 + (hour - 7) / 4 * 0.30;
-            else if (hour >= 11 && hour < 14) p = 0.40 + (hour - 11) / 3 * 0.15;
-            else if (hour >= 14 && hour < 17) p = 0.55 + (hour - 14) / 3 * 0.20;
-            else if (hour >= 17 && hour < 19) p = 0.75 + (hour - 17) / 2 * 0.15;
-            else if (hour >= 19)              p = 0.90;
-            else                              p = 0.02;
-
-            const stops = [
-                { p:0.00, c:[26,26,46] }, { p:0.05, c:[200,95,80] }, { p:0.18, c:[135,190,220] },
-                { p:0.48, c:[74,144,217] }, { p:0.70, c:[240,175,85] }, { p:0.88, c:[200,85,115] },
-                { p:1.00, c:[26,26,46] },
-            ];
-            let lo=stops[0], hi=stops[stops.length-1];
-            for (let i=0;i<stops.length-1;i++) {
-                if (p>=stops[i].p && p<=stops[i+1].p) { lo=stops[i]; hi=stops[i+1]; break; }
-            }
-            const t = hi.p===lo.p ? 0 : (p-lo.p)/(hi.p-lo.p);
-            const sc = [0,1,2].map(i=>Math.round(lo.c[i]+(hi.c[i]-lo.c[i])*t));
-
-            const ar = Math.round(sc[0]*0.18+209), ag = Math.round(sc[1]*0.18+209), ab = Math.round(sc[2]*0.18+209);
-            document.body.style.setProperty('--page-ambient', `rgb(${ar},${ag},${ab})`);
-
-            const dr = Math.round(sc[0]*0.30+179), dg = Math.round(sc[1]*0.30+179), db = Math.round(sc[2]*0.30+179);
-            document.body.style.setProperty('--page-accent', `rgb(${dr},${dg},${db})`);
-        })();
-
         let allPosts = [];
 
         // 使用时间戳防止浏览器缓存 posts.json 导致无法看到最新更新
@@ -435,6 +407,12 @@
                 const hh=header.offsetHeight;
                 const colors=skyColor(p);
                 header.style.setProperty('--sky-top',`rgb(${colors.top.join(',')})`);
+
+                // 全局氛围色：与进度条天空同源
+                const aR=Math.round(colors.top[0]*0.18+209),aG=Math.round(colors.top[1]*0.18+209),aB=Math.round(colors.top[2]*0.18+209);
+                document.body.style.setProperty('--page-ambient',`rgb(${aR},${aG},${aB})`);
+                const dR=Math.round(colors.top[0]*0.30+179),dG=Math.round(colors.top[1]*0.30+179),dB=Math.round(colors.top[2]*0.30+179);
+                document.body.style.setProperty('--page-accent',`rgb(${dR},${dG},${dB})`);
 
                 // 太阳
                 const sunRise=0.03,sunSet=0.91;
