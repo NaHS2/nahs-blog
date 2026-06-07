@@ -133,61 +133,76 @@ body {
   height: 14px;
 }
 
-/* ====== 侧边栏 Profile 时钟 ====== */
+/* ====== 侧边栏 天空表盘时钟 ====== */
 .profile-clock {
   padding: 12px 0;
   border-top: 1px solid var(--page-accent, rgba(0,0,0,0.06));
   border-bottom: 1px solid var(--page-accent, rgba(0,0,0,0.06));
+  text-align: center;
 }
 
-/* 微型天空指示条：呼应顶部进度条 */
-.clock-sky-bar {
-  position: relative;
-  height: 5px;
-  border-radius: 3px;
-  background: var(--page-accent, #e0e0e0);
-  margin-bottom: 10px;
-  overflow: hidden;
+.analog-clock {
+  width: 130px;
+  height: 130px;
+  display: block;
+  margin: 0 auto 10px;
 }
 
-.clock-sky-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: var(--sky-top, #87CEEB);
-  transition: width 60s linear, background 60s linear;
+.clock-face {
+  fill: var(--sky-top, #87CEEB);
+  stroke: rgba(255,255,255,0.5);
+  stroke-width: 1.5;
+  transition: fill 60s linear;
 }
 
-/* 天空条上的小日/月点 */
-.clock-celestial {
-  position: absolute;
-  top: -3px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #fbbf24;
-  box-shadow: 0 0 6px rgba(251,191,36,0.6);
-  transition: left 60s linear;
+/* 刻度 */
+.clock-ticks line {
+  stroke: rgba(255,255,255,0.7);
+  stroke-linecap: round;
 }
 
-.clock-celestial.night {
-  background: #fef9c3;
-  box-shadow: 0 0 6px rgba(254,249,195,0.5);
-  width: 8px;
-  height: 8px;
-  top: -2px;
+/* 日月指示点——盘面边缘绕行 */
+.clock-celestial-dot {
+  fill: #fbbf24;
+  filter: drop-shadow(0 0 3px rgba(251,191,36,0.6));
+  transition: cx 60s linear, cy 60s linear, fill 2s ease;
 }
 
-.clock-time {
-  font-size: 1.55rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--gray-900);
-  font-variant-numeric: tabular-nums;
-  line-height: 1.2;
+.clock-celestial-dot.night {
+  fill: #fef9c3;
+  filter: drop-shadow(0 0 3px rgba(254,249,195,0.5));
+  r: 2.5;
+}
+
+/* 指针 */
+.clock-hand-hour {
+  stroke: rgba(255,255,255,0.9);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform-origin: 50px 50px;
+}
+
+.clock-hand-min {
+  stroke: rgba(255,255,255,0.8);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  transform-origin: 50px 50px;
+}
+
+.clock-hand-sec {
+  stroke: rgba(255,255,255,0.6);
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  transform-origin: 50px 50px;
+}
+
+.clock-center {
+  fill: #ffffff;
+  stroke: rgba(0,0,0,0.08);
+  stroke-width: 1;
 }
 
 .clock-date {
-  margin-top: 3px;
   font-size: 0.88rem;
   font-weight: 500;
   color: var(--gray-700);
@@ -196,6 +211,9 @@ body {
 
 .clock-sub {
   display: none;
+  font-size: 0.78rem;
+  color: var(--gray-400);
+  margin-top: 1px;
 }
 
 .clock-lunar {
@@ -208,31 +226,16 @@ body {
   .profile-clock {
     padding: 14px 0;
   }
-  .clock-sky-bar {
-    height: 6px;
+  .analog-clock {
+    width: 150px;
+    height: 150px;
     margin-bottom: 12px;
-  }
-  .clock-celestial {
-    top: -3px;
-    width: 12px;
-    height: 12px;
-  }
-  .clock-celestial.night {
-    width: 10px;
-    height: 10px;
-    top: -2px;
-  }
-  .clock-time {
-    font-size: 1.7rem;
   }
   .clock-date {
     font-size: 0.92rem;
   }
   .clock-sub {
     display: block;
-    font-size: 0.78rem;
-    color: var(--gray-400);
-    margin-top: 1px;
   }
 }
 
