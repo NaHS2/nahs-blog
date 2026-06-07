@@ -256,17 +256,27 @@
                 document.getElementById('header-time').textContent =
                     pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
 
-                // 头像环上的日月指示点
+                // 头像环日月点(与进度条同阈值: sunRise=0.03, sunSet=0.91)
                 const dot = document.getElementById('avatar-celestial');
                 if (dot) {
                     const aw = document.getElementById('avatar');
                     const size = aw ? aw.offsetWidth : 72;
-                    const r = size / 2 + 2;
-                    const angle = ((h - 6) / 24) * 360 - 90;
-                    const rad = angle * Math.PI / 180;
-                    dot.style.left = (r + r * Math.cos(rad)) + 'px';
-                    dot.style.top = (r + r * Math.sin(rad)) + 'px';
-                    dot.classList.toggle('night', h < 6 || h > 18);
+                    const dr = size / 2 + 2;
+                    // 时间→p映射(与进度条getTimePct同逻辑)
+                    let p;
+                    if (h < 5)        p = 0.94 + (h / 5) * 0.06;
+                    else if (h < 7)   p = 0.00 + ((h - 5) / 2) * 0.12;
+                    else if (h < 11)  p = 0.12 + ((h - 7) / 4) * 0.30;
+                    else if (h < 14)  p = 0.42 + ((h - 11) / 3) * 0.13;
+                    else if (h < 17)  p = 0.55 + ((h - 14) / 3) * 0.17;
+                    else if (h < 19.5)p = 0.72 + ((h - 17) / 2.5) * 0.20;
+                    else              p = 0.92 + ((h - 19.5) / 4.5) * 0.08;
+                    const sr = 0.03, ss = 0.91;
+                    const dt = (p - sr) / (ss - sr);
+                    const a = (Math.max(0, Math.min(1, dt)) * 180 + 90) * Math.PI / 180;
+                    dot.style.left = (dr + dr * Math.cos(a)) + 'px';
+                    dot.style.top = (dr + dr * Math.sin(a)) + 'px';
+                    dot.classList.toggle('night', p < sr || p > ss);
                 }
 
                 // June 7th · Sun
@@ -401,7 +411,7 @@
                 const hh = header.offsetHeight;
                 const colors = skyColor(p);
                 header.style.setProperty('--sky-top', `rgb(${colors.top.join(',')})`);
-                // 头像环 + 日月点
+                // 头像环 + 日月点(与进度条同阈值)
                 const av = document.getElementById('avatar');
                 if (av) {
                     av.style.borderColor = `rgb(${colors.top.join(',')})`;
@@ -409,12 +419,13 @@
                     if (dot) {
                         const size = av.offsetWidth;
                         const dr = size / 2 + 2;
-                        const dh = 6; // 模拟6am偏移
-                        const a = ((dh - 6 + p * 24) / 24) * 360 - 90;
-                        const rad = a * Math.PI / 180;
+                        const sunRise = 0.03, sunSet = 0.91;
+                        const dt = (p - sunRise) / (sunSet - sunRise);
+                        const a = (Math.max(0, Math.min(1, dt)) * 180 + 90) * Math.PI / 180;
+                        const rad = a;
                         dot.style.left = (dr + dr * Math.cos(rad)) + 'px';
                         dot.style.top = (dr + dr * Math.sin(rad)) + 'px';
-                        dot.classList.toggle('night', p < 0.25 || p > 0.75);
+                        dot.classList.toggle('night', p < sunRise || p > sunSet);
                     }
                 }
                 // 氛围
