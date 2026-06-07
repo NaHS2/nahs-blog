@@ -61,50 +61,60 @@ body {
 
 .profile {
   display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-top {
+  display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .avatar {
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid var(--gray-200);
+  border: 2px solid var(--page-accent, var(--gray-200));
   flex-shrink: 0;
 }
 
 .author-name {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 700;
   margin: 0;
   letter-spacing: -0.01em;
   color: var(--gray-900);
 }
 
 .author-bio {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--gray-500);
   margin: 0;
-  line-height: 1.5;
-  width: 100%;
+  line-height: 1.45;
 }
 
 .social-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
-  margin-top: 4px;
+  margin-top: 12px;
 }
 
 .social-links a {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--gray-500);
   text-decoration: none;
   font-weight: 500;
@@ -115,20 +125,56 @@ body {
 }
 
 .social-links svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 /* ====== 侧边栏 Profile 时钟 ====== */
 .profile-clock {
-  margin: 18px 0 14px;
-  padding: 14px 0;
+  padding: 12px 0;
   border-top: 1px solid var(--page-accent, rgba(0,0,0,0.06));
   border-bottom: 1px solid var(--page-accent, rgba(0,0,0,0.06));
 }
 
+/* 微型天空指示条：呼应顶部进度条 */
+.clock-sky-bar {
+  position: relative;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--page-accent, #e0e0e0);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.clock-sky-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--sky-top, #87CEEB);
+  transition: width 60s linear, background 60s linear;
+}
+
+/* 天空条上的小日/月点 */
+.clock-celestial {
+  position: absolute;
+  top: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fbbf24;
+  box-shadow: 0 0 6px rgba(251,191,36,0.6);
+  transition: left 60s linear;
+}
+
+.clock-celestial.night {
+  background: #fef9c3;
+  box-shadow: 0 0 6px rgba(254,249,195,0.5);
+  width: 8px;
+  height: 8px;
+  top: -2px;
+}
+
 .clock-time {
-  font-size: 1.65rem;
+  font-size: 1.55rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   color: var(--gray-900);
@@ -138,31 +184,51 @@ body {
 
 .clock-date {
   margin-top: 3px;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 500;
   color: var(--gray-700);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
 
 .clock-sub {
-  margin-top: 1px;
-  font-size: 0.78rem;
-  color: var(--gray-400);
-  letter-spacing: 0.03em;
+  display: none;
 }
 
 .clock-lunar {
-  margin-top: 6px;
-  font-size: 0.8rem;
+  margin-top: 4px;
+  font-size: 0.78rem;
   color: var(--gray-500);
 }
 
 @media (min-width: 768px) {
   .profile-clock {
-    margin: 22px 0 16px;
+    padding: 14px 0;
+  }
+  .clock-sky-bar {
+    height: 6px;
+    margin-bottom: 12px;
+  }
+  .clock-celestial {
+    top: -3px;
+    width: 12px;
+    height: 12px;
+  }
+  .clock-celestial.night {
+    width: 10px;
+    height: 10px;
+    top: -2px;
   }
   .clock-time {
-    font-size: 1.75rem;
+    font-size: 1.7rem;
+  }
+  .clock-date {
+    font-size: 0.92rem;
+  }
+  .clock-sub {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--gray-400);
+    margin-top: 1px;
   }
 }
 
@@ -741,10 +807,29 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--page-accent, rgba(56,189,248,0.35)), transparent);
+  height: 3px;
+  background:
+    repeating-linear-gradient(90deg, transparent, transparent 6px, rgba(56,189,248,0.12) 6px, rgba(56,189,248,0.12) 7px),
+    repeating-linear-gradient(90deg, transparent, transparent 13px, rgba(56,189,248,0.08) 13px, rgba(56,189,248,0.08) 14px);
   background-size: 200% 100%;
-  animation: water-ripple 4s linear infinite;
+  animation: water-ripple 3s linear infinite;
+}
+
+/* 水花飞溅粒子 */
+.water-splash {
+  position: absolute;
+  bottom: 2px;
+  width: 2px;
+  height: 2px;
+  background: rgba(56,189,248,0.55);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: splash-up 0.7s ease-out forwards;
+}
+
+@keyframes splash-up {
+  0%   { transform: translateY(0) scale(1); opacity: 0.7; }
+  100% { transform: translateY(-10px) scale(0.2); opacity: 0; }
 }
 
 @keyframes water-ripple {
@@ -892,33 +977,36 @@ body {
 
   .profile {
     flex-direction: column;
+    gap: 18px;
+  }
+
+  .profile-top {
+    flex-direction: column;
     align-items: flex-start;
     gap: 14px;
   }
 
   .avatar {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
   }
 
   .author-name {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
 
   .author-bio {
-    font-size: 0.9rem;
-    width: auto;
+    font-size: 0.85rem;
   }
 
   .social-links {
     flex-direction: column;
-    gap: 8px;
-    width: auto;
-    margin-top: 6px;
+    gap: 6px;
+    margin-top: 10px;
   }
 
   .social-links a {
-    font-size: 0.88rem;
+    font-size: 0.82rem;
   }
 
   .main-content {

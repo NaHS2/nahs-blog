@@ -336,11 +336,28 @@
                 ticking = false;
             }
 
+            // 水花飞溅
+            let lastSplashPct = -1;
+            function maybeSplash(scrollPct) {
+                if (!header || Math.abs(scrollPct - lastSplashPct) < 0.03) return;
+                lastSplashPct = scrollPct;
+                const bx = parseFloat(boat.style.left) || 0;
+                const dot = document.createElement('div');
+                dot.className = 'water-splash';
+                dot.style.left = (bx + Math.random() * 6 - 3) + '%';
+                dot.style.animationDuration = (0.5 + Math.random() * 0.5) + 's';
+                header.appendChild(dot);
+                setTimeout(() => dot.remove(), 800);
+            }
+
             window.addEventListener('scroll', () => {
                 if (!ticking) {
                     requestAnimationFrame(() => {
                         update();
                         toggleBackToTop();
+                        const pct = document.body.scrollHeight > window.innerHeight
+                            ? window.scrollY / (document.body.scrollHeight - window.innerHeight) : 0;
+                        maybeSplash(pct);
                         ticking = false;
                     });
                     ticking = true;
