@@ -275,9 +275,9 @@
                 const cr=Math.round(lo[0]+(hi[0]-lo[0])*t),cg=Math.round(lo[1]+(hi[1]-lo[1])*t),cb=Math.round(lo[2]+(hi[2]-lo[2])*t);
                 if(aw) aw.style.borderColor = `rgb(${cr},${cg},${cb})`;
 
-                // 日月点：钟表24h位置 + 真实月相
+                // 日月点：标准钟表盘面(0h/12h顶→3h右→6h底→9h左)
                 if(dot){
-                    const angle = (0.5 + h / 12) * Math.PI;
+                    const angle = (1.5 + h / 6) * Math.PI;
                     const isNight = sp < 0.03 || sp > 0.91;
                     dot.classList.toggle('night', isNight);
                     if(isNight){
@@ -446,7 +446,7 @@
                     if (dot) {
                         const size = av.offsetWidth;
                         const cx = size / 2, cy = size / 2, orbitR = size / 2 + 3;
-                        const angle = (0.5 + p * 24 / 12) * Math.PI;
+                        const angle = (1.5 + p * 24 / 6) * Math.PI;
                         const isNight = p < 0.03 || p > 0.91;
                         dot.classList.toggle('night', isNight);
                         const half = isNight ? 3.5 : 5;
