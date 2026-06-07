@@ -285,11 +285,17 @@
                 const colors = getSkyColors(scrollPct);
                 header.style.setProperty('--sky-top', `rgb(${colors.top.join(',')})`);
 
-                // -- 全局环境色：8% 天空 + 92% 白，统一页面色调 --
-                const aR = Math.round(colors.top[0] * 0.08 + 245);
-                const aG = Math.round(colors.top[1] * 0.08 + 245);
-                const aB = Math.round(colors.top[2] * 0.08 + 245);
+                // -- 全局环境色：10% 天空色素，形成可感知的氛围基调 --
+                const aR = Math.round(colors.top[0] * 0.10 + 230);
+                const aG = Math.round(colors.top[1] * 0.10 + 230);
+                const aB = Math.round(colors.top[2] * 0.10 + 230);
                 document.body.style.setProperty('--page-ambient', `rgb(${aR},${aG},${aB})`);
+
+                // -- 装饰色：22% 天空色素，用于边框、分隔线等结构性元素 --
+                const dR = Math.round(colors.top[0] * 0.22 + 199);
+                const dG = Math.round(colors.top[1] * 0.22 + 199);
+                const dB = Math.round(colors.top[2] * 0.22 + 199);
+                document.body.style.setProperty('--page-accent', `rgb(${dR},${dG},${dB})`);
 
                 // -- 太阳 --
                 const sunRise = 0.03, sunSet = 0.90;
