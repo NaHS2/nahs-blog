@@ -123,6 +123,74 @@ body {
   height: 16px;
 }
 
+/* ====== 侧边栏日月时钟 ====== */
+.sidebar-clock {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(0,0,0,0.04);
+  text-align: center;
+}
+
+.clock-time {
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--gray-900);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.clock-date-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: var(--gray-500);
+}
+
+.clock-lunar-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  font-size: 0.78rem;
+}
+
+.clock-ganzhi {
+  color: var(--gray-500);
+}
+
+.clock-zodiac {
+  color: var(--gray-400);
+  font-size: 0.72rem;
+}
+
+.clock-lunar-date {
+  margin-top: 2px;
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+
+@media (min-width: 768px) {
+  .sidebar-clock {
+    margin-top: 20px;
+    text-align: left;
+  }
+  .clock-time {
+    font-size: 1.75rem;
+  }
+  .clock-date-row,
+  .clock-lunar-row {
+    justify-content: flex-start;
+  }
+}
+
 /* keep backwards compat with class-based links */
 .social-link {
   display: inline-flex;
