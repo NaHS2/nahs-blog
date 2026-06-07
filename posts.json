@@ -48,7 +48,7 @@
     "title": "用嘉立创EDA画了一张支持NFC的PCB校园卡",
     "date": "2025-08-15",
     "tags": ["PCB", "NFC", "嘉立创EDA", "硬件"],
-    "collection": "独立项目",
+    "collection": "硬件实践",
     "readTime": "大约 4 分钟",
     "excerpt": "对NFC原理好奇，用嘉立创EDA免费打板画了一张PCB校园卡。环形铜线圈做天线，NXP NTAG芯片，手机一扫就能读写。从天线阻抗匹配到FR-4介电特性，一张卡片把NFC物理链路完整跑通了。"
   },
