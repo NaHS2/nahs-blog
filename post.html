@@ -15,6 +15,7 @@
 <body class="post-page">
     <!-- 顶部进度条：日月轮转 + 行舟 -->
     <header class="scroll-header" id="scroll-header">
+        <div class="header-time" id="header-time">00:00:00</div>
         <div class="sky-canvas">
             <!-- 星星（夜间可见） -->
             <div class="stars-layer" id="stars-layer"></div>
@@ -282,11 +283,18 @@
 
             let lastAmbientPct = -1;
 
+            function pad(n){return n<10?'0'+n:''+n;}
+
             function update() {
                 const scrollTop = window.scrollY;
                 const docH = document.body.scrollHeight - window.innerHeight;
                 const scrollPct = docH > 0 ? Math.max(0, Math.min(1, scrollTop / docH)) : 0;
                 const hh = header.offsetHeight;
+
+                // 左上角时间
+                const now = new Date();
+                document.getElementById('header-time').textContent =
+                    pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
 
                 // -- 天空颜色 --
                 const colors = getSkyColors(scrollPct);

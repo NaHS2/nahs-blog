@@ -11,6 +11,7 @@
 <body>
     <!-- 顶部进度条：日月轮转（时间驱动） -->
     <header class="scroll-header" id="scroll-header">
+        <div class="header-time" id="header-time">00:00:00</div>
         <div class="sky-canvas">
             <div class="stars-layer" id="stars-layer"></div>
             <div class="sun-container" id="sun"><div class="sun-core"></div></div>
@@ -329,6 +330,10 @@
                 const now = new Date();
                 const lun = getLunar(now);
                 const h = now.getHours() + now.getMinutes() / 60;
+
+                // 左上角时间 HH:MM:SS
+                document.getElementById('header-time').textContent =
+                    pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
 
                 // 头像环上的日月指示点
                 const dot = document.getElementById('avatar-celestial');
