@@ -17,6 +17,16 @@
     <header class="scroll-header" id="scroll-header">
         <div class="header-time" id="header-time">00:00:00</div>
         <div class="header-date" id="header-date"></div>
+        <!-- 返回按钮：置于header内左上 -->
+        <a href="index.html" class="back-btn-fixed" aria-label="返回列表">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <span class="back-btn-label">返回</span>
+        </a>
+        <!-- 纯净阅读 -->
+        <button class="pure-toggle" id="pure-toggle" aria-label="纯净阅读模式" title="切换纯净阅读模式">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <span class="pure-toggle-label">纯净</span>
+        </button>
         <div class="sky-canvas">
             <!-- 星星（夜间可见） -->
             <div class="stars-layer" id="stars-layer"></div>
@@ -44,18 +54,6 @@
             <path d="M9 6 L17 12 L9 14"/>
         </svg>
     </header>
-
-    <!-- 返回按钮：固定左上角 -->
-    <a href="index.html" class="back-btn-fixed" aria-label="返回列表">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        <span class="back-btn-label">返回</span>
-    </a>
-
-    <!-- 纯净阅读切换：固定右上角 -->
-    <button class="pure-toggle" id="pure-toggle" aria-label="纯净阅读模式" title="切换纯净阅读模式">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-        <span class="pure-toggle-label">纯净</span>
-    </button>
 
     <!-- 文章页不再使用两栏布局，而是居中单栏 -->
     <div class="app-wrapper page-transition has-header" style="display: block; max-width: 900px; margin: 0 auto; position: relative;">

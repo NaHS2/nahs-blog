@@ -395,68 +395,62 @@ body {
 }
 
 /* ====== 固定返回按钮（文章页左上角） ====== */
+/* ====== 返回按钮（header内左上角） ====== */
 .back-btn-fixed {
-  position: fixed;
-  top: 56px;
-  left: 12px;
-  z-index: 1100;
+  position: absolute;
+  top: 8px;
+  right: 52px;  /* 时间在左上，返回在时间右边 */
+  z-index: 20;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border-radius: 50%;
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.1);
-  color: var(--gray-800);
+  background: rgba(255,255,255,0.25);
+  border: none;
+  color: rgba(255,255,255,0.9);
   text-decoration: none;
-  transition: color 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .back-btn-fixed:hover {
-  color: var(--gray-900);
-  background: rgba(255,255,255,0.92);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  background: rgba(255,255,255,0.4);
 }
 
 .back-btn-label {
   display: none;
 }
 
-/* ====== 纯净阅读切换按钮（文章页右上角） ====== */
+/* ====== 纯净阅读按钮（header内右上角） ====== */
 .pure-toggle {
-  position: fixed;
-  top: 56px;
+  position: absolute;
+  top: 8px;
   right: 12px;
-  z-index: 1100;
+  z-index: 20;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border-radius: 50%;
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.1);
-  color: var(--gray-800);
+  background: rgba(255,255,255,0.25);
+  border: none;
+  color: rgba(255,255,255,0.9);
   font-size: 0.82rem;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  transition: color 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .pure-toggle:hover {
-  box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+  background: rgba(255,255,255,0.4);
 }
 
 .pure-toggle.active {
-  background: var(--gray-900);
+  background: rgba(0,0,0,0.5);
   color: #ffffff;
-  border-color: var(--gray-900);
 }
 
 .pure-toggle-label {
@@ -494,31 +488,26 @@ body.pure-reading .water-splash {
 
 @media (min-width: 768px) {
   .back-btn-fixed {
-    top: 68px;
-    left: 24px;
+    top: 10px;
+    right: auto;
+    left: 120px;
     width: auto;
     height: auto;
-    padding: 7px 16px;
-    border-radius: 18px;
-    font-size: 0.85rem;
-    background: rgba(255,255,255,0.9);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    padding: 4px 14px;
+    border-radius: 14px;
+    font-size: 0.82rem;
+    background: rgba(255,255,255,0.3);
   }
   .back-btn-label {
     display: inline;
   }
   .pure-toggle {
-    top: 68px;
-    right: 24px;
+    top: 10px;
+    right: 16px;
     width: auto;
     height: auto;
-    padding: 7px 16px;
-    border-radius: 18px;
-    font-size: 0.85rem;
-    background: rgba(255,255,255,0.9);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    padding: 4px 14px;
+    border-radius: 14px;
   }
   .pure-toggle-label {
     display: inline;
