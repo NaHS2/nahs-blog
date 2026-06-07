@@ -60,6 +60,37 @@
     </div>
 
     <script>
+        // ==== 根据当前时刻渲染页面环境氛围 ====
+        (function() {
+            const hour = new Date().getHours();
+            let p;
+            if (hour >= 5 && hour < 7)       p = 0.05 + (hour - 5) / 2 * 0.05;
+            else if (hour >= 7 && hour < 11)  p = 0.10 + (hour - 7) / 4 * 0.30;
+            else if (hour >= 11 && hour < 14) p = 0.40 + (hour - 11) / 3 * 0.15;
+            else if (hour >= 14 && hour < 17) p = 0.55 + (hour - 14) / 3 * 0.20;
+            else if (hour >= 17 && hour < 19) p = 0.75 + (hour - 17) / 2 * 0.15;
+            else if (hour >= 19)              p = 0.90;
+            else                              p = 0.02;
+
+            const stops = [
+                { p:0.00, c:[26,26,46] }, { p:0.05, c:[200,95,80] }, { p:0.18, c:[135,190,220] },
+                { p:0.48, c:[74,144,217] }, { p:0.70, c:[240,175,85] }, { p:0.88, c:[200,85,115] },
+                { p:1.00, c:[26,26,46] },
+            ];
+            let lo=stops[0], hi=stops[stops.length-1];
+            for (let i=0;i<stops.length-1;i++) {
+                if (p>=stops[i].p && p<=stops[i+1].p) { lo=stops[i]; hi=stops[i+1]; break; }
+            }
+            const t = hi.p===lo.p ? 0 : (p-lo.p)/(hi.p-lo.p);
+            const sc = [0,1,2].map(i=>Math.round(lo.c[i]+(hi.c[i]-lo.c[i])*t));
+
+            const ar = Math.round(sc[0]*0.10+230), ag = Math.round(sc[1]*0.10+230), ab = Math.round(sc[2]*0.10+230);
+            document.body.style.setProperty('--page-ambient', `rgb(${ar},${ag},${ab})`);
+
+            const dr = Math.round(sc[0]*0.22+199), dg = Math.round(sc[1]*0.22+199), db = Math.round(sc[2]*0.22+199);
+            document.body.style.setProperty('--page-accent', `rgb(${dr},${dg},${db})`);
+        })();
+
         let allPosts = [];
 
         // 使用时间戳防止浏览器缓存 posts.json 导致无法看到最新更新
