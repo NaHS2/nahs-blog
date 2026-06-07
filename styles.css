@@ -82,8 +82,9 @@ body {
 
 .avatar-wrap {
   position: relative;
+  display: inline-block;
   flex-shrink: 0;
-  padding: 10px;  /* 日月点轨道空间 */
+  line-height: 0;
 }
 
 .avatar {
@@ -96,23 +97,24 @@ body {
   transition: border-color 60s linear;
 }
 
-/* 头像环上的日月指示点(以avatar几何中心为圆心旋转) */
+/* 头像环日月点：24h正圆轨道 */
 .avatar-celestial {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #fbbf24;
-  box-shadow: 0 0 5px rgba(251,191,36,0.7);
+  box-shadow: 0 0 6px rgba(251,191,36,0.8);
   pointer-events: none;
   z-index: 2;
+  /* 定位由JS计算 */
 }
 
 .avatar-celestial.night {
   background: #fef9c3;
-  box-shadow: 0 0 4px rgba(254,249,195,0.5);
-  width: 6px;
-  height: 6px;
+  box-shadow: 0 0 4px rgba(254,249,195,0.6);
+  width: 7px;
+  height: 7px;
 }
 
 .author-name {
@@ -1051,8 +1053,8 @@ body.pure-reading .water-splash {
   }
 
   .avatar-celestial {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
   }
 
   .avatar-celestial.night {
