@@ -125,7 +125,9 @@ NE555 的 3 脚方波 → 第一片 CD40110 的 CPu → 0–9 计数 → Qco 进
 
 ![调试过程 - 示波器测NE555时钟](../assets/course-design/img_21_01.jpeg)
 
-![最终成品 - 计数器显示20](../assets/course-design/img_22_01.jpeg)
+![焊接结果 - 计数器电路正面](../assets/course-design/img_22_01.jpeg)
+
+![焊接结果 - 计数器电路背面](../assets/course-design/img_22_03.jpeg)
 
 ---
 
