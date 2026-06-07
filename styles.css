@@ -393,8 +393,8 @@ body {
   font-size: 0.8rem;
 }
 
-/* ====== Article Detail (post.html) ====== */
-body.post-page .app-wrapper {
+/* ====== 有顶部进度条的页面 ====== */
+.app-wrapper.has-header {
   padding-top: 64px;
 }
 
@@ -995,7 +995,7 @@ body.post-page .app-wrapper {
     height: 26px;
   }
 
-  body.post-page .app-wrapper {
+  .app-wrapper.has-header {
     padding-top: 80px;
   }
 

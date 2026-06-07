@@ -9,7 +9,26 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="app-wrapper page-transition">
+    <!-- 顶部进度条：日月轮转（时间驱动） -->
+    <header class="scroll-header" id="scroll-header">
+        <div class="sky-canvas">
+            <div class="stars-layer" id="stars-layer"></div>
+            <div class="sun-container" id="sun"><div class="sun-core"></div></div>
+            <svg class="moon-container" id="moon" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" class="moon-base" />
+                <path id="moon-lit" class="moon-lit" d="M12 2 A10 10 0 0 1 12 22 A6 10 0 0 0 12 2" />
+            </svg>
+        </div>
+        <div class="scroll-water"></div>
+        <svg id="scroll-boat" class="scroll-boat-horizontal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 18 L22 18"/>
+            <path d="M5 18 C5 18, 8 22, 14 22 C17 22, 19 18, 19 18"/>
+            <path d="M9 18 L9 6"/>
+            <path d="M9 6 L17 12 L9 14"/>
+        </svg>
+    </header>
+
+    <div class="app-wrapper page-transition has-header">
         <!-- 侧边栏 -->
         <aside class="sidebar">
             <div class="profile">
@@ -343,6 +362,102 @@
 
             updateClock();
             setInterval(updateClock, 1000);
+        })();
+
+        // ==== 日月轮转进度条（时间驱动，非滚动） ==========================
+        (function() {
+            const header = document.getElementById('scroll-header');
+            const boat = document.getElementById('scroll-boat');
+            const sunEl = document.getElementById('sun');
+            const moonEl = document.getElementById('moon');
+            const moonLit = document.getElementById('moon-lit');
+            const starsLayer = document.getElementById('stars-layer');
+            if (!header || !boat) return;
+
+            const skyStops = [
+                { p:0.00, top:[26,26,46],    bot:[45,27,78]   },
+                { p:0.05, top:[200,95,80],   bot:[245,180,140] },
+                { p:0.18, top:[135,190,220], bot:[200,228,242] },
+                { p:0.48, top:[74,144,217],  bot:[175,215,240] },
+                { p:0.70, top:[240,175,85],  bot:[250,218,165] },
+                { p:0.88, top:[200,85,115],  bot:[235,160,178] },
+                { p:1.00, top:[26,26,46],    bot:[45,27,78]   },
+            ];
+
+            function lerp(a,b,t){return[Math.round(a[0]+(b[0]-a[0])*t),Math.round(a[1]+(b[1]-a[1])*t),Math.round(a[2]+(b[2]-a[2])*t)];}
+            function skyColor(p){
+                let lo=skyStops[0],hi=skyStops[skyStops.length-1];
+                for(let i=0;i<skyStops.length-1;i++){if(p>=skyStops[i].p&&p<=skyStops[i+1].p){lo=skyStops[i];hi=skyStops[i+1];break;}}
+                const t=hi.p===lo.p?0:(p-lo.p)/(hi.p-lo.p);
+                return {top:lerp(lo.top,hi.top,t),bot:lerp(lo.bot,hi.bot,t)};
+            }
+
+            // 月相（同 post.html）
+            function getMoonPhase(d){
+                const y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate();
+                let jd=Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+day-1524;
+                if(m<=2) jd=Math.floor(365.25*(y+4715))+Math.floor(30.6001*(m+13))+day-1524;
+                let phase=((jd-2451550.1)%29.53058867)/29.53058867;
+                if(phase<0) phase+=1;
+                return phase;
+            }
+            function getMoonPath(phase){
+                const R=10,cx=12,cy=12,cosT=Math.cos(2*Math.PI*phase),rx=Math.abs(cosT)*R;
+                if(phase<0.003||phase>0.997)return'';
+                if(Math.abs(phase-0.5)<0.003)return`M ${cx} ${cy-R} A ${R} ${R} 0 1 1 ${cx} ${cy+R} A ${R} ${R} 0 1 1 ${cx} ${cy-R}`;
+                if(phase<0.5){const sw=cosT>=0?0:1;return`M ${cx} ${cy-R} A ${R} ${R} 0 0 1 ${cx} ${cy+R} A ${rx} ${R} 0 0 ${sw} ${cx} ${cy-R}`;}
+                const sw=cosT>=0?1:0;return`M ${cx} ${cy-R} A ${R} ${R} 0 0 0 ${cx} ${cy+R} A ${rx} ${R} 0 0 ${sw} ${cx} ${cy-R}`;
+            }
+
+            // 当天月相
+            moonLit.setAttribute('d', getMoonPath(getMoonPhase(new Date())));
+
+            // 星星
+            let sf='';
+            for(let s=0;s<28;s++) sf+=`<div class="star" style="left:${2+Math.random()*96}%;top:${4+Math.random()*55}%;--twinkle-dur:${1.8+Math.random()*3.5}s;--twinkle-delay:${Math.random()*4}s"></div>`;
+            starsLayer.innerHTML=sf;
+
+            // 时间→天空位置映射
+            function getTimePct(){
+                const n=new Date();
+                const h=n.getHours()+n.getMinutes()/60+n.getSeconds()/3600;
+                if(h<5)   return 0.94+(h/5)*0.06;
+                if(h<7)   return 0.00+((h-5)/2)*0.12;
+                if(h<11)  return 0.12+((h-7)/4)*0.30;
+                if(h<14)  return 0.42+((h-11)/3)*0.13;
+                if(h<17)  return 0.55+((h-14)/3)*0.17;
+                if(h<19.5)return 0.72+((h-17)/2.5)*0.20;
+                return 0.92+((h-19.5)/4.5)*0.08;
+            }
+
+            function update(){
+                const p=getTimePct();
+                const hh=header.offsetHeight;
+                const colors=skyColor(p);
+                header.style.setProperty('--sky-top',`rgb(${colors.top.join(',')})`);
+
+                // 太阳
+                const sunRise=0.03,sunSet=0.91;
+                const sunVis=p>=sunRise&&p<=sunSet?1:0;
+                sunEl.style.opacity=sunVis;
+                if(sunVis>0){
+                    const t=(p-sunRise)/(sunSet-sunRise);
+                    const arc=Math.sin(Math.PI*t);
+                    sunEl.style.left=(5+t*88)+'%';
+                    sunEl.style.top=(hh*.58-arc*(hh*.46))+'px';
+                }
+
+                // 月亮 & 星星
+                const night=p<0.04||p>0.86?1:p<0.09?1-(p-0.04)/0.05:p>0.80?(p-0.80)/0.06:0;
+                moonEl.style.opacity=Math.max(0,Math.min(1,night));
+                starsLayer.style.opacity=Math.max(0,Math.min(1,night));
+
+                // 小船：白天从左到右航行
+                boat.style.left=(p*100)+'%';
+            }
+
+            update();
+            setInterval(update, 60000); // 每分钟更新
         })();
     </script>
 </body>
