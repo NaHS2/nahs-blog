@@ -816,11 +816,6 @@ body.pure-reading .water-splash {
   transition: opacity 0.8s ease;
 }
 
-.moon-base {
-  fill: #cbd5e1;
-  opacity: 0.18;
-}
-
 .moon-lit {
   fill: #fef9c3;
   filter: drop-shadow(0 0 3px rgba(254, 249, 195, 0.5));
