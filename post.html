@@ -16,6 +16,7 @@
     <!-- 顶部进度条：日月轮转 + 行舟 -->
     <header class="scroll-header" id="scroll-header">
         <div class="header-time" id="header-time">00:00:00</div>
+        <div class="header-date" id="header-date"></div>
         <div class="sky-canvas">
             <!-- 星星（夜间可见） -->
             <div class="stars-layer" id="stars-layer"></div>
@@ -291,10 +292,15 @@
                 const scrollPct = docH > 0 ? Math.max(0, Math.min(1, scrollTop / docH)) : 0;
                 const hh = header.offsetHeight;
 
-                // 左上角时间
+                // 左上角时间 + 日期
                 const now = new Date();
                 document.getElementById('header-time').textContent =
                     pad(now.getHours())+':'+pad(now.getMinutes())+':'+pad(now.getSeconds());
+                const mo = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                const wd = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+                const od = (n) => { const s=['th','st','nd','rd']; const v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); };
+                document.getElementById('header-date').textContent =
+                    mo[now.getMonth()]+' '+od(now.getDate())+' · '+wd[now.getDay()];
 
                 // -- 天空颜色 --
                 const colors = getSkyColors(scrollPct);

@@ -12,6 +12,7 @@
     <!-- 顶部进度条：日月轮转（时间驱动） -->
     <header class="scroll-header" id="scroll-header">
         <div class="header-time" id="header-time">00:00:00</div>
+        <div class="header-date" id="header-date">June 7th · Sun</div>
         <div class="sky-canvas">
             <div class="stars-layer" id="stars-layer"></div>
             <div class="sun-container" id="sun"><div class="sun-core"></div></div>
@@ -280,8 +281,9 @@
                 }
 
                 // June 7th · Sun
-                document.getElementById('clock-sub').textContent =
-                    monthFull[now.getMonth()] + ' ' + ordinal(now.getDate()) + ' · ' + weekNames[now.getDay()];
+                const dateStr = monthFull[now.getMonth()] + ' ' + ordinal(now.getDate()) + ' · ' + weekNames[now.getDay()];
+                document.getElementById('clock-sub').textContent = dateStr;
+                document.getElementById('header-date').textContent = dateStr;
             }
 
             updateClock();
