@@ -303,7 +303,7 @@
                         else if(Math.abs(mp-0.5)<0.003) moonPath='M12 2 A10 10 0 1 1 12 22 A10 10 0 1 1 12 2';
                         else if(mp<0.5){const sw=cosT>=0?0:1;moonPath=`M12 2 A10 10 0 0 1 12 22 A${rx} 10 0 0 ${sw} 12 2`;}
                         else{const sw=cosT>=0?1:0;moonPath=`M12 2 A10 10 0 0 0 12 22 A${rx} 10 0 0 ${sw} 12 2`;}
-                        dot.innerHTML = `<circle cx="12" cy="12" r="10" fill="#1e293b" opacity="0.2"/><path d="${moonPath}" fill="#fef9c3"/>`;
+                        dot.innerHTML = `<path d="${moonPath}" fill="#fef9c3"/>`;
                     }else{
                         dot.innerHTML = '<circle cx="12" cy="12" r="9" fill="#fbbf24" filter="url(#sunGlow)"/><defs><filter id="sunGlow"><feGaussianBlur stdDeviation="1.5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
                     }
@@ -476,7 +476,7 @@
                             else if(Math.abs(mp-0.5)<0.003) moonPath='M12 2 A10 10 0 1 1 12 22 A10 10 0 1 1 12 2';
                             else if(mp<0.5){const sw=cosT>=0?0:1;moonPath=`M12 2 A10 10 0 0 1 12 22 A${rx} 10 0 0 ${sw} 12 2`;}
                             else{const sw=cosT>=0?1:0;moonPath=`M12 2 A10 10 0 0 0 12 22 A${rx} 10 0 0 ${sw} 12 2`;}
-                            dot.innerHTML = `<circle cx="12" cy="12" r="10" fill="#1e293b" opacity="0.2"/><path d="${moonPath}" fill="#fef9c3"/>`;
+                            dot.innerHTML = `<path d="${moonPath}" fill="#fef9c3"/>`;
                         }else{
                             dot.innerHTML = '<circle cx="12" cy="12" r="9" fill="#fbbf24" filter="url(#sunGlow)"/><defs><filter id="sunGlow"><feGaussianBlur stdDeviation="1.5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
                         }
