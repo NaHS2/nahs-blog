@@ -375,21 +375,7 @@ body {
 /* ====== 固定返回按钮（文章页左上角） ====== */
 /* ====== 返回按钮（header内左上角） ====== */
 .back-btn-fixed {
-  position: absolute;
-  top: 8px;
-  right: 52px;  /* 时间在左上，返回在时间右边 */
-  z-index: 20;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.25);
-  border: none;
-  color: rgba(255,255,255,0.9);
-  text-decoration: none;
+  display: none;  /* 移动端隐藏 */
 }
 
 .back-btn-fixed:hover {
@@ -466,6 +452,8 @@ body.pure-reading .water-splash {
 
 @media (min-width: 768px) {
   .back-btn-fixed {
+    display: inline-flex;
+    position: absolute;
     top: 10px;
     right: auto;
     left: 120px;
@@ -475,6 +463,11 @@ body.pure-reading .water-splash {
     border-radius: 14px;
     font-size: 0.82rem;
     background: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.9);
+    text-decoration: none;
+    align-items: center;
+    gap: 4px;
+    z-index: 20;
   }
   .back-btn-label {
     display: inline;

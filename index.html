@@ -252,26 +252,15 @@
                 document.getElementById('header-time').textContent =
                     pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
 
-                // 头像环日月点：以avatar几何中心为圆心(左→上→右)
+                // 头像日月：北京时间24h全周(0h底→6h左日出→12h顶正午→18h右日落)
                 const dot = document.getElementById('avatar-celestial');
                 if (dot) {
                     const aw = document.getElementById('avatar');
                     const size = aw ? aw.offsetWidth : 72;
-                    const pad = 10; // 与CSS padding一致
+                    const pad = 10;
                     const cx = pad + size / 2, cy = pad + size / 2, orbitR = size / 2 + 5;
-                    let p;
-                    if (h < 5)        p = 0.94 + (h / 5) * 0.06;
-                    else if (h < 7)   p = 0.00 + ((h - 5) / 2) * 0.12;
-                    else if (h < 11)  p = 0.12 + ((h - 7) / 4) * 0.30;
-                    else if (h < 14)  p = 0.42 + ((h - 11) / 3) * 0.13;
-                    else if (h < 17)  p = 0.55 + ((h - 14) / 3) * 0.17;
-                    else if (h < 19.5)p = 0.72 + ((h - 17) / 2.5) * 0.20;
-                    else              p = 0.92 + ((h - 19.5) / 4.5) * 0.08;
-                    const sr = 0.03, ss = 0.91;
-                    const dt = Math.max(0, Math.min(1, (p - sr) / (ss - sr)));
-                    // 角度：π(左/日出) → 1.5π(顶/正午) → 2π(右/日落)
-                    const angle = Math.PI + dt * Math.PI;
-                    const isNight = p < sr || p > ss;
+                    const angle = ((h - 6) / 12 + 1) * Math.PI;
+                    const isNight = h < 6 || h >= 18;
                     dot.classList.toggle('night', isNight);
                     const half = isNight ? 3 : 4;
                     dot.style.left = (cx + orbitR * Math.cos(angle) - half) + 'px';
@@ -410,7 +399,7 @@
                 const hh = header.offsetHeight;
                 const colors = skyColor(p);
                 header.style.setProperty('--sky-top', `rgb(${colors.top.join(',')})`);
-                // 头像环 + 日月点(顺时针钟表轨道)
+                // 头像环 + 日月点(p值直接映射24h轨道)
                 const av = document.getElementById('avatar');
                 if (av) {
                     av.style.borderColor = `rgb(${colors.top.join(',')})`;
@@ -419,10 +408,8 @@
                         const size = av.offsetWidth;
                         const pad = 10;
                         const cx = pad + size / 2, cy = pad + size / 2, orbitR = size / 2 + 5;
-                        const sr = 0.03, ss = 0.91;
-                        const dt = Math.max(0, Math.min(1, (p - sr) / (ss - sr)));
-                        const angle = Math.PI + dt * Math.PI;
-                        const isNight = p < sr || p > ss;
+                        const angle = (p * 2 + 0.5) * Math.PI;
+                        const isNight = p < 0.25 || p > 0.75;
                         dot.classList.toggle('night', isNight);
                         const half = isNight ? 3 : 4;
                         dot.style.left = (cx + orbitR * Math.cos(angle) - half) + 'px';
