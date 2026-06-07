@@ -257,13 +257,12 @@
                 document.getElementById('header-time').textContent =
                     pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
 
-                // 头像环日月点(与进度条同阈值: sunRise=0.03, sunSet=0.91)
+                // 头像环日月点(正圆轨道，贴环外侧，不遮挡头像)
                 const dot = document.getElementById('avatar-celestial');
                 if (dot) {
                     const aw = document.getElementById('avatar');
                     const size = aw ? aw.offsetWidth : 72;
-                    const dr = size / 2 + 2;
-                    // 时间→p映射(与进度条getTimePct同逻辑)
+                    const cx = size / 2, cy = size / 2, orbitR = size / 2 + 6;
                     let p;
                     if (h < 5)        p = 0.94 + (h / 5) * 0.06;
                     else if (h < 7)   p = 0.00 + ((h - 5) / 2) * 0.12;
@@ -274,9 +273,9 @@
                     else              p = 0.92 + ((h - 19.5) / 4.5) * 0.08;
                     const sr = 0.03, ss = 0.91;
                     const dt = (p - sr) / (ss - sr);
-                    const a = (Math.max(0, Math.min(1, dt)) * 180 + 90) * Math.PI / 180;
-                    dot.style.left = (dr + dr * Math.cos(a)) + 'px';
-                    dot.style.top = (dr + dr * Math.sin(a)) + 'px';
+                    const angle = (Math.max(0, Math.min(1, dt)) * 180 + 90) * Math.PI / 180;
+                    dot.style.left = (cx + orbitR * Math.cos(angle) - 4) + 'px';
+                    dot.style.top = (cy + orbitR * Math.sin(angle) - 4) + 'px';
                     dot.classList.toggle('night', p < sr || p > ss);
                 }
 
@@ -413,20 +412,19 @@
                 const hh = header.offsetHeight;
                 const colors = skyColor(p);
                 header.style.setProperty('--sky-top', `rgb(${colors.top.join(',')})`);
-                // 头像环 + 日月点(与进度条同阈值)
+                // 头像环 + 日月点(正圆轨道)
                 const av = document.getElementById('avatar');
                 if (av) {
                     av.style.borderColor = `rgb(${colors.top.join(',')})`;
                     const dot = document.getElementById('avatar-celestial');
                     if (dot) {
                         const size = av.offsetWidth;
-                        const dr = size / 2 + 2;
+                        const cx = size / 2, cy = size / 2, orbitR = size / 2 + 6;
                         const sunRise = 0.03, sunSet = 0.91;
                         const dt = (p - sunRise) / (sunSet - sunRise);
-                        const a = (Math.max(0, Math.min(1, dt)) * 180 + 90) * Math.PI / 180;
-                        const rad = a;
-                        dot.style.left = (dr + dr * Math.cos(rad)) + 'px';
-                        dot.style.top = (dr + dr * Math.sin(rad)) + 'px';
+                        const angle = (Math.max(0, Math.min(1, dt)) * 180 + 90) * Math.PI / 180;
+                        dot.style.left = (cx + orbitR * Math.cos(angle) - 4) + 'px';
+                        dot.style.top = (cy + orbitR * Math.sin(angle) - 4) + 'px';
                         dot.classList.toggle('night', p < sunRise || p > sunSet);
                     }
                 }
