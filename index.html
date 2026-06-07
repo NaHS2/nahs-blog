@@ -37,7 +37,10 @@
                 <div class="profile-top">
                     <div class="avatar-wrap">
                         <img src="assets/avatar.jpg" alt="硫氢化钠" class="avatar" id="avatar" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
-                        <div class="avatar-celestial" id="avatar-celestial"></div>
+                        <svg class="avatar-celestial" id="avatar-celestial" viewBox="0 0 20 20">
+                            <circle cx="10" cy="10" r="9" fill="#fbbf24" filter="url(#glow)" />
+                            <defs><filter id="glow"><feGaussianBlur stdDeviation="1" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+                        </svg>
                     </div>
                     <div class="profile-info">
                         <h1 class="author-name">硫氢化钠</h1>
@@ -278,27 +281,31 @@
                 const cr=Math.round(lo[0]+(hi[0]-lo[0])*t),cg=Math.round(lo[1]+(hi[1]-lo[1])*t),cb=Math.round(lo[2]+(hi[2]-lo[2])*t);
                 if(aw) aw.style.borderColor = `rgb(${cr},${cg},${cb})`;
 
-                // 日月点：标准钟表盘面(0h/12h顶→3h右→6h底→9h左)
+                // 日月点：标准钟表盘面 + 太阳圆/真实月相SVG
                 if(dot){
                     const angle = (1.5 + h / 6) * Math.PI;
                     const isNight = sp < 0.03 || sp > 0.91;
                     dot.classList.toggle('night', isNight);
+                    const halfSvg = 9;
+                    dot.style.left = (cx + orbitR * Math.cos(angle) - halfSvg) + 'px';
+                    dot.style.top = (cy + orbitR * Math.sin(angle) - halfSvg) + 'px';
+
                     if(isNight){
-                        // 月相：0=新月 0.5=满月 1=新月
                         const nowD = new Date();
                         const y=nowD.getFullYear(),m=nowD.getMonth()+1,d=nowD.getDate();
                         let jd=Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d-1524;
                         if(m<=2) jd=Math.floor(365.25*(y+4715))+Math.floor(30.6001*(m+13))+d-1524;
-                        const mp=((jd-2451550.1)%29.53058867)/29.53058867;
-                        const illum=(1-Math.cos(2*Math.PI*(mp<0?mp+1:mp)))/2;
-                        const ms=2+illum*5; // 2~7px
-                        dot.style.width=ms+'px'; dot.style.height=ms+'px';
-                        dot.style.left=(cx+orbitR*Math.cos(angle)-ms/2)+'px';
-                        dot.style.top=(cy+orbitR*Math.sin(angle)-ms/2)+'px';
+                        let mp=((jd-2451550.1)%29.53058867)/29.53058867;
+                        if(mp<0) mp+=1;
+                        const cosT=Math.cos(2*Math.PI*mp), rx=Math.abs(cosT)*10;
+                        let moonPath;
+                        if(mp<0.003||mp>0.997) moonPath='';
+                        else if(Math.abs(mp-0.5)<0.003) moonPath='M12 2 A10 10 0 1 1 12 22 A10 10 0 1 1 12 2';
+                        else if(mp<0.5){const sw=cosT>=0?0:1;moonPath=`M12 2 A10 10 0 0 1 12 22 A${rx} 10 0 0 ${sw} 12 2`;}
+                        else{const sw=cosT>=0?1:0;moonPath=`M12 2 A10 10 0 0 0 12 22 A${rx} 10 0 0 ${sw} 12 2`;}
+                        dot.innerHTML = `<circle cx="12" cy="12" r="10" fill="#1e293b" opacity="0.2"/><path d="${moonPath}" fill="#fef9c3"/>`;
                     }else{
-                        dot.style.width='10px'; dot.style.height='10px';
-                        dot.style.left=(cx+orbitR*Math.cos(angle)-5)+'px';
-                        dot.style.top=(cy+orbitR*Math.sin(angle)-5)+'px';
+                        dot.innerHTML = '<circle cx="12" cy="12" r="9" fill="#fbbf24" filter="url(#sunGlow)"/><defs><filter id="sunGlow"><feGaussianBlur stdDeviation="1.5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
                     }
                 }
 
@@ -448,14 +455,31 @@
                     av.style.borderColor = `rgb(${colors.top.join(',')})`;
                     const dot = document.getElementById('avatar-celestial');
                     if (dot) {
-                        const size = av.offsetWidth;
-                        const cx = size / 2, cy = size / 2, orbitR = size / 2 + 3;
+                        const SIZE = window.innerWidth >= 768 ? 100 : 72;
+                        const cx = SIZE / 2, cy = SIZE / 2, orbitR = SIZE / 2 + 3;
                         const angle = (1.5 + p * 24 / 6) * Math.PI;
                         const isNight = p < 0.03 || p > 0.91;
                         dot.classList.toggle('night', isNight);
-                        const half = isNight ? 3.5 : 5;
-                        dot.style.left = (cx + orbitR * Math.cos(angle) - half) + 'px';
-                        dot.style.top = (cy + orbitR * Math.sin(angle) - half) + 'px';
+                        const halfSvg = 9;
+                        dot.style.left = (cx + orbitR * Math.cos(angle) - halfSvg) + 'px';
+                        dot.style.top = (cy + orbitR * Math.sin(angle) - halfSvg) + 'px';
+                        if(isNight){
+                            const nowD = new Date();
+                            const y=nowD.getFullYear(),m=nowD.getMonth()+1,d=nowD.getDate();
+                            let jd=Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d-1524;
+                            if(m<=2) jd=Math.floor(365.25*(y+4715))+Math.floor(30.6001*(m+13))+d-1524;
+                            let mp=((jd-2451550.1)%29.53058867)/29.53058867;
+                            if(mp<0) mp+=1;
+                            const cosT=Math.cos(2*Math.PI*mp), rx=Math.abs(cosT)*10;
+                            let moonPath;
+                            if(mp<0.003||mp>0.997) moonPath='';
+                            else if(Math.abs(mp-0.5)<0.003) moonPath='M12 2 A10 10 0 1 1 12 22 A10 10 0 1 1 12 2';
+                            else if(mp<0.5){const sw=cosT>=0?0:1;moonPath=`M12 2 A10 10 0 0 1 12 22 A${rx} 10 0 0 ${sw} 12 2`;}
+                            else{const sw=cosT>=0?1:0;moonPath=`M12 2 A10 10 0 0 0 12 22 A${rx} 10 0 0 ${sw} 12 2`;}
+                            dot.innerHTML = `<circle cx="12" cy="12" r="10" fill="#1e293b" opacity="0.2"/><path d="${moonPath}" fill="#fef9c3"/>`;
+                        }else{
+                            dot.innerHTML = '<circle cx="12" cy="12" r="9" fill="#fbbf24" filter="url(#sunGlow)"/><defs><filter id="sunGlow"><feGaussianBlur stdDeviation="1.5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
+                        }
                     }
                 }
                 // 氛围
