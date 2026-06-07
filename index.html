@@ -248,9 +248,12 @@
                 const now = new Date();
                 const h = now.getHours() + now.getMinutes() / 60;
 
-                // 左上角时间 HH:MM:SS
+                // 左上角时间 HH:MM:SS（拖拽时也更新）
                 document.getElementById('header-time').textContent =
                     pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+
+                // 拖拽期间不更新头像环色和日月点，避免冲突
+                if (window._boatDragging) return;
 
                 // 头像环色+日月点(每秒更新，所有值硬编码防跳)
                 const aw = document.getElementById('avatar');
@@ -431,6 +434,7 @@
 
             // ==== 小船拖拽预览 ============================================
             let dragging = false, dragPct = 0;
+            window._boatDragging = false;
             boat.style.cursor = 'grab';
             boat.style.pointerEvents = 'auto';
 
@@ -495,13 +499,15 @@
             }
 
             boat.addEventListener('mousedown', e => {
-                dragging = true; dragPct = getBoatPct(e.clientX);
+                dragging = true; window._boatDragging = true;
+                dragPct = getBoatPct(e.clientX);
                 boat.style.cursor = 'grabbing';
                 applySky(dragPct);
                 e.preventDefault();
             });
             boat.addEventListener('touchstart', e => {
-                dragging = true; dragPct = getBoatPct(e.touches[0].clientX);
+                dragging = true; window._boatDragging = true;
+                dragPct = getBoatPct(e.touches[0].clientX);
                 applySky(dragPct);
                 e.preventDefault();
             }, { passive: false });
@@ -519,13 +525,13 @@
 
             window.addEventListener('mouseup', () => {
                 if (!dragging) return;
-                dragging = false;
+                dragging = false; window._boatDragging = false;
                 boat.style.cursor = 'grab';
-                applySky(getTimePct()); // 弹回真实时间
+                applySky(getTimePct());
             });
             window.addEventListener('touchend', () => {
                 if (!dragging) return;
-                dragging = false;
+                dragging = false; window._boatDragging = false;
                 applySky(getTimePct());
             });
 

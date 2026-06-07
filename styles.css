@@ -107,7 +107,7 @@ body {
   box-shadow: 0 0 6px rgba(251,191,36,0.8);
   pointer-events: none;
   z-index: 2;
-  /* 定位由JS计算 */
+  transition: none; /* 拖拽时无延迟 */
 }
 
 .avatar-celestial.night {
