@@ -275,6 +275,8 @@
             // ====== 滚动驱动 ======
             let ticking = false;
 
+            let lastAmbientPct = -1;
+
             function update() {
                 const scrollTop = window.scrollY;
                 const docH = document.body.scrollHeight - window.innerHeight;
@@ -285,17 +287,19 @@
                 const colors = getSkyColors(scrollPct);
                 header.style.setProperty('--sky-top', `rgb(${colors.top.join(',')})`);
 
-                // -- 全局环境色：10% 天空色素，形成可感知的氛围基调 --
-                const aR = Math.round(colors.top[0] * 0.10 + 230);
-                const aG = Math.round(colors.top[1] * 0.10 + 230);
-                const aB = Math.round(colors.top[2] * 0.10 + 230);
-                document.body.style.setProperty('--page-ambient', `rgb(${aR},${aG},${aB})`);
+                // -- 全局环境色（节流：滚动变化 >1.5% 才更新，避免每帧重绘） --
+                if (Math.abs(scrollPct - lastAmbientPct) > 0.015) {
+                    lastAmbientPct = scrollPct;
+                    const aR = Math.round(colors.top[0] * 0.18 + 209);
+                    const aG = Math.round(colors.top[1] * 0.18 + 209);
+                    const aB = Math.round(colors.top[2] * 0.18 + 209);
+                    document.body.style.setProperty('--page-ambient', `rgb(${aR},${aG},${aB})`);
 
-                // -- 装饰色：22% 天空色素，用于边框、分隔线等结构性元素 --
-                const dR = Math.round(colors.top[0] * 0.22 + 199);
-                const dG = Math.round(colors.top[1] * 0.22 + 199);
-                const dB = Math.round(colors.top[2] * 0.22 + 199);
-                document.body.style.setProperty('--page-accent', `rgb(${dR},${dG},${dB})`);
+                    const dR = Math.round(colors.top[0] * 0.30 + 179);
+                    const dG = Math.round(colors.top[1] * 0.30 + 179);
+                    const dB = Math.round(colors.top[2] * 0.30 + 179);
+                    document.body.style.setProperty('--page-accent', `rgb(${dR},${dG},${dB})`);
+                }
 
                 // -- 太阳 --
                 const sunRise = 0.03, sunSet = 0.90;

@@ -189,10 +189,10 @@
             const t = hi.p===lo.p ? 0 : (p-lo.p)/(hi.p-lo.p);
             const sc = [0,1,2].map(i=>Math.round(lo.c[i]+(hi.c[i]-lo.c[i])*t));
 
-            const ar = Math.round(sc[0]*0.10+230), ag = Math.round(sc[1]*0.10+230), ab = Math.round(sc[2]*0.10+230);
+            const ar = Math.round(sc[0]*0.18+209), ag = Math.round(sc[1]*0.18+209), ab = Math.round(sc[2]*0.18+209);
             document.body.style.setProperty('--page-ambient', `rgb(${ar},${ag},${ab})`);
 
-            const dr = Math.round(sc[0]*0.22+199), dg = Math.round(sc[1]*0.22+199), db = Math.round(sc[2]*0.22+199);
+            const dr = Math.round(sc[0]*0.30+179), dg = Math.round(sc[1]*0.30+179), db = Math.round(sc[2]*0.30+179);
             document.body.style.setProperty('--page-accent', `rgb(${dr},${dg},${db})`);
         })();
     </script>
