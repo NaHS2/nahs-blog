@@ -10,48 +10,40 @@
 </head>
 <body>
     <div class="app-wrapper page-transition">
-        <!-- 侧边栏：极简人物卡片 -->
+        <!-- 侧边栏 -->
         <aside class="sidebar">
             <div class="profile">
                 <img src="assets/avatar.jpg" alt="硫氢化钠" class="avatar" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
                 <h1 class="author-name">硫氢化钠</h1>
-                <p class="author-bio">记录学习点滴，分享开源日常。关注技术，也热爱生活。</p>
+                <p class="author-bio">请允许一切发生，然后做一个勇敢的人</p>
+
+                <!-- 日月时钟 -->
+                <div class="profile-clock">
+                    <div class="clock-time" id="clock-time">00:00:00</div>
+                    <div class="clock-date" id="clock-date">2026.06.07</div>
+                    <div class="clock-sub" id="clock-sub">Jun · Sun</div>
+                    <div class="clock-lunar" id="clock-lunar">丙午年 四月廿三 · 属马</div>
+                </div>
+
                 <div class="social-links">
                     <a href="https://github.com/NaHS2" target="_blank" class="social-link">
-                        <!-- Feather Icon: GitHub -->
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                         @NaHS2
                     </a>
-                    <a href="https://space.bilibili.com/549713964?spm_id_from=333.1007.0.0" target="_blank" class="social-link">
-                        <!-- Custom Icon: Bilibili TV outline -->
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="7" width="20" height="15" rx="4" ry="4"></rect>
-                            <polyline points="8 3 12 7 16 3"></polyline>
-                            <line x1="8" y1="12" x2="8" y2="12"></line>
-                            <line x1="16" y1="12" x2="16" y2="12"></line>
-                        </svg>
+                    <a href="https://space.bilibili.com/549713964" target="_blank" class="social-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="4" ry="4"></rect><polyline points="8 3 12 7 16 3"></polyline></svg>
                         Bilibili
                     </a>
                     <a href="downloads.html" class="social-link">
-                        <!-- Feather Icon: Download / Archive -->
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         资料下载
                     </a>
                 </div>
-            </div>
 
-            <!-- 日月时钟：公历 + 农历 + 天干地支 -->
-            <div class="sidebar-clock" id="sidebar-clock">
-                <div class="clock-time" id="clock-time">00:00:00</div>
-                <div class="clock-date-row">
-                    <span class="clock-solar" id="clock-solar"></span>
-                    <span class="clock-weekday" id="clock-weekday"></span>
+                <div class="email-list">
+                    <a href="mailto:nahs.lql@outlook.com" class="email-link">nahs.lql@outlook.com</a>
+                    <a href="mailto:nahs.lql@gmail.com" class="email-link">nahs.lql@gmail.com</a>
                 </div>
-                <div class="clock-lunar-row">
-                    <span class="clock-ganzhi" id="clock-ganzhi"></span>
-                    <span class="clock-zodiac" id="clock-zodiac"></span>
-                </div>
-                <div class="clock-lunar-date" id="clock-lunar"></div>
             </div>
         </aside>
 
@@ -278,7 +270,8 @@
                 '十一','十二','十三','十四','十五','十六','十七','十八','十九','二十',
                 '廿一','廿二','廿三','廿四','廿五','廿六','廿七','廿八','廿九','三十',
             ];
-            const weekDayNames = ['日','一','二','三','四','五','六'];
+            const weekNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
             function leapMonth(y) { return lunarInfo[y - 1900] & 0xF; }
             function leapDays(y) { return leapMonth(y) ? ((lunarInfo[y - 1900] >> 16) & 1) ? 30 : 29 : 0; }
@@ -336,17 +329,16 @@
                 document.getElementById('clock-time').textContent =
                     pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
 
-                document.getElementById('clock-solar').textContent =
-                    now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日';
+                document.getElementById('clock-date').textContent =
+                    now.getFullYear() + '.' + pad(now.getMonth() + 1) + '.' + pad(now.getDate());
 
-                document.getElementById('clock-weekday').textContent = '周' + weekDayNames[now.getDay()];
+                document.getElementById('clock-sub').textContent =
+                    monthNames[now.getMonth()] + ' · ' + weekNames[now.getDay()];
 
-                document.getElementById('clock-ganzhi').textContent = lun.yearGZ + '年';
-                document.getElementById('clock-zodiac').textContent = '属' + lun.zodiac;
-
-                const lunarDateStr = (lun.isLeap ? '闰' : '') +
-                    lunarMonthNames[lun.month - 1] + '月' + lunarDayNames[lun.day];
-                document.getElementById('clock-lunar').textContent = lunarDateStr;
+                const lunarStr = lun.yearGZ + '年 ' +
+                    (lun.isLeap ? '闰' : '') + lunarMonthNames[lun.month - 1] + '月' +
+                    lunarDayNames[lun.day] + ' · 属' + lun.zodiac;
+                document.getElementById('clock-lunar').textContent = lunarStr;
             }
 
             updateClock();

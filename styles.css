@@ -57,10 +57,6 @@ body {
   width: 100%;
   flex-shrink: 0;
   position: static;
-  background: linear-gradient(180deg, var(--page-ambient, #f3f5f9), transparent);
-  border-radius: 14px;
-  padding: 16px;
-  margin: -8px;
 }
 
 .profile {
@@ -123,71 +119,69 @@ body {
   height: 16px;
 }
 
-/* ====== 侧边栏日月时钟 ====== */
-.sidebar-clock {
-  margin-top: 16px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.55);
-  border: 1px solid rgba(0,0,0,0.04);
-  text-align: center;
+/* ====== 侧边栏 Profile 时钟 ====== */
+.profile-clock {
+  margin: 18px 0 14px;
+  padding: 14px 0;
+  border-top: 1px solid var(--page-accent, rgba(0,0,0,0.06));
+  border-bottom: 1px solid var(--page-accent, rgba(0,0,0,0.06));
 }
 
 .clock-time {
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: var(--gray-900);
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
 
-.clock-date-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-  font-size: 0.82rem;
-  color: var(--gray-500);
-}
-
-.clock-lunar-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 2px;
-  font-size: 0.78rem;
-}
-
-.clock-ganzhi {
-  color: var(--gray-500);
-}
-
-.clock-zodiac {
-  color: var(--gray-400);
-  font-size: 0.72rem;
-}
-
-.clock-lunar-date {
-  margin-top: 2px;
-  font-size: 0.85rem;
-  color: var(--gray-600);
+.clock-date {
+  margin-top: 3px;
+  font-size: 0.95rem;
   font-weight: 500;
+  color: var(--gray-700);
+  letter-spacing: 0.02em;
+}
+
+.clock-sub {
+  margin-top: 1px;
+  font-size: 0.78rem;
+  color: var(--gray-400);
+  letter-spacing: 0.03em;
+}
+
+.clock-lunar {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+}
+
+/* ====== 邮箱列表 ====== */
+.email-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.email-link {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.email-link:hover {
+  color: var(--gray-600);
 }
 
 @media (min-width: 768px) {
-  .sidebar-clock {
-    margin-top: 20px;
-    text-align: left;
+  .profile-clock {
+    margin: 22px 0 16px;
   }
   .clock-time {
     font-size: 1.75rem;
-  }
-  .clock-date-row,
-  .clock-lunar-row {
-    justify-content: flex-start;
   }
 }
 
