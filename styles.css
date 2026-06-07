@@ -457,22 +457,20 @@ body {
   position: fixed;
   top: 56px;
   left: 12px;
-  z-index: 1001;
+  z-index: 1100;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 8px;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
   border-radius: 50%;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(0,0,0,0.08);
-  color: var(--gray-700);
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: var(--gray-800);
   text-decoration: none;
-  font-size: 0.82rem;
-  font-weight: 500;
-  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  transition: color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .back-btn-fixed:hover {
@@ -488,30 +486,29 @@ body {
 /* ====== 纯净阅读切换按钮（文章页右上角） ====== */
 .pure-toggle {
   position: fixed;
-  top: 60px;
-  right: 16px;
-  z-index: 1001;
+  top: 56px;
+  right: 12px;
+  z-index: 1100;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 12px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.78);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(0,0,0,0.06);
-  color: var(--gray-600);
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: var(--gray-800);
   font-size: 0.82rem;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+  transition: color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .pure-toggle:hover {
-  color: var(--gray-900);
-  background: rgba(255,255,255,0.92);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.12);
 }
 
 .pure-toggle.active {
@@ -557,9 +554,14 @@ body.pure-reading .water-splash {
   .back-btn-fixed {
     top: 68px;
     left: 24px;
+    width: auto;
+    height: auto;
     padding: 7px 16px;
     border-radius: 18px;
     font-size: 0.85rem;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   .back-btn-label {
     display: inline;
@@ -567,8 +569,14 @@ body.pure-reading .water-splash {
   .pure-toggle {
     top: 68px;
     right: 24px;
+    width: auto;
+    height: auto;
     padding: 7px 16px;
+    border-radius: 18px;
     font-size: 0.85rem;
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   .pure-toggle-label {
     display: inline;
