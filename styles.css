@@ -76,6 +76,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  flex: 1;
+  min-width: 0;
 }
 
 .avatar {
@@ -100,6 +102,8 @@ body {
   color: var(--gray-500);
   margin: 0;
   line-height: 1.45;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .social-links {
