@@ -94,7 +94,7 @@ body {
   object-fit: cover;
   border: 3px solid var(--sky-top, #87CEEB);
   display: block;
-  transition: border-color 60s linear;
+  transition: border-color 1s ease;
 }
 
 /* 头像环日月点：24h正圆轨道 */
