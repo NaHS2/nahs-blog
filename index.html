@@ -33,31 +33,18 @@
         <aside class="sidebar">
             <div class="profile">
                 <div class="profile-top">
-                    <img src="assets/avatar.jpg" alt="硫氢化钠" class="avatar" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
+                    <div class="avatar-wrap">
+                        <img src="assets/avatar.jpg" alt="硫氢化钠" class="avatar" id="avatar" onerror="this.src='https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'">
+                        <div class="avatar-celestial" id="avatar-celestial"></div>
+                    </div>
                     <div class="profile-info">
                         <h1 class="author-name">硫氢化钠</h1>
                         <p class="author-bio">想扎根嵌入式领域，顺便多学点全栈本事</p>
                     </div>
                 </div>
 
-                <!-- 天空时钟 -->
+                <!-- 日期与农历 -->
                 <div class="profile-clock" id="profile-clock">
-                    <svg class="analog-clock" viewBox="0 0 100 100" id="analog-clock">
-                        <!-- 天空盘面 -->
-                        <circle cx="50" cy="50" r="48" class="clock-face" id="clock-face" />
-                        <!-- 刻度 -->
-                        <g class="clock-ticks" id="clock-ticks"></g>
-                        <!-- 日月指示点 -->
-                        <circle cx="50" cy="50" r="3" class="clock-celestial-dot" id="clock-celestial-dot" />
-                        <!-- 时针 -->
-                        <line x1="50" y1="50" x2="50" y2="30" class="clock-hand-hour" id="clock-hand-h" />
-                        <!-- 分针 -->
-                        <line x1="50" y1="50" x2="50" y2="18" class="clock-hand-min" id="clock-hand-m" />
-                        <!-- 秒针 -->
-                        <line x1="50" y1="58" x2="50" y2="16" class="clock-hand-sec" id="clock-hand-s" />
-                        <!-- 中心点 -->
-                        <circle cx="50" cy="50" r="2.5" class="clock-center" />
-                    </svg>
                     <div class="clock-date" id="clock-date">2026.06.07</div>
                     <div class="clock-sub" id="clock-sub">June 7th · Sun</div>
                     <div class="clock-lunar" id="clock-lunar">丙午年 四月廿三 · 属马</div>
@@ -338,54 +325,31 @@
 
             function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
-            // 生成表盘刻度
-            (function genTicks() {
-                const g = document.getElementById('clock-ticks');
-                if (!g) return;
-                let html = '';
-                for (let i = 0; i < 60; i++) {
-                    const a = (i * 6 - 90) * Math.PI / 180;
-                    const inner = i % 5 === 0 ? 40 : 43;
-                    const w = i % 5 === 0 ? 1.5 : 0.5;
-                    const x1 = 50 + inner * Math.cos(a), y1 = 50 + inner * Math.sin(a);
-                    const x2 = 50 + 45 * Math.cos(a), y2 = 50 + 45 * Math.sin(a);
-                    html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${w}" />`;
-                }
-                g.innerHTML = html;
-            })();
-
             function updateClock() {
                 const now = new Date();
                 const lun = getLunar(now);
                 const h = now.getHours() + now.getMinutes() / 60;
-                const s = now.getSeconds();
 
-                // 表盘指针旋转
-                const hDeg = ((now.getHours() % 12) + now.getMinutes() / 60) * 30;
-                const mDeg = (now.getMinutes() + s / 60) * 6;
-                const sDeg = s * 6;
-                document.getElementById('clock-hand-h').setAttribute('transform', `rotate(${hDeg} 50 50)`);
-                document.getElementById('clock-hand-m').setAttribute('transform', `rotate(${mDeg} 50 50)`);
-                document.getElementById('clock-hand-s').setAttribute('transform', `rotate(${sDeg} 50 50)`);
-
-                // 日月指示点在盘面上的位置（绕边缘）
-                const dot = document.getElementById('clock-celestial-dot');
+                // 头像环上的日月指示点
+                const dot = document.getElementById('avatar-celestial');
                 if (dot) {
-                    const sunAngle = ((h - 6) / 24) * 360; // 6am=0°(顶部), 6pm=180°(底部)
-                    const rad = (sunAngle - 90) * Math.PI / 180;
-                    const dotR = 37;
-                    dot.setAttribute('cx', (50 + dotR * Math.cos(rad)).toFixed(1));
-                    dot.setAttribute('cy', (50 + dotR * Math.sin(rad)).toFixed(1));
+                    const aw = document.getElementById('avatar');
+                    const size = aw ? aw.offsetWidth : 72;
+                    const r = size / 2 + 2; // 贴紧环外侧
+                    // 6am=顶部, 12pm=右侧, 6pm=底部, 12am=左侧
+                    const angle = ((h - 6) / 24) * 360 - 90;
+                    const rad = angle * Math.PI / 180;
+                    const cx = r + r * Math.cos(rad);
+                    const cy = r + r * Math.sin(rad);
+                    dot.style.left = cx + 'px';
+                    dot.style.top = cy + 'px';
                     const isNight = h < 6 || h > 18;
                     dot.classList.toggle('night', isNight);
-                    dot.setAttribute('r', isNight ? '2.5' : '3.5');
                 }
 
-                // 日期：2026.06.07
                 document.getElementById('clock-date').textContent =
                     now.getFullYear() + '.' + pad(now.getMonth() + 1) + '.' + pad(now.getDate());
 
-                // June 7th · Sun
                 document.getElementById('clock-sub').textContent =
                     monthFull[now.getMonth()] + ' ' + ordinal(now.getDate()) + ' · ' + weekNames[now.getDay()];
 
@@ -471,9 +435,9 @@
                 const colors=skyColor(p);
                 header.style.setProperty('--sky-top',`rgb(${colors.top.join(',')})`);
 
-                // 表盘盘面跟随天空色
-                const face = document.getElementById('clock-face');
-                if (face) face.setAttribute('fill', `rgb(${colors.top.join(',')})`);
+                // 头像环跟随天空色
+                const av = document.getElementById('avatar');
+                if (av) av.style.borderColor = `rgb(${colors.top.join(',')})`;
 
                 // 全局氛围色：与进度条天空同源
                 const aR=Math.round(colors.top[0]*0.18+209),aG=Math.round(colors.top[1]*0.18+209),aB=Math.round(colors.top[2]*0.18+209);
