@@ -482,9 +482,84 @@
                 setTimeout(()=>dot.remove(),800);
             }
 
+            // ==== 小船拖拽预览 ============================================
+            let dragging = false, dragPct = 0;
+            boat.style.cursor = 'grab';
+            boat.style.pointerEvents = 'auto';
+
+            function applySky(p) {
+                const hh = header.offsetHeight;
+                const colors = skyColor(p);
+                header.style.setProperty('--sky-top', `rgb(${colors.top.join(',')})`);
+                // 头像环
+                const av = document.getElementById('avatar');
+                if (av) av.style.borderColor = `rgb(${colors.top.join(',')})`;
+                // 氛围
+                const aR = Math.round(colors.top[0]*0.18+209), aG = Math.round(colors.top[1]*0.18+209), aB = Math.round(colors.top[2]*0.18+209);
+                document.body.style.setProperty('--page-ambient', `rgb(${aR},${aG},${aB})`);
+                const dR = Math.round(colors.top[0]*0.30+179), dG = Math.round(colors.top[1]*0.30+179), dB = Math.round(colors.top[2]*0.30+179);
+                document.body.style.setProperty('--page-accent', `rgb(${dR},${dG},${dB})`);
+                // 太阳
+                const sr = 0.03, ss = 0.91;
+                const sv = p >= sr && p <= ss ? 1 : 0;
+                sunEl.style.opacity = sv;
+                if (sv > 0) {
+                    const t = (p - sr) / (ss - sr);
+                    sunEl.style.left = (5 + t * 88) + '%';
+                    sunEl.style.top = (hh * .58 - Math.sin(Math.PI * t) * (hh * .46)) + 'px';
+                }
+                // 月亮 & 星星
+                const n = p < 0.04 || p > 0.86 ? 1 : p < 0.09 ? 1 - (p - 0.04) / 0.05 : p > 0.80 ? (p - 0.80) / 0.06 : 0;
+                moonEl.style.opacity = Math.max(0, Math.min(1, n));
+                starsLayer.style.opacity = Math.max(0, Math.min(1, n));
+                // 小船
+                boat.style.left = (p * 100) + '%';
+                boat.style.transition = dragging ? 'none' : 'left 0.8s cubic-bezier(0.34,1.56,0.64,1)';
+            }
+
+            function getBoatPct(clientX) {
+                const rect = header.getBoundingClientRect();
+                return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+            }
+
+            boat.addEventListener('mousedown', e => {
+                dragging = true; dragPct = getBoatPct(e.clientX);
+                boat.style.cursor = 'grabbing';
+                applySky(dragPct);
+                e.preventDefault();
+            });
+            boat.addEventListener('touchstart', e => {
+                dragging = true; dragPct = getBoatPct(e.touches[0].clientX);
+                applySky(dragPct);
+                e.preventDefault();
+            }, { passive: false });
+
+            window.addEventListener('mousemove', e => {
+                if (!dragging) return;
+                dragPct = getBoatPct(e.clientX);
+                applySky(dragPct);
+            });
+            window.addEventListener('touchmove', e => {
+                if (!dragging) return;
+                dragPct = getBoatPct(e.touches[0].clientX);
+                applySky(dragPct);
+            }, { passive: false });
+
+            window.addEventListener('mouseup', () => {
+                if (!dragging) return;
+                dragging = false;
+                boat.style.cursor = 'grab';
+                applySky(getTimePct()); // 弹回真实时间
+            });
+            window.addEventListener('touchend', () => {
+                if (!dragging) return;
+                dragging = false;
+                applySky(getTimePct());
+            });
+
             update();
-            setInterval(update, 60000);
-            setInterval(splash, 10000); // 每10秒轻轻飞溅
+            setInterval(() => { if (!dragging) update(); }, 60000);
+            setInterval(splash, 10000);
         })();
     </script>
 </body>
