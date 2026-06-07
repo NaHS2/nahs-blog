@@ -897,12 +897,16 @@ body.pure-reading .water-splash {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 6'%3E%3Cpath d='M0 3 Q15 0 30 3 Q45 6 60 3 Q75 0 90 3 Q105 6 120 3' fill='none' stroke='rgba(56,189,248,0.25)' stroke-width='1.2'/%3E%3Cpath d='M0 4.5 Q20 1.5 40 4.5 Q60 7.5 80 4.5 Q100 1.5 120 4.5' fill='none' stroke='rgba(56,189,248,0.12)' stroke-width='0.8'/%3E%3C/svg%3E");
   background-size: 120px 6px;
   background-repeat: repeat-x;
-  animation: wave-flow 18s linear infinite;
+  animation: wave-flow 16s ease-in-out infinite;
 }
 
 @keyframes wave-flow {
-  0%   { background-position: 0 0; }
-  100% { background-position: -120px 0; }
+  0%   { background-position: 0 0;   transform: translateY(0); }
+  20%  { transform: translateY(-0.6px); }
+  40%  { background-position: -48px 0; transform: translateY(0); }
+  60%  { transform: translateY(0.6px); }
+  80%  { background-position: -96px 0; transform: translateY(0); }
+  100% { background-position: -120px 0; transform: translateY(0); }
 }
 
 /* 水花飞溅粒子 */
@@ -932,7 +936,7 @@ body.pure-reading .water-splash {
   transform: translateX(-50%);
   transition: left 0.1s linear;
   will-change: left;
-  animation: bob 3s ease-in-out infinite;
+  animation: bob 4s ease-in-out infinite;
 }
 
 @keyframes bob {
