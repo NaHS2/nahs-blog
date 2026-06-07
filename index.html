@@ -262,7 +262,7 @@
                 const aw = document.getElementById('avatar');
                 const dot = document.getElementById('avatar-celestial');
                 const SIZE = window.innerWidth >= 768 ? 100 : 72;
-                const cx = SIZE / 2, cy = SIZE / 2, orbitR = SIZE / 2 + 3;
+                const cx = SIZE / 2, cy = SIZE / 2, orbitR = SIZE / 2 + 5;
 
                 // 时间→天空色(与进度条同源)
                 let sp;
@@ -286,7 +286,7 @@
                     const angle = (1.5 + h / 6) * Math.PI;
                     const isNight = sp < 0.03 || sp > 0.91;
                     dot.classList.toggle('night', isNight);
-                    const halfSvg = 9;
+                    const halfSvg = window.innerWidth >= 768 ? 9 : 7;
                     dot.style.left = (cx + orbitR * Math.cos(angle) - halfSvg) + 'px';
                     dot.style.top = (cy + orbitR * Math.sin(angle) - halfSvg) + 'px';
 
@@ -456,11 +456,11 @@
                     const dot = document.getElementById('avatar-celestial');
                     if (dot) {
                         const SIZE = window.innerWidth >= 768 ? 100 : 72;
-                        const cx = SIZE / 2, cy = SIZE / 2, orbitR = SIZE / 2 + 3;
+                        const cx = SIZE / 2, cy = SIZE / 2, orbitR = SIZE / 2 + 5;
                         const angle = (1.5 + p * 24 / 6) * Math.PI;
                         const isNight = p < 0.03 || p > 0.91;
                         dot.classList.toggle('night', isNight);
-                        const halfSvg = 9;
+                        const halfSvg = window.innerWidth >= 768 ? 9 : 7;
                         dot.style.left = (cx + orbitR * Math.cos(angle) - halfSvg) + 'px';
                         dot.style.top = (cy + orbitR * Math.sin(angle) - halfSvg) + 'px';
                         if(isNight){

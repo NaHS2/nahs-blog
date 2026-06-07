@@ -100,8 +100,8 @@ body {
 /* 头像环日月点：SVG */
 .avatar-celestial {
   position: absolute;
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
   pointer-events: none;
   z-index: 2;
   transition: none;
@@ -1044,8 +1044,8 @@ body.pure-reading .water-splash {
   }
 
   .avatar-celestial {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
 
   .author-name {
