@@ -334,20 +334,18 @@
                 }
 
                 // -- 月亮 & 星星 --
+                const moonRise = 0.88, moonSet = 0.06;
+                let moonT;
+                if (scrollPct > moonRise) moonT = (scrollPct - moonRise) / (1 - moonRise + moonSet);
+                else if (scrollPct < moonSet) moonT = (1 - moonRise + scrollPct) / (1 - moonRise + moonSet);
+                else moonT = -1;
+                const moonVis = moonT < 0 ? 0 : moonT < 0.1 ? moonT / 0.1 : moonT > 0.9 ? (1 - moonT) / 0.1 : 1;
+                moonEl.style.opacity = moonVis.toString();
                 const night = scrollPct < 0.04 || scrollPct > 0.86 ? 1
                     : scrollPct < 0.09 ? 1 - (scrollPct - 0.04) / 0.05
-                    : scrollPct > 0.80 ? (scrollPct - 0.80) / 0.06
-                    : 0;
-                moonEl.style.opacity = Math.max(0, Math.min(1, night)).toString();
+                    : scrollPct > 0.80 ? (scrollPct - 0.80) / 0.06 : 0;
                 starsLayer.style.opacity = Math.max(0, Math.min(1, night)).toString();
-
-                // 月亮弧线：东升→中天→西落
-                if (night > 0) {
-                    const p = scrollPct;
-                    let moonT;
-                    if (p > 0.91) moonT = (p - 0.91) / 0.12;
-                    else if (p < 0.03) moonT = (0.09 + p) / 0.12;
-                    else moonT = 0;
+                if (moonT >= 0) {
                     moonT = Math.max(0, Math.min(1, moonT));
                     moonEl.style.left = (5 + moonT * 88) + '%';
                     moonEl.style.right = 'auto';

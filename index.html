@@ -369,15 +369,15 @@
                 }
 
                 // 月亮 & 星星
-                const night=p<0.04||p>0.86?1:p<0.09?1-(p-0.04)/0.05:p>0.80?(p-0.80)/0.06:0;
-                moonEl.style.opacity=Math.max(0,Math.min(1,night));
-                starsLayer.style.opacity=Math.max(0,Math.min(1,night));
-                // 月亮弧线：东升(左)→中天(顶)→西落(右)
-                if(night>0){
-                    let moonT;
-                    if(p>0.91) moonT=(p-0.91)/0.12;
-                    else if(p<0.03) moonT=(0.09+p)/0.12;
-                    else moonT=0;
+                const moonRise=0.88, moonSet=0.06;
+                let moonT;
+                if(p>moonRise) moonT=(p-moonRise)/(1-moonRise+moonSet);
+                else if(p<moonSet) moonT=(1-moonRise+p)/(1-moonRise+moonSet);
+                else moonT=-1;
+                const moonVis=moonT<0?0:moonT<0.1?moonT/0.1:moonT>0.9?(1-moonT)/0.1:1;
+                moonEl.style.opacity=moonVis;
+                starsLayer.style.opacity=Math.max(0,Math.min(1,p<0.04||p>0.86?1:p<0.09?1-(p-0.04)/0.05:p>0.80?(p-0.80)/0.06:0));
+                if(moonT>=0){
                     moonT=Math.max(0,Math.min(1,moonT));
                     moonEl.style.left=(5+moonT*88)+'%';
                     moonEl.style.right='auto';
@@ -440,18 +440,20 @@
                     sunEl.style.top = (hh * .58 - Math.sin(Math.PI * t) * (hh * .46)) + 'px';
                 }
                 // 月亮 & 星星
-                const n = p < 0.04 || p > 0.86 ? 1 : p < 0.09 ? 1 - (p - 0.04) / 0.05 : p > 0.80 ? (p - 0.80) / 0.06 : 0;
-                moonEl.style.opacity = Math.max(0, Math.min(1, n));
-                starsLayer.style.opacity = Math.max(0, Math.min(1, n));
-                if(n>0){
-                    let moonT;
-                    if(p>0.91) moonT=(p-0.91)/0.12;
-                    else if(p<0.03) moonT=(0.09+p)/0.12;
-                    else moonT=0;
-                    moonT=Math.max(0,Math.min(1,moonT));
-                    moonEl.style.left=(5+moonT*88)+'%';
+                const moonRise=0.88, moonSet=0.06;
+                let mT;
+                if(p>moonRise) mT=(p-moonRise)/(1-moonRise+moonSet);
+                else if(p<moonSet) mT=(1-moonRise+p)/(1-moonRise+moonSet);
+                else mT=-1;
+                const mV=mT<0?0:mT<0.1?mT/0.1:mT>0.9?(1-mT)/0.1:1;
+                moonEl.style.opacity=mV;
+                const ns=p<0.04||p>0.86?1:p<0.09?1-(p-0.04)/0.05:p>0.80?(p-0.80)/0.06:0;
+                starsLayer.style.opacity=Math.max(0,Math.min(1,ns));
+                if(mT>=0){
+                    mT=Math.max(0,Math.min(1,mT));
+                    moonEl.style.left=(5+mT*88)+'%';
                     moonEl.style.right='auto';
-                    moonEl.style.top=(hh*.58-Math.sin(Math.PI*moonT)*(hh*.46))+'px';
+                    moonEl.style.top=(hh*.58-Math.sin(Math.PI*mT)*(hh*.46))+'px';
                 }
                 // 小船
                 boat.style.left = (p * 100) + '%';
