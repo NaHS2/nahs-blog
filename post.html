@@ -331,6 +331,69 @@
                 }
             }, { passive: true });
 
+            // ====== 底部三连下滑返回顶部 ======
+            const bottomHint = document.createElement('div');
+            bottomHint.className = 'bottom-hint';
+            bottomHint.innerHTML = '<span class="bottom-hint-text"></span><span class="bottom-hint-dots"></span>';
+            document.body.appendChild(bottomHint);
+
+            let bottomSwipeCount = 0;
+            let bottomHintTimer = null;
+
+            function isAtBottom() {
+                return window.innerHeight + window.scrollY >= document.body.scrollHeight - 3;
+            }
+
+            function showBottomHint(count) {
+                const textEl = bottomHint.querySelector('.bottom-hint-text');
+                const dotsEl = bottomHint.querySelector('.bottom-hint-dots');
+                const msgs = ['再次下滑回到顶部', '再滑一次！', '返回顶部！'];
+                const idx = Math.min(count - 1, 2);
+                textEl.textContent = msgs[idx];
+                dotsEl.textContent = '●'.repeat(count) + '○'.repeat(Math.max(0, 3 - count));
+                bottomHint.classList.add('visible');
+                clearTimeout(bottomHintTimer);
+                bottomHintTimer = setTimeout(() => bottomHint.classList.remove('visible'), 2000);
+            }
+
+            function scrollToTop() {
+                bottomHint.classList.remove('visible');
+                bottomSwipeCount = 0;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function handleBottomSwipe() {
+                if (!isAtBottom()) {
+                    if (bottomSwipeCount > 0 && window.scrollY < document.body.scrollHeight - window.innerHeight - 20) {
+                        bottomSwipeCount = 0;
+                        bottomHint.classList.remove('visible');
+                    }
+                    return;
+                }
+                bottomSwipeCount++;
+                if (bottomSwipeCount >= 3) {
+                    scrollToTop();
+                } else {
+                    showBottomHint(bottomSwipeCount);
+                }
+            }
+
+            // 桌面端：鼠标滚轮
+            window.addEventListener('wheel', (e) => {
+                if (e.deltaY > 0 && isAtBottom()) handleBottomSwipe();
+            }, { passive: true });
+
+            // 移动端：触摸下滑
+            let touchStartY = 0;
+            window.addEventListener('touchstart', (e) => {
+                touchStartY = e.touches[0].clientY;
+            }, { passive: true });
+            window.addEventListener('touchend', (e) => {
+                const endY = e.changedTouches[0] ? e.changedTouches[0].clientY : touchStartY;
+                // 手指上滑（startY > endY）= 试图向下滚动页面
+                if (touchStartY - endY > 30 && isAtBottom()) handleBottomSwipe();
+            });
+
             // 初始调用
             update();
         }
