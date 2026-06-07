@@ -477,6 +477,74 @@ body {
   display: none;
 }
 
+/* ====== 纯净阅读切换按钮（文章页右上角） ====== */
+.pure-toggle {
+  position: fixed;
+  top: 60px;
+  right: 16px;
+  z-index: 1001;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0,0,0,0.06);
+  color: var(--gray-600);
+  font-size: 0.82rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.pure-toggle:hover {
+  color: var(--gray-900);
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.pure-toggle.active {
+  background: var(--gray-900);
+  color: #ffffff;
+  border-color: var(--gray-900);
+}
+
+.pure-toggle-label {
+  display: none;
+}
+
+/* ====== 纯净阅读模式 ====== */
+body.pure-reading .scroll-header {
+  display: none;
+}
+
+body.pure-reading {
+  --page-ambient: #ffffff !important;
+  --page-accent: #eaeaea !important;
+  background: #ffffff;
+}
+
+body.pure-reading .post-item {
+  background: #ffffff;
+  border-color: var(--gray-200);
+}
+
+body.pure-reading .profile-clock {
+  border-color: var(--gray-200);
+}
+
+body.pure-reading .sun-container,
+body.pure-reading .moon-container,
+body.pure-reading .stars-layer,
+body.pure-reading .scroll-water,
+body.pure-reading .scroll-boat-horizontal,
+body.pure-reading .water-splash {
+  display: none;
+}
+
 @media (min-width: 768px) {
   .back-btn-fixed {
     top: 68px;
@@ -485,6 +553,15 @@ body {
     font-size: 0.85rem;
   }
   .back-btn-label {
+    display: inline;
+  }
+  .pure-toggle {
+    top: 68px;
+    right: 24px;
+    padding: 7px 16px;
+    font-size: 0.85rem;
+  }
+  .pure-toggle-label {
     display: inline;
   }
 }
@@ -812,7 +889,7 @@ body {
     repeating-linear-gradient(90deg, transparent, transparent 6px, rgba(56,189,248,0.12) 6px, rgba(56,189,248,0.12) 7px),
     repeating-linear-gradient(90deg, transparent, transparent 13px, rgba(56,189,248,0.08) 13px, rgba(56,189,248,0.08) 14px);
   background-size: 200% 100%;
-  animation: water-ripple 3s linear infinite;
+  animation: water-ripple 8s linear infinite;
 }
 
 /* 水花飞溅粒子 */

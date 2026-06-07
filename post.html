@@ -43,11 +43,17 @@
         </svg>
     </header>
 
-    <!-- 返回按钮：固定左上角，不随滚动 -->
+    <!-- 返回按钮：固定左上角 -->
     <a href="index.html" class="back-btn-fixed" aria-label="返回列表">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
         <span class="back-btn-label">返回</span>
     </a>
+
+    <!-- 纯净阅读切换：固定右上角 -->
+    <button class="pure-toggle" id="pure-toggle" aria-label="纯净阅读模式" title="切换纯净阅读模式">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span class="pure-toggle-label">纯净</span>
+    </button>
 
     <!-- 文章页不再使用两栏布局，而是居中单栏 -->
     <div class="app-wrapper page-transition has-header" style="display: block; max-width: 900px; margin: 0 auto; position: relative;">
@@ -339,7 +345,7 @@
             // 水花飞溅
             let lastSplashPct = -1;
             function maybeSplash(scrollPct) {
-                if (!header || Math.abs(scrollPct - lastSplashPct) < 0.03) return;
+                if (!header || Math.abs(scrollPct - lastSplashPct) < 0.08) return;
                 lastSplashPct = scrollPct;
                 const bx = parseFloat(boat.style.left) || 0;
                 const dot = document.createElement('div');
@@ -376,6 +382,21 @@
 
             function toggleBackToTop() {
                 backToTop.classList.toggle('visible', window.scrollY > 400);
+            }
+
+            // ====== 纯净阅读切换 ======
+            const pureToggle = document.getElementById('pure-toggle');
+            if (pureToggle) {
+                // 从 localStorage 恢复状态
+                if (localStorage.getItem('pure-reading') === '1') {
+                    document.body.classList.add('pure-reading');
+                    pureToggle.classList.add('active');
+                }
+                pureToggle.addEventListener('click', () => {
+                    const isPure = document.body.classList.toggle('pure-reading');
+                    pureToggle.classList.toggle('active', isPure);
+                    localStorage.setItem('pure-reading', isPure ? '1' : '0');
+                });
             }
 
             // 初始调用
