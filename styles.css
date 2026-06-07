@@ -400,17 +400,21 @@ body {
   padding: 0;
   border-radius: 50%;
   background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.15);
   color: var(--gray-700);
   font-size: 0.82rem;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+body:not(.pure-reading) .pure-toggle {
+  display: inline-flex !important;
 }
 
 .pure-toggle:hover {
-  box-shadow: 0 3px 12px rgba(0,0,0,0.16);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.2);
 }
 
 .pure-toggle.active {
@@ -424,6 +428,14 @@ body {
 }
 
 /* ====== 纯净阅读模式 ====== */
+body.pure-reading .pure-toggle {
+  display: inline-flex !important;
+  background: var(--gray-900);
+  color: #ffffff;
+  border-color: var(--gray-900);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+
 body.pure-reading .scroll-header {
   display: none;
 }
