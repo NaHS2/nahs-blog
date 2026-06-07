@@ -341,10 +341,17 @@
                 moonEl.style.opacity = Math.max(0, Math.min(1, night)).toString();
                 starsLayer.style.opacity = Math.max(0, Math.min(1, night)).toString();
 
-                // 月亮夜间缓慢左移
-                if (night > 0.5) {
-                    const nightT = scrollPct > 0.5 ? (scrollPct - 0.86) / 0.14 : (0.04 - scrollPct) / 0.04;
-                    moonEl.style.right = (8 - nightT * 5) + '%';
+                // 月亮弧线：东升→中天→西落
+                if (night > 0) {
+                    const p = scrollPct;
+                    let moonT;
+                    if (p > 0.91) moonT = (p - 0.91) / 0.12;
+                    else if (p < 0.03) moonT = (0.09 + p) / 0.12;
+                    else moonT = 0;
+                    moonT = Math.max(0, Math.min(1, moonT));
+                    moonEl.style.left = (5 + moonT * 88) + '%';
+                    moonEl.style.right = 'auto';
+                    moonEl.style.top = (hh * .58 - Math.sin(Math.PI * moonT) * (hh * .46)) + 'px';
                 }
 
                 // -- 小船 --

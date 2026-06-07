@@ -373,6 +373,17 @@
                 const night=p<0.04||p>0.86?1:p<0.09?1-(p-0.04)/0.05:p>0.80?(p-0.80)/0.06:0;
                 moonEl.style.opacity=Math.max(0,Math.min(1,night));
                 starsLayer.style.opacity=Math.max(0,Math.min(1,night));
+                // 月亮弧线：东升(左)→中天(顶)→西落(右)
+                if(night>0){
+                    let moonT;
+                    if(p>0.91) moonT=(p-0.91)/0.12;
+                    else if(p<0.03) moonT=(0.09+p)/0.12;
+                    else moonT=0;
+                    moonT=Math.max(0,Math.min(1,moonT));
+                    moonEl.style.left=(5+moonT*88)+'%';
+                    moonEl.style.right='auto';
+                    moonEl.style.top=(hh*.58-Math.sin(Math.PI*moonT)*(hh*.46))+'px';
+                }
 
                 // 小船：白天从左到右航行
                 boat.style.left=(p*100)+'%';
@@ -434,6 +445,16 @@
                 const n = p < 0.04 || p > 0.86 ? 1 : p < 0.09 ? 1 - (p - 0.04) / 0.05 : p > 0.80 ? (p - 0.80) / 0.06 : 0;
                 moonEl.style.opacity = Math.max(0, Math.min(1, n));
                 starsLayer.style.opacity = Math.max(0, Math.min(1, n));
+                if(n>0){
+                    let moonT;
+                    if(p>0.91) moonT=(p-0.91)/0.12;
+                    else if(p<0.03) moonT=(0.09+p)/0.12;
+                    else moonT=0;
+                    moonT=Math.max(0,Math.min(1,moonT));
+                    moonEl.style.left=(5+moonT*88)+'%';
+                    moonEl.style.right='auto';
+                    moonEl.style.top=(hh*.58-Math.sin(Math.PI*moonT)*(hh*.46))+'px';
+                }
                 // 小船
                 boat.style.left = (p * 100) + '%';
                 boat.style.transition = dragging ? 'none' : 'left 0.8s cubic-bezier(0.34,1.56,0.64,1)';
