@@ -45,11 +45,6 @@
                     </div>
                 </div>
 
-                <!-- 日期 -->
-                <div class="profile-clock" id="profile-clock">
-                    <div class="clock-sub" id="clock-sub">June 7th · Sun</div>
-                </div>
-
                 <div class="social-links">
                     <a href="https://github.com/NaHS2" target="_blank" class="social-link">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
@@ -257,12 +252,13 @@
                 document.getElementById('header-time').textContent =
                     pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
 
-                // 头像环日月点：顺时针钟表轨道(左→上→右)
+                // 头像环日月点：以avatar几何中心为圆心(左→上→右)
                 const dot = document.getElementById('avatar-celestial');
                 if (dot) {
                     const aw = document.getElementById('avatar');
                     const size = aw ? aw.offsetWidth : 72;
-                    const cx = size / 2, cy = size / 2, orbitR = size / 2 + 5;
+                    const pad = 10; // 与CSS padding一致
+                    const cx = pad + size / 2, cy = pad + size / 2, orbitR = size / 2 + 5;
                     let p;
                     if (h < 5)        p = 0.94 + (h / 5) * 0.06;
                     else if (h < 7)   p = 0.00 + ((h - 5) / 2) * 0.12;
@@ -282,10 +278,9 @@
                     dot.style.top = (cy + orbitR * Math.sin(angle) - half) + 'px';
                 }
 
-                // June 7th · Sun
-                const dateStr = monthFull[now.getMonth()] + ' ' + ordinal(now.getDate()) + ' · ' + weekNames[now.getDay()];
-                document.getElementById('clock-sub').textContent = dateStr;
-                document.getElementById('header-date').textContent = dateStr;
+                // 顶部日期 June 7th · Sun
+                document.getElementById('header-date').textContent =
+                    monthFull[now.getMonth()] + ' ' + ordinal(now.getDate()) + ' · ' + weekNames[now.getDay()];
             }
 
             updateClock();
@@ -422,7 +417,8 @@
                     const dot = document.getElementById('avatar-celestial');
                     if (dot) {
                         const size = av.offsetWidth;
-                        const cx = size / 2, cy = size / 2, orbitR = size / 2 + 5;
+                        const pad = 10;
+                        const cx = pad + size / 2, cy = pad + size / 2, orbitR = size / 2 + 5;
                         const sr = 0.03, ss = 0.91;
                         const dt = Math.max(0, Math.min(1, (p - sr) / (ss - sr)));
                         const angle = Math.PI + dt * Math.PI;

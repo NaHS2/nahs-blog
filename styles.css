@@ -82,8 +82,8 @@ body {
 
 .avatar-wrap {
   position: relative;
-  display: inline-block;
   flex-shrink: 0;
+  padding: 10px;  /* 日月点轨道空间 */
 }
 
 .avatar {
@@ -92,12 +92,11 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--sky-top, #87CEEB);
-  flex-shrink: 0;
   display: block;
   transition: border-color 60s linear;
 }
 
-/* 头像环上的日月指示点 */
+/* 头像环上的日月指示点(以avatar几何中心为圆心旋转) */
 .avatar-celestial {
   position: absolute;
   width: 8px;
@@ -158,27 +157,6 @@ body {
 .social-links svg {
   width: 14px;
   height: 14px;
-}
-
-/* ====== 日期信息 ====== */
-.profile-clock {
-  padding: 10px 0;
-  border-top: 1px solid var(--page-accent, rgba(0,0,0,0.06));
-  border-bottom: 1px solid var(--page-accent, rgba(0,0,0,0.06));
-}
-
-.clock-sub {
-  font-size: 0.85rem;
-  color: var(--gray-500);
-}
-
-@media (min-width: 768px) {
-  .profile-clock {
-    padding: 12px 0;
-  }
-  .clock-sub {
-    font-size: 0.88rem;
-  }
 }
 
 /* keep backwards compat with class-based links */
