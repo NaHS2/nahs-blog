@@ -386,36 +386,37 @@ body {
   display: none;
 }
 
-/* ====== 纯净阅读按钮（header内右上角） ====== */
+/* ====== 纯净阅读按钮 ====== */
 .pure-toggle {
   position: fixed;
   top: 8px;
   right: 12px;
   z-index: 1100;
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border-radius: 50%;
-  background: rgba(0,0,0,0.25);
-  border: none;
-  color: rgba(255,255,255,0.9);
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.12);
+  color: var(--gray-700);
   font-size: 0.82rem;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .pure-toggle:hover {
-  background: rgba(0,0,0,0.4);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.16);
 }
 
 .pure-toggle.active {
-  background: rgba(255,255,255,0.9);
-  color: var(--gray-900);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: var(--gray-900);
+  color: #ffffff;
+  border-color: var(--gray-900);
 }
 
 .pure-toggle-label {
@@ -425,11 +426,6 @@ body {
 /* ====== 纯净阅读模式 ====== */
 body.pure-reading .scroll-header {
   display: none;
-}
-
-body.pure-reading .pure-toggle {
-  /* 纯净模式按钮始终可见 */
-  display: inline-flex !important;
 }
 
 body.pure-reading {
@@ -486,14 +482,10 @@ body.pure-reading .water-splash {
     padding: 7px 16px;
     border-radius: 18px;
     font-size: 0.85rem;
-    background: rgba(255,255,255,0.85);
-    color: var(--gray-600);
-    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
   }
   .pure-toggle.active {
     background: var(--gray-900);
     color: #ffffff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   }
   .pure-toggle-label {
     display: inline;
