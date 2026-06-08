@@ -88,6 +88,9 @@
     </div>
 
     <script>
+        // iOS Safari 必须注册 touchstart 才能让 :active 伪类生效
+        document.addEventListener('touchstart', function() {}, { passive: true });
+
         let allPosts = [];
 
         // 使用时间戳防止浏览器缓存 posts.json 导致无法看到最新更新
@@ -228,6 +231,19 @@
                 const category = e.target.getAttribute('data-category');
                 renderPosts(category);
             });
+        });
+
+        // ====== 文章卡片点击缩放动画 ======
+        document.getElementById('post-list').addEventListener('click', (e) => {
+            const card = e.target.closest('.post-item');
+            if (!card) return;
+            e.preventDefault();
+            card.style.transform = 'scale(0.97)';
+            card.style.transition = 'transform 0.12s ease';
+            setTimeout(() => {
+                card.style.transform = '';
+                window.location.href = card.href;
+            }, 120);
         });
 
         // ==== 时钟与日期 ==================================================

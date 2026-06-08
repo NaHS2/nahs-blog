@@ -165,6 +165,9 @@
     </div>
 
     <script>
+        // iOS Safari 必须注册 touchstart 才能让 :active 伪类生效
+        document.addEventListener('touchstart', function() {}, { passive: true });
+
         // ====== 回到顶部按钮 ======
         const backToTop = document.createElement('button');
         backToTop.className = 'back-to-top';

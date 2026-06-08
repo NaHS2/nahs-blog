@@ -23,12 +23,24 @@
 /* ====== Reset ====== */
 * {
   box-sizing: border-box;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 html {
   height: 100%;
   overflow-y: scroll;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 全局禁用移动端点击蓝色高亮 + 焦点环 */
+html, body, a, button, [role="button"], input, textarea, select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: none;
 }
 
 body {
@@ -256,7 +268,7 @@ body {
 }
 
 .post-item:active {
-  transform: scale(0.97);
+  transform: translateY(-2px) scale(0.97);
 }
 
 .post-title {
@@ -1309,4 +1321,17 @@ body.pure-reading .water-splash {
     width: 48px;
     height: 48px;
   }
+}
+
+/* ====== 所有可点击元素以中心缩放 ====== */
+.social-link,
+.tab-btn,
+.post-item,
+.back-btn-fixed,
+.back-btn,
+.pure-toggle,
+.download-card,
+.download-btn,
+.back-to-top {
+  transform-origin: center;
 }

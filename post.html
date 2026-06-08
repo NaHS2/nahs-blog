@@ -78,6 +78,9 @@
     </div>
 
     <script>
+        // iOS Safari 必须注册 touchstart 才能让 :active 伪类生效
+        document.addEventListener('touchstart', function() {}, { passive: true });
+
         marked.setOptions({
             highlight: function(code, lang) {
                 const language = hljs.getLanguage(lang) ? lang : 'plaintext';
