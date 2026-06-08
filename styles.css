@@ -1226,7 +1226,7 @@ body.pure-reading .water-splash {
   opacity: 0;
   transform: translateY(12px);
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, scale 0.2s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   z-index: 1001;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
   -webkit-tap-highlight-color: transparent;
@@ -1246,7 +1246,7 @@ body.pure-reading .water-splash {
 }
 
 .back-to-top:active {
-  scale: 0.88;
+  transform: scale(0.88);
 }
 
 @media (min-width: 768px) {
