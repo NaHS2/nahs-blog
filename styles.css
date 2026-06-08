@@ -23,6 +23,7 @@
 /* ====== Reset ====== */
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 html {
@@ -159,11 +160,15 @@ body {
   gap: 4px;
   color: var(--gray-500);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.2s, transform 0.15s ease;
 }
 
 .social-link:hover {
   color: var(--fg);
+}
+
+.social-link:active {
+  transform: scale(0.92);
 }
 
 /* ====== Main Content ====== */
@@ -198,10 +203,16 @@ body {
   white-space: nowrap;
   font-family: inherit;
   flex-shrink: 0;
+  transition: transform 0.15s ease;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .tab-btn:hover {
   color: var(--gray-900);
+}
+
+.tab-btn:active {
+  transform: scale(0.92);
 }
 
 .tab-btn.active {
@@ -242,6 +253,10 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
   border-color: var(--page-accent, var(--gray-300));
+}
+
+.post-item:active {
+  transform: scale(0.97);
 }
 
 .post-title {
@@ -400,6 +415,8 @@ body {
   font-family: inherit;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: transform 0.15s ease;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 body:not(.pure-reading) .pure-toggle {
@@ -408,6 +425,10 @@ body:not(.pure-reading) .pure-toggle {
 
 .pure-toggle:hover {
   box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+}
+
+.pure-toggle:active {
+  transform: scale(0.88);
 }
 
 .pure-toggle.active {
@@ -475,6 +496,10 @@ body.pure-reading .water-splash {
     align-items: center;
     gap: 4px;
     z-index: 20;
+    transition: transform 0.15s ease;
+  }
+  .back-btn-fixed:active {
+    transform: scale(0.9);
   }
   .back-btn-label {
     display: inline;
@@ -507,10 +532,16 @@ body.pure-reading .water-splash {
   font-size: 0.85rem;
   font-weight: 500;
   margin-bottom: 28px;
+  transition: color 0.2s, transform 0.15s ease;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .back-btn:hover {
   color: var(--gray-900);
+}
+
+.back-btn:active {
+  transform: scale(0.9);
 }
 
 .article-header {
@@ -961,11 +992,17 @@ body.pure-reading .water-splash {
   border-radius: 10px;
   text-decoration: none;
   color: inherit;
+  transition: transform 0.15s ease, border-color 0.2s, box-shadow 0.2s;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .download-card:hover {
   border-color: var(--gray-300);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.download-card:active {
+  transform: scale(0.97);
 }
 
 .download-info h3 {
@@ -993,10 +1030,16 @@ body.pure-reading .water-splash {
   white-space: nowrap;
   text-align: center;
   align-self: flex-start;
+  transition: transform 0.15s ease, background 0.2s;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .download-btn:hover {
   background: var(--gray-800);
+}
+
+.download-btn:active {
+  transform: scale(0.93);
 }
 
 /* ====== Desktop (>= 768px) ====== */
