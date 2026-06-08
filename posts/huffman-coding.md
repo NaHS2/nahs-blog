@@ -1,6 +1,6 @@
 # 用 C 语言手写哈夫曼编码：从堆排序到文件压缩
 
-> 源码：[github.com/NaHS2/Huffman-coding](https://github.com/NaHS2/Huffman-coding)
+> 源码：[github.com/NaHSIT/Huffman-coding](https://github.com/NaHSIT/Huffman-coding)
 
 大二学数据结构的时候，哈夫曼编码是我印象最深的一章。贪心策略、最小堆、二叉树遍历、前缀码——几乎把课程重点全串起来了。课本上的伪代码读懂了，但心里总觉得不踏实：真的懂了吗？
 

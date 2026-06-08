@@ -1,6 +1,6 @@
 # 基于 51 单片机的智能红绿灯系统设计
 
-> 源码：[github.com/NaHS2/Traffic-signal-controller](https://github.com/NaHS2/Traffic-signal-controller)
+> 源码：[github.com/NaHSIT/Traffic-signal-controller](https://github.com/NaHSIT/Traffic-signal-controller)
 
 大二下学期末的 EDA 课程设计，要求用单片机做一个**十字路口红绿灯控制系统**。基础功能是交替放行主干道和支干道，我额外加了超声波测距模块来检测支干道有没有车——没车的时候主干道一直绿灯，减少不必要的等待。
 

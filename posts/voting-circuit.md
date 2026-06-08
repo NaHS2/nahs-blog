@@ -1,6 +1,6 @@
 # 基于 51 单片机的七人表决电路设计
 
-> 源码：[github.com/NaHS2/Seven-person-voting-circuit](https://github.com/NaHS2/Seven-person-voting-circuit)
+> 源码：[github.com/NaHSIT/Seven-person-voting-circuit](https://github.com/NaHSIT/Seven-person-voting-circuit)
 
 大二暑假的数字逻辑 EDA 实验，用 51 单片机做了一个**七人表决电路**。七个拨动开关代表七个人投票，两个数码管分别显示赞成票和反对票，绿 LED 亮表示通过（赞成 ≥ 4），红 LED 亮表示否决。
 

@@ -1,6 +1,6 @@
 # 用嘉立创 EDA 画了一张支持 NFC 的 PCB 校园卡
 
-> 源码：[github.com/NaHS2/CSUFT-PCB-campus-card](https://github.com/NaHS2/CSUFT-PCB-campus-card)
+> 源码：[github.com/NaHSIT/CSUFT-PCB-campus-card](https://github.com/NaHSIT/CSUFT-PCB-campus-card)
 
 我在中南林业科技大学（CSUFT），学校里人手一张校园卡，图书馆、寝室门禁全用它。有段时间我对 NFC 的原理特别好奇——一张塑料卡片凭什么能在刷卡机上一碰就完成身份识别？正好嘉立创每个月给两次免费打板额度，于是决定自己画一张 CSUFT 主题的 PCB 校园卡，把"卡片内部到底长什么样"这个问题彻底搞明白。
 
