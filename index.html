@@ -80,7 +80,7 @@
             <div id="post-list" class="post-list">
                 <p style="color: var(--gray-400);">数据加载中...</p>
             </div>
-            
+
             <footer class="footer">
                 <p>&copy; 2026 硫氢化钠. Crafted with focus.</p>
             </footer>
@@ -91,19 +91,80 @@
         // iOS Safari 必须注册 touchstart 才能让 :active 伪类生效
         document.addEventListener('touchstart', function() {}, { passive: true });
 
-        let allPosts = [];
+        var allPosts = [];
+        var _restoredFromBfcache = false;
 
-        // 使用时间戳防止浏览器缓存 posts.json 导致无法看到最新更新
+        window.addEventListener('pageshow', function(e) {
+            if (e.persisted) {
+                _restoredFromBfcache = true;
+                // bfcache 恢复：小船快照到当前时钟位置（无过渡，消除撕裂）
+                var boat = document.getElementById('scroll-boat');
+                if (boat && window._boatUpdate) {
+                    boat.style.transition = 'none';
+                    window._boatUpdate();
+                    boat.getBoundingClientRect();
+                    boat.style.transition = '';
+                }
+            }
+        });
+
+        // ====== 瞬时恢复：用缓存的 DOM 立即渲染，不等网络 ======
+        var _cachedList = sessionStorage.getItem('cachedList');
+        var _cachedScrollY = sessionStorage.getItem('cachedScrollY');
+        var _cachedTab = sessionStorage.getItem('cachedTab');
+
+        if (_cachedList && !_restoredFromBfcache) {
+            // 直接注入缓存 DOM + 瞬间滚到位（同步完成，零闪烁）
+            var listEl = document.getElementById('post-list');
+            listEl.innerHTML = _cachedList;
+            // 清除缓存卡片上的动画样式——否则卡片从 opacity:0 重新播放
+            listEl.querySelectorAll('.post-item, .collection-header').forEach(function(el) {
+                el.style.animation = 'none';
+                el.style.opacity = '1';
+            });
+            window.scrollTo(0, parseInt(_cachedScrollY, 10) || 0);
+
+            // 恢复标签状态
+            if (_cachedTab) {
+                document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+                var tb = document.querySelector('.tab-btn[data-category="' + _cachedTab + '"]');
+                if (tb) tb.classList.add('active');
+            }
+        }
+
+        // ====== 后台拉最新数据，静默更新（用户无感知） ======
         fetch('posts.json?t=' + new Date().getTime())
-            .then(response => response.json())
-            .then(posts => {
+            .then(function(response) { return response.json(); })
+            .then(function(posts) {
                 allPosts = posts;
-                // 按日期降序排列，保证首页始终按时间顺序展示
-                allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-                renderPosts('all'); // 默认显示全部文章
+                allPosts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+
+                if (_restoredFromBfcache) return;
+
+                // 如果没有缓存（首次访问），正常渲染
+                if (!_cachedList) {
+                    var savedTab = sessionStorage.getItem('cachedTab');
+                    if (savedTab) {
+                        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+                        var targetBtn = document.querySelector('.tab-btn[data-category="' + savedTab + '"]');
+                        if (targetBtn) targetBtn.classList.add('active');
+                        renderPosts(savedTab);
+                    } else {
+                        renderPosts('all');
+                    }
+                }
+                // 有缓存的话，后台静默刷新列表（用户看不到更新过程）
+
+                var params = new URLSearchParams(window.location.search);
+                var initialPost = params.get('post');
+                if (initialPost) {
+                    window.location.replace('post.html?id=' + initialPost);
+                }
             })
-            .catch(error => {
-                document.getElementById('post-list').innerHTML = '<p style="color: red;">加载失败，请检查网络或配置。</p>';
+            .catch(function(error) {
+                if (!_cachedList) {
+                    document.getElementById('post-list').innerHTML = '<p style="color: red;">加载失败，请检查网络或配置。</p>';
+                }
                 console.error('Error loading posts:', error);
             });
 
@@ -229,23 +290,26 @@
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
                 const category = e.target.getAttribute('data-category');
+                sessionStorage.setItem('indexTab', category);
                 renderPosts(category);
             });
         });
 
-        // ====== 文章卡片点击缩放动画 ======
+        // ====== 文章卡片点击：缓存列表 DOM，导航到 post.html ======
         document.getElementById('post-list').addEventListener('click', (e) => {
             const card = e.target.closest('.post-item');
             if (!card) return;
             e.preventDefault();
-            card.style.transform = 'scale(0.97)';
-            card.style.transition = 'transform 0.12s ease';
-            setTimeout(() => {
-                card.style.transform = '';
-                window.location.href = card.href;
-            }, 120);
+
+            // 缓存整个列表的 DOM 和滚动位置——返回时瞬间恢复，不等 fetch
+            sessionStorage.setItem('cachedList', document.getElementById('post-list').innerHTML);
+            sessionStorage.setItem('cachedScrollY', window.scrollY);
+            sessionStorage.setItem('cachedTab', document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all');
+
+            window.location.href = card.href;
         });
 
+        // ====== 文章视图逻辑 ======
         // ==== 时钟与日期 ==================================================
         (function() {
             const weekNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -438,6 +502,7 @@
                 // 小船：白天从左到右航行
                 boat.style.left=(p*100)+'%';
             }
+            window._boatUpdate = update;
 
             // 水花飞溅
             function splash(){
@@ -571,7 +636,12 @@
                 applySky(getTimePct());
             });
 
+            // 首次定位无过渡——消除从 left:0 飞到时钟位置的撕裂
+            boat.style.transition = 'none';
             update();
+            boat.getBoundingClientRect();
+            boat.style.transition = '';
+
             setInterval(() => { if (!dragging) update(); }, 60000);
             setInterval(splash, 10000);
         })();

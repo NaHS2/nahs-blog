@@ -8,7 +8,7 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20 L22 20'/%3E%3Cpath d='M5 20 C5 20, 8 23, 14 23 C17 23, 19 20, 19 20'/%3E%3Cpath d='M9 20 L9 9'/%3E%3Cpath d='M9 9 L17 15 L9 17'/%3E%3Cpath d='M10 2 A 4 4 0 0 0 5 5 A 5 5 0 0 1 10 2'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
     
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
@@ -18,7 +18,7 @@
         <div class="header-time" id="header-time">00:00:00</div>
         <div class="header-date" id="header-date"></div>
         <!-- 返回按钮：置于header内左上 -->
-        <a href="index.html" class="back-btn-fixed" aria-label="返回列表">
+        <a href="index.html" class="back-btn-fixed" id="back-btn" aria-label="返回列表">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
             <span class="back-btn-label">返回</span>
         </a>
@@ -80,6 +80,16 @@
     <script>
         // iOS Safari 必须注册 touchstart 才能让 :active 伪类生效
         document.addEventListener('touchstart', function() {}, { passive: true });
+
+        // 返回按钮：优先使用浏览器后退（触发 bfcache 瞬时恢复），无历史时回退到首页
+        document.getElementById('back-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (document.referrer && document.referrer.indexOf(window.location.origin) === 0) {
+                history.back();
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
 
         marked.setOptions({
             highlight: function(code, lang) {
