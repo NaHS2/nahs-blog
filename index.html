@@ -106,6 +106,17 @@
                     boat.style.transition = '';
                 }
             }
+
+            // 手机端有时不会自动恢复滚动位置，这里用缓存做一次兜底
+            var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+            if (navEntry && navEntry.type === 'back_forward') {
+                var restoredY = parseInt(sessionStorage.getItem('cachedScrollY'), 10);
+                if (!isNaN(restoredY)) {
+                    requestAnimationFrame(function() {
+                        window.scrollTo(0, restoredY);
+                    });
+                }
+            }
         });
 
         // ====== 瞬时恢复：用缓存的 DOM 立即渲染，不等网络 ======
@@ -337,6 +348,18 @@
             sessionStorage.setItem('cachedPostsSignature', getPostsSignature(document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all'));
 
             window.location.href = card.href;
+        });
+
+        function saveListScrollState() {
+            sessionStorage.setItem('cachedScrollY', String(window.scrollY || 0));
+            sessionStorage.setItem('cachedTab', document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all');
+        }
+
+        window.addEventListener('pagehide', saveListScrollState);
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'hidden') {
+                saveListScrollState();
+            }
         });
 
         // ====== 文章视图逻辑 ======

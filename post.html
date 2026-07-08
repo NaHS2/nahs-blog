@@ -85,7 +85,7 @@
         // 返回按钮：优先使用浏览器后退（触发 bfcache 瞬时恢复），无历史时回退到首页
         function goBackToList(e) {
             e.preventDefault();
-            if (document.referrer && document.referrer.indexOf(window.location.origin) === 0) {
+            if (sessionStorage.getItem('cachedList')) {
                 history.back();
             } else {
                 window.location.href = 'index.html';
