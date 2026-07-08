@@ -93,6 +93,24 @@
 
         var allPosts = [];
         var _restoredFromBfcache = false;
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
+        function restoreListScrollPosition() {
+            var restoredY = parseInt(sessionStorage.getItem('cachedScrollY'), 10);
+            if (isNaN(restoredY)) return;
+
+            var applyScroll = function() {
+                window.scrollTo(0, restoredY);
+            };
+
+            requestAnimationFrame(function() {
+                applyScroll();
+                requestAnimationFrame(applyScroll);
+                setTimeout(applyScroll, 50);
+            });
+        }
 
         window.addEventListener('pageshow', function(e) {
             if (e.persisted) {
@@ -109,13 +127,8 @@
 
             // 手机端有时不会自动恢复滚动位置，这里用缓存做一次兜底
             var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-            if (navEntry && navEntry.type === 'back_forward') {
-                var restoredY = parseInt(sessionStorage.getItem('cachedScrollY'), 10);
-                if (!isNaN(restoredY)) {
-                    requestAnimationFrame(function() {
-                        window.scrollTo(0, restoredY);
-                    });
-                }
+            if ((navEntry && navEntry.type === 'back_forward') || (document.referrer && document.referrer.indexOf('post.html') !== -1)) {
+                restoreListScrollPosition();
             }
         });
 
@@ -184,7 +197,7 @@
                     var latestSignature = getPostsSignature(_currentCategory);
                     if (_cachedSignature && _cachedSignature !== latestSignature) {
                         renderPosts(_currentCategory);
-                        window.scrollTo(0, parseInt(_cachedScrollY, 10) || 0);
+                        restoreListScrollPosition();
                     }
                     sessionStorage.removeItem('cachedList');
                     sessionStorage.removeItem('cachedScrollY');
@@ -360,6 +373,9 @@
             if (document.visibilityState === 'hidden') {
                 saveListScrollState();
             }
+        });
+        window.addEventListener('popstate', function() {
+            restoreListScrollPosition();
         });
 
         // ====== 文章视图逻辑 ======

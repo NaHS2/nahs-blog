@@ -544,7 +544,7 @@ body.pure-reading .water-splash {
 
 @media (max-width: 767px) {
   .back-btn-fixed {
-    left: 12px;
+    display: none;
   }
 }
 
