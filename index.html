@@ -112,6 +112,35 @@
         var _cachedList = sessionStorage.getItem('cachedList');
         var _cachedScrollY = sessionStorage.getItem('cachedScrollY');
         var _cachedTab = sessionStorage.getItem('cachedTab');
+        var _cachedSignature = sessionStorage.getItem('cachedPostsSignature');
+        var _currentCategory = _cachedTab || sessionStorage.getItem('indexTab') || 'all';
+        if (!['all', 'tech', 'life'].includes(_currentCategory)) _currentCategory = 'all';
+
+        function getPostsSignature(category) {
+            return JSON.stringify({
+                category: category,
+                posts: allPosts.map(function(post) {
+                    return {
+                        id: post.id,
+                        title: post.title,
+                        date: post.date,
+                        readTime: post.readTime,
+                        excerpt: post.excerpt,
+                        tags: post.tags || [],
+                        collection: post.collection || ''
+                    };
+                })
+            });
+        }
+
+        function setActiveTab(category) {
+            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            var tab = document.querySelector('.tab-btn[data-category="' + category + '"]');
+            if (tab) {
+                tab.classList.add('active');
+                _currentCategory = category;
+            }
+        }
 
         if (_cachedList && !_restoredFromBfcache) {
             // 直接注入缓存 DOM + 瞬间滚到位（同步完成，零闪烁）
@@ -125,11 +154,9 @@
             window.scrollTo(0, parseInt(_cachedScrollY, 10) || 0);
 
             // 恢复标签状态
-            if (_cachedTab) {
-                document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-                var tb = document.querySelector('.tab-btn[data-category="' + _cachedTab + '"]');
-                if (tb) tb.classList.add('active');
-            }
+            setActiveTab(_currentCategory);
+        } else {
+            setActiveTab(_currentCategory);
         }
 
         // ====== 后台拉最新数据，静默更新（用户无感知） ======
@@ -141,23 +168,23 @@
 
                 if (_restoredFromBfcache) return;
 
-                // 如果没有缓存（首次访问），正常渲染
-                if (!_cachedList) {
-                    var savedTab = sessionStorage.getItem('cachedTab');
-                    if (savedTab) {
-                        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-                        var targetBtn = document.querySelector('.tab-btn[data-category="' + savedTab + '"]');
-                        if (targetBtn) targetBtn.classList.add('active');
-                        renderPosts(savedTab);
-                    } else {
-                        renderPosts('all');
+                setActiveTab(_currentCategory);
+                if (_cachedList) {
+                    var latestSignature = getPostsSignature(_currentCategory);
+                    if (_cachedSignature && _cachedSignature !== latestSignature) {
+                        renderPosts(_currentCategory);
+                        window.scrollTo(0, parseInt(_cachedScrollY, 10) || 0);
                     }
+                    sessionStorage.removeItem('cachedList');
+                    sessionStorage.removeItem('cachedScrollY');
+                    sessionStorage.removeItem('cachedPostsSignature');
+                } else {
+                    renderPosts(_currentCategory);
                 }
-                // 有缓存的话，后台静默刷新列表（用户看不到更新过程）
 
                 var params = new URLSearchParams(window.location.search);
                 var initialPost = params.get('post');
-                if (initialPost) {
+                if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(initialPost || '')) {
                     window.location.replace('post.html?id=' + initialPost);
                 }
             })
@@ -291,6 +318,8 @@
                 e.target.classList.add('active');
                 const category = e.target.getAttribute('data-category');
                 sessionStorage.setItem('indexTab', category);
+                sessionStorage.setItem('cachedTab', category);
+                _currentCategory = category;
                 renderPosts(category);
             });
         });
@@ -305,6 +334,7 @@
             sessionStorage.setItem('cachedList', document.getElementById('post-list').innerHTML);
             sessionStorage.setItem('cachedScrollY', window.scrollY);
             sessionStorage.setItem('cachedTab', document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all');
+            sessionStorage.setItem('cachedPostsSignature', getPostsSignature(document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all'));
 
             window.location.href = card.href;
         });

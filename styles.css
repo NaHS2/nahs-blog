@@ -395,7 +395,23 @@ body {
 /* ====== 固定返回按钮（文章页左上角） ====== */
 /* ====== 返回按钮（header内左上角） ====== */
 .back-btn-fixed {
-  display: none;  /* 移动端隐藏 */
+  display: inline-flex;
+  position: fixed;
+  top: 10px;
+  right: auto;
+  left: 120px;
+  width: auto;
+  height: auto;
+  padding: 4px 14px;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  background: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  align-items: center;
+  gap: 4px;
+  z-index: 1200;
+  transition: transform 0.15s ease;
 }
 
 .back-btn-fixed:hover {
@@ -403,7 +419,7 @@ body {
 }
 
 .back-btn-label {
-  display: none;
+  display: inline;
 }
 
 /* ====== 纯净阅读按钮 ====== */
@@ -466,6 +482,18 @@ body.pure-reading .scroll-header {
   display: none;
 }
 
+body.pure-reading .back-btn-fixed {
+  display: inline-flex;
+  background: rgba(255,255,255,0.92);
+  color: var(--gray-700);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+body.pure-reading .back-btn-fixed:hover {
+  background: rgba(255,255,255,0.98);
+}
+
 body.pure-reading {
   --page-ambient: #ffffff !important;
   --page-accent: #eaeaea !important;
@@ -484,6 +512,8 @@ body.pure-reading .profile-clock {
 body.pure-reading .sun-container,
 body.pure-reading .moon-container,
 body.pure-reading .stars-layer,
+body.pure-reading .header-time,
+body.pure-reading .header-date,
 body.pure-reading .scroll-water,
 body.pure-reading .scroll-boat-horizontal,
 body.pure-reading .water-splash {
@@ -491,30 +521,8 @@ body.pure-reading .water-splash {
 }
 
 @media (min-width: 768px) {
-  .back-btn-fixed {
-    display: inline-flex;
-    position: absolute;
-    top: 10px;
-    right: auto;
-    left: 120px;
-    width: auto;
-    height: auto;
-    padding: 4px 14px;
-    border-radius: 14px;
-    font-size: 0.82rem;
-    background: rgba(255,255,255,0.3);
-    color: rgba(255,255,255,0.9);
-    text-decoration: none;
-    align-items: center;
-    gap: 4px;
-    z-index: 20;
-    transition: transform 0.15s ease;
-  }
   .back-btn-fixed:active {
     transform: scale(0.9);
-  }
-  .back-btn-label {
-    display: inline;
   }
   .pure-toggle {
     top: 70px;
@@ -531,6 +539,12 @@ body.pure-reading .water-splash {
   }
   .pure-toggle-label {
     display: inline;
+  }
+}
+
+@media (max-width: 767px) {
+  .back-btn-fixed {
+    left: 12px;
   }
 }
 

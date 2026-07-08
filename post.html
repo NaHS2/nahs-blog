@@ -17,11 +17,6 @@
     <header class="scroll-header" id="scroll-header">
         <div class="header-time" id="header-time">00:00:00</div>
         <div class="header-date" id="header-date"></div>
-        <!-- 返回按钮：置于header内左上 -->
-        <a href="index.html" class="back-btn-fixed" id="back-btn" aria-label="返回列表">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-            <span class="back-btn-label">返回</span>
-        </a>
         <div class="sky-canvas">
             <!-- 星星（夜间可见） -->
             <div class="stars-layer" id="stars-layer"></div>
@@ -48,6 +43,12 @@
             <path d="M9 6 L17 12 L9 14"/>
         </svg>
     </header>
+
+    <!-- 返回按钮：固定在页面最上方，普通/纯净模式共用同一个样式 -->
+    <a href="index.html" class="back-btn-fixed" id="back-btn" aria-label="返回列表">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span class="back-btn-label">返回</span>
+    </a>
 
     <!-- 纯净阅读切换：独立固定，不受header隐藏影响 -->
     <button class="pure-toggle" id="pure-toggle" aria-label="纯净阅读模式" title="切换纯净阅读模式">
@@ -82,14 +83,15 @@
         document.addEventListener('touchstart', function() {}, { passive: true });
 
         // 返回按钮：优先使用浏览器后退（触发 bfcache 瞬时恢复），无历史时回退到首页
-        document.getElementById('back-btn').addEventListener('click', (e) => {
+        function goBackToList(e) {
             e.preventDefault();
             if (document.referrer && document.referrer.indexOf(window.location.origin) === 0) {
                 history.back();
             } else {
                 window.location.href = 'index.html';
             }
-        });
+        }
+        document.getElementById('back-btn').addEventListener('click', goBackToList);
 
         marked.setOptions({
             highlight: function(code, lang) {
@@ -101,33 +103,36 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const postId = urlParams.get('id');
+        const isValidPostId = id => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id || '');
 
-        if (postId) {
+        if (isValidPostId(postId)) {
             fetch('posts.json')
                 .then(res => res.json())
                 .then(posts => {
                     const currentPost = posts.find(p => p.id === postId);
-                    if (currentPost) {
-                        document.title = `${currentPost.title} - 硫氢化钠`;
-                        document.getElementById('post-title').innerText = currentPost.title;
-                        
-                        let tagsHtml = '';
-                        if (currentPost.tags && currentPost.tags.length > 0) {
-                            tagsHtml = `<div class="tags">` + 
-                                currentPost.tags.map(tag => `<span class="tag">${tag}</span>`).join('') + 
-                                `</div>`;
-                        }
-                        const readTimeHtml = currentPost.readTime ? `<span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ${currentPost.readTime}</span>` : '';
-                        
-                        document.getElementById('post-meta').innerHTML = `
-                            <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> ${currentPost.date.replace(/-/g, '.')}</span>
-                            ${readTimeHtml}
-                            ${tagsHtml}
-                        `;
+                    if (!currentPost) {
+                        throw new Error('文章未找到');
                     }
-                });
 
-            fetch(`posts/${postId}.md`)
+                    document.title = `${currentPost.title} - 硫氢化钠`;
+                    document.getElementById('post-title').innerText = currentPost.title;
+                    
+                    let tagsHtml = '';
+                    if (currentPost.tags && currentPost.tags.length > 0) {
+                        tagsHtml = `<div class="tags">` + 
+                            currentPost.tags.map(tag => `<span class="tag">${tag}</span>`).join('') + 
+                            `</div>`;
+                    }
+                    const readTimeHtml = currentPost.readTime ? `<span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ${currentPost.readTime}</span>` : '';
+                    
+                    document.getElementById('post-meta').innerHTML = `
+                        <span class="meta-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> ${currentPost.date.replace(/-/g, '.')}</span>
+                        ${readTimeHtml}
+                        ${tagsHtml}
+                    `;
+
+                    return fetch(`posts/${currentPost.id}.md`);
+                })
                 .then(response => {
                     if (!response.ok) throw new Error('文章未找到');
                     return response.text();
@@ -151,7 +156,7 @@
                 });
             
         } else {
-            document.getElementById('content').innerHTML = '<p>未提供文章 ID</p>';
+            document.getElementById('content').innerHTML = '<p>未提供有效的文章 ID</p>';
         }
 
         // ---- 图片排版：连续两张图片自动横排 ----
