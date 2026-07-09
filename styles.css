@@ -546,6 +546,10 @@ body.pure-reading .water-splash {
   .back-btn-fixed {
     display: none;
   }
+
+  body.pure-reading .back-btn-fixed {
+    display: none;
+  }
 }
 
 /* 旧的 back-btn 保留兼容 */

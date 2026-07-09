@@ -93,22 +93,14 @@
 
         var allPosts = [];
         var _restoredFromBfcache = false;
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
+        var _pendingListRestore = sessionStorage.getItem('pendingListRestore') === '1';
 
         function restoreListScrollPosition() {
+            if (!_pendingListRestore) return;
             var restoredY = parseInt(sessionStorage.getItem('cachedScrollY'), 10);
             if (isNaN(restoredY)) return;
-
-            var applyScroll = function() {
-                window.scrollTo(0, restoredY);
-            };
-
             requestAnimationFrame(function() {
-                applyScroll();
-                requestAnimationFrame(applyScroll);
-                setTimeout(applyScroll, 50);
+                window.scrollTo(0, restoredY);
             });
         }
 
@@ -125,11 +117,7 @@
                 }
             }
 
-            // 手机端有时不会自动恢复滚动位置，这里用缓存做一次兜底
-            var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-            if ((navEntry && navEntry.type === 'back_forward') || (document.referrer && document.referrer.indexOf('post.html') !== -1)) {
-                restoreListScrollPosition();
-            }
+            restoreListScrollPosition();
         });
 
         // ====== 瞬时恢复：用缓存的 DOM 立即渲染，不等网络 ======
@@ -175,7 +163,7 @@
                 el.style.animation = 'none';
                 el.style.opacity = '1';
             });
-            window.scrollTo(0, parseInt(_cachedScrollY, 10) || 0);
+            restoreListScrollPosition();
 
             // 恢复标签状态
             setActiveTab(_currentCategory);
@@ -197,8 +185,9 @@
                     var latestSignature = getPostsSignature(_currentCategory);
                     if (_cachedSignature && _cachedSignature !== latestSignature) {
                         renderPosts(_currentCategory);
-                        restoreListScrollPosition();
                     }
+                    restoreListScrollPosition();
+                    sessionStorage.removeItem('pendingListRestore');
                     sessionStorage.removeItem('cachedList');
                     sessionStorage.removeItem('cachedScrollY');
                     sessionStorage.removeItem('cachedPostsSignature');
@@ -359,6 +348,7 @@
             sessionStorage.setItem('cachedScrollY', window.scrollY);
             sessionStorage.setItem('cachedTab', document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all');
             sessionStorage.setItem('cachedPostsSignature', getPostsSignature(document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all'));
+            sessionStorage.setItem('pendingListRestore', '1');
 
             window.location.href = card.href;
         });
@@ -373,9 +363,6 @@
             if (document.visibilityState === 'hidden') {
                 saveListScrollState();
             }
-        });
-        window.addEventListener('popstate', function() {
-            restoreListScrollPosition();
         });
 
         // ====== 文章视图逻辑 ======
