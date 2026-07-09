@@ -94,14 +94,32 @@
         var allPosts = [];
         var _restoredFromBfcache = false;
         var _pendingListRestore = sessionStorage.getItem('pendingListRestore') === '1';
+        var _cachedList = sessionStorage.getItem('cachedList');
+        var _cachedScrollY = sessionStorage.getItem('cachedScrollY');
+        var _cachedTab = sessionStorage.getItem('cachedTab');
+        var _cachedSignature = sessionStorage.getItem('cachedPostsSignature');
+        var _currentCategory = _cachedTab || sessionStorage.getItem('indexTab') || 'all';
+        if (!['all', 'tech', 'life'].includes(_currentCategory)) _currentCategory = 'all';
 
-        function restoreListScrollPosition() {
-            if (!_pendingListRestore) return;
-            var restoredY = parseInt(sessionStorage.getItem('cachedScrollY'), 10);
-            if (isNaN(restoredY)) return;
-            requestAnimationFrame(function() {
-                window.scrollTo(0, restoredY);
+        function restoreListFromCache() {
+            if (!_pendingListRestore || !_cachedList) return false;
+
+            var listEl = document.getElementById('post-list');
+            if (!listEl) return false;
+
+            listEl.innerHTML = _cachedList;
+            listEl.querySelectorAll('.post-item, .collection-header').forEach(function(el) {
+                el.style.animation = 'none';
+                el.style.opacity = '1';
             });
+
+            var restoredY = parseInt(_cachedScrollY, 10);
+            if (!isNaN(restoredY)) {
+                window.scrollTo(0, restoredY);
+            }
+
+            setActiveTab(_currentCategory);
+            return true;
         }
 
         window.addEventListener('pageshow', function(e) {
@@ -117,16 +135,8 @@
                 }
             }
 
-            restoreListScrollPosition();
+            restoreListFromCache();
         });
-
-        // ====== 瞬时恢复：用缓存的 DOM 立即渲染，不等网络 ======
-        var _cachedList = sessionStorage.getItem('cachedList');
-        var _cachedScrollY = sessionStorage.getItem('cachedScrollY');
-        var _cachedTab = sessionStorage.getItem('cachedTab');
-        var _cachedSignature = sessionStorage.getItem('cachedPostsSignature');
-        var _currentCategory = _cachedTab || sessionStorage.getItem('indexTab') || 'all';
-        if (!['all', 'tech', 'life'].includes(_currentCategory)) _currentCategory = 'all';
 
         function getPostsSignature(category) {
             return JSON.stringify({
@@ -154,21 +164,13 @@
             }
         }
 
-        if (_cachedList && !_restoredFromBfcache) {
-            // 直接注入缓存 DOM + 瞬间滚到位（同步完成，零闪烁）
-            var listEl = document.getElementById('post-list');
-            listEl.innerHTML = _cachedList;
-            // 清除缓存卡片上的动画样式——否则卡片从 opacity:0 重新播放
-            listEl.querySelectorAll('.post-item, .collection-header').forEach(function(el) {
-                el.style.animation = 'none';
-                el.style.opacity = '1';
-            });
-            restoreListScrollPosition();
-
-            // 恢复标签状态
+        // ====== 瞬时恢复：用缓存的 DOM 立即渲染，不等网络 ======
+        if (!restoreListFromCache()) {
+            setActiveTab(_currentCategory);
+        } else if (_restoredFromBfcache) {
             setActiveTab(_currentCategory);
         } else {
-            setActiveTab(_currentCategory);
+            window.addEventListener('load', restoreListFromCache, { once: true });
         }
 
         // ====== 后台拉最新数据，静默更新（用户无感知） ======
@@ -186,11 +188,13 @@
                     if (_cachedSignature && _cachedSignature !== latestSignature) {
                         renderPosts(_currentCategory);
                     }
-                    restoreListScrollPosition();
+                    restoreListFromCache();
                     sessionStorage.removeItem('pendingListRestore');
                     sessionStorage.removeItem('cachedList');
                     sessionStorage.removeItem('cachedScrollY');
                     sessionStorage.removeItem('cachedPostsSignature');
+                    _pendingListRestore = false;
+                    _cachedList = null;
                 } else {
                     renderPosts(_currentCategory);
                 }
