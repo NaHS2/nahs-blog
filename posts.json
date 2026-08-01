@@ -36,6 +36,69 @@
     "excerpt": "对NFC原理好奇，用嘉立创EDA免费打板画了一张PCB校园卡。环形铜线圈做天线，NXP NTAG芯片，手机一扫就能读写。从天线阻抗匹配到FR-4介电特性，一张卡片把NFC物理链路完整跑通了。"
   },
   {
+    "id": "stm32-button-pwm-controller",
+    "title": "一个按键控制LED亮度：短按调光，长按呼吸",
+    "date": "2025-08-14",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "PWM", "按键", "状态机"],
+    "collection": "STM32实践",
+    "readTime": "大约 6 分钟",
+    "excerpt": "用一枚按键同时完成五档调光和呼吸模式切换。通过10ms状态机区分短按与长按，去掉长时间阻塞和goto，让TIM3 PWM与按键交互始终保持响应。"
+  },
+  {
+    "id": "stm32-lcd-multimedia-player",
+    "title": "在STM32上播放彩色动画和声音：LCD、DMA与PCM联动",
+    "date": "2025-08-09",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "LCD", "DMA", "PCM", "FSMC"],
+    "collection": "STM32实践",
+    "readTime": "大约 9 分钟",
+    "excerpt": "在240×320 LCD上绘图、显示RGB565图片，并用DMA播放RGB332动画和8kHz PCM音频。从Flash容量计算到中断节拍优化，把显示、搬运和声音组合成一个完整项目。"
+  },
+  {
+    "id": "stm32-pwm-signal-analyzer",
+    "title": "自己生成再自己测：STM32 PWM波形分析仪",
+    "date": "2025-08-04",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "PWM", "输入捕获", "定时器"],
+    "collection": "STM32实践",
+    "readTime": "大约 8 分钟",
+    "excerpt": "TIM3从PB5生成PWM，TIM5在PA0测回频率和占空比。结合测周法、500ms闸门测频和迟滞切换，处理输入捕获与计数器溢出同时发生的边界。"
+  },
+  {
+    "id": "stm32-pulse-width-meter",
+    "title": "用TIM5量出按键按了多久：1us分辨率输入捕获",
+    "date": "2025-07-30",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "输入捕获", "TIM5", "定时器"],
+    "collection": "STM32实践",
+    "readTime": "大约 6 分钟",
+    "excerpt": "用TIM5_CH1交替捕获按键的上升沿和下降沿，以1us分辨率测量高电平宽度。通过溢出次数与CCR组合时间戳，修复边沿撞上计数器回绕时的竞态。"
+  },
+  {
+    "id": "stm32-pwm-breathing-led",
+    "title": "不用Delay调亮度：TIM3 PWM做一个平滑呼吸灯",
+    "date": "2025-07-25",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "PWM", "TIM3", "LED"],
+    "collection": "STM32实践",
+    "readTime": "大约 5 分钟",
+    "excerpt": "把TIM3_CH2重映射到PB5，用1kHz PWM和1000级分辨率驱动板载LED。弄清低电平有效带来的极性关系，并用预装载寄存器做平滑呼吸效果。"
+  },
+  {
+    "id": "stm32-dac-loopback-calibrator",
+    "title": "从数字量到电压再采回来：STM32 ADC/DAC闭环校准",
+    "date": "2025-07-22",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "ADC", "DAC", "串口"],
+    "collection": "STM32实践",
+    "readTime": "大约 5 分钟",
+    "excerpt": "串口输入0-4095，DAC从PA4输出模拟电压，再由PA1的ADC回采。用整帧输入校验和16次均值采样观察设定值、测量值与真实硬件误差。"
+  },
+  {
+    "id": "stm32-adc-voltage-monitor",
+    "title": "把模拟电压变成串口数据：STM32 ADC采样与均值滤波",
+    "date": "2025-07-17",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "ADC", "模拟信号", "串口"],
+    "collection": "STM32实践",
+    "readTime": "大约 5 分钟",
+    "excerpt": "用ADC1采集PA1上的电位器电压，经过校准和十次均值滤波后每秒从串口输出。把ADC时钟、采样时间、参考电压与读数抖动逐项理清。"
+  },
+  {
     "id": "voting-circuit",
     "title": "基于 51 单片机的七人表决电路设计",
     "date": "2025-07-15",
@@ -43,6 +106,60 @@
     "collection": "单片机项目",
     "readTime": "大约 4 分钟",
     "excerpt": "7个拨动开关投票，2个数码管显示赞成/反对票，绿灯通过红灯否决。30行单片机代码替代了一堆逻辑门芯片，第一次直观感受「软件定义硬件」。"
+  },
+  {
+    "id": "stm32-uart-command-console",
+    "title": "给STM32做一个串口命令控制台：帧协议、状态机与LED控制",
+    "date": "2025-07-14",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "USART", "串口", "状态机"],
+    "collection": "STM32实践",
+    "readTime": "大约 7 分钟",
+    "excerpt": "为USART1设计@payload帧协议和中断接收状态机，用串口命令控制两盏LED并回报状态。修复8位接收索引绕回、缓冲区越界和不受限格式化输出问题。"
+  },
+  {
+    "id": "stm32-exti-event-controller",
+    "title": "让按键不再轮询：STM32外部中断事件控制器",
+    "date": "2025-07-09",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "EXTI", "中断", "按键"],
+    "collection": "STM32实践",
+    "readTime": "大约 6 分钟",
+    "excerpt": "把PA0和PE2/PE3/PE4映射到四条EXTI线路，中断只投递按键事件，主循环统一消费。再用TIM2节拍推进闪烁任务，让输入和长动作互不阻塞。"
+  },
+  {
+    "id": "stm32-timer-scheduler",
+    "title": "告别Delay：用TIM2中断做一个1秒任务调度器",
+    "date": "2025-07-04",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "TIM2", "定时器", "中断"],
+    "collection": "STM32实践",
+    "readTime": "大约 5 分钟",
+    "excerpt": "用TIM2把72MHz时钟分出准确的1秒节拍，中断里只设置volatile标志，主循环负责翻转LED。从清除首次伪更新到理解单标志方案的边界。"
+  },
+  {
+    "id": "stm32-button-led-controller",
+    "title": "四个按键控制两盏LED：从消抖到事件触发",
+    "date": "2025-07-01",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "GPIO", "按键", "状态机"],
+    "collection": "STM32实践",
+    "readTime": "大约 5 分钟",
+    "excerpt": "用四个板载按键控制两盏LED，分别处理上拉与下拉输入、软件消抖和按下边沿。把五次闪烁拆成10ms状态机，避免主循环被阻塞五秒。"
+  },
+  {
+    "id": "stm32-dual-led-runner",
+    "title": "用STM32F103ZET6做双LED流水灯：封装第一个GPIO驱动",
+    "date": "2025-06-28",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "GPIO", "LED", "驱动"],
+    "collection": "STM32实践",
+    "readTime": "大约 4 分钟",
+    "excerpt": "把PB5和PE5的GPIO操作封装为独立LED驱动，让主函数只保留流水灯动作。顺手理清低电平有效、输出速度和初始化默认状态这些基础细节。"
+  },
+  {
+    "id": "stm32-gpio-board-check",
+    "title": "从GPIO配置到第一盏灯：STM32F103ZET6板卡自检",
+    "date": "2025-06-25",
+    "tags": ["STM32", "STM32F103ZET6", "嵌入式", "GPIO", "SysTick", "入门"],
+    "collection": "STM32实践",
+    "readTime": "大约 5 分钟",
+    "excerpt": "从最小启动流程开始，验证72MHz系统时钟、GPIO时钟、板载LED和下载链路。两盏灯交替闪烁背后，是第一次完整走通STM32从复位到输出的路径。"
   },
   {
     "id": "eda-traffic-light",
