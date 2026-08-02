@@ -8,7 +8,7 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20 L22 20'/%3E%3Cpath d='M5 20 C5 20, 8 23, 14 23 C17 23, 19 20, 19 20'/%3E%3Cpath d='M9 20 L9 9'/%3E%3Cpath d='M9 9 L17 15 L9 17'/%3E%3Cpath d='M10 2 A 4 4 0 0 0 5 5 A 5 5 0 0 1 10 2'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="home-page">
     <!-- 顶部进度条：日月轮转（时间驱动） -->
     <header class="scroll-header" id="scroll-header">
         <div class="header-time" id="header-time">00:00:00</div>
@@ -98,8 +98,18 @@
         var _cachedScrollY = sessionStorage.getItem('cachedScrollY');
         var _cachedTab = sessionStorage.getItem('cachedTab');
         var _cachedSignature = sessionStorage.getItem('cachedPostsSignature');
+        var _listCacheVersion = 'collection-jump-nav-v1';
+        var _cachedListVersion = sessionStorage.getItem('cachedListVersion');
         var _currentCategory = _cachedTab || sessionStorage.getItem('indexTab') || 'all';
         if (!['all', 'tech', 'life'].includes(_currentCategory)) _currentCategory = 'all';
+
+        // DOM 结构升级后不复用旧缓存，避免返回时缺少合集导航。
+        if (_cachedList && _cachedListVersion !== _listCacheVersion) {
+            _cachedList = null;
+            _pendingListRestore = false;
+            sessionStorage.removeItem('pendingListRestore');
+            sessionStorage.removeItem('cachedList');
+        }
 
         function restoreListFromCache() {
             if (!_pendingListRestore || !_cachedList) return false;
@@ -112,6 +122,7 @@
                 el.style.animation = 'none';
                 el.style.opacity = '1';
             });
+            listEl.classList.toggle('has-collection-nav', !!listEl.querySelector('.collection-jump-nav'));
 
             var restoredY = parseInt(_cachedScrollY, 10);
             if (!isNaN(restoredY)) {
@@ -119,6 +130,7 @@
             }
 
             setActiveTab(_currentCategory);
+            setupCollectionNavigation();
             return true;
         }
 
@@ -163,6 +175,59 @@
                 _currentCategory = category;
             }
         }
+
+        var _collectionHeaders = [];
+        var _collectionUpdateFrame = 0;
+        var _activeCollectionId = '';
+
+        function setActiveCollection(targetId, centerLink) {
+            var hasChanged = _activeCollectionId !== targetId;
+            _activeCollectionId = targetId;
+            var links = document.querySelectorAll('.collection-jump-link');
+            links.forEach(function(link) {
+                var isActive = link.dataset.target === targetId;
+                link.classList.toggle('active', isActive);
+                if (isActive) {
+                    link.setAttribute('aria-current', 'true');
+                } else {
+                    link.removeAttribute('aria-current');
+                }
+            });
+
+            if (!centerLink || !hasChanged || window.innerWidth >= 1360) return;
+            var activeLink = document.querySelector('.collection-jump-link.active');
+            var linksWrap = activeLink && activeLink.closest('.collection-jump-links');
+            if (!activeLink || !linksWrap) return;
+
+            var targetLeft = activeLink.offsetLeft - (linksWrap.clientWidth - activeLink.offsetWidth) / 2;
+            linksWrap.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
+        }
+
+        function updateCollectionNavigation() {
+            _collectionUpdateFrame = 0;
+            if (_collectionHeaders.length === 0) return;
+
+            var threshold = window.innerWidth >= 1360 ? 100 : 145;
+            var activeHeader = _collectionHeaders[0];
+            _collectionHeaders.forEach(function(header) {
+                if (header.getBoundingClientRect().top <= threshold) activeHeader = header;
+            });
+            setActiveCollection(activeHeader.id, true);
+        }
+
+        function requestCollectionNavigationUpdate() {
+            if (_collectionUpdateFrame) return;
+            _collectionUpdateFrame = requestAnimationFrame(updateCollectionNavigation);
+        }
+
+        function setupCollectionNavigation() {
+            _collectionHeaders = Array.from(document.querySelectorAll('.collection-header[data-collection-section]'));
+            if (_collectionHeaders.length === 0) _activeCollectionId = '';
+            requestCollectionNavigationUpdate();
+        }
+
+        window.addEventListener('scroll', requestCollectionNavigationUpdate, { passive: true });
+        window.addEventListener('resize', requestCollectionNavigationUpdate, { passive: true });
 
         // ====== 瞬时恢复：用缓存的 DOM 立即渲染，不等网络 ======
         if (!restoreListFromCache()) {
@@ -215,7 +280,8 @@
         // 渲染文章列表
         function renderPosts(category) {
             const postList = document.getElementById('post-list');
-            postList.innerHTML = ''; 
+            postList.innerHTML = '';
+            postList.classList.remove('has-collection-nav');
             
             // 根据分类过滤文章
             let filteredPosts = allPosts;
@@ -277,17 +343,75 @@
                 });
 
                 let delayIndex = 0;
+                const collectionEntries = Object.entries(collections);
+                const navItems = collectionEntries.map(([collName, collPosts], index) => ({
+                    name: collName,
+                    count: collPosts.length,
+                    target: `collection-section-${index}`
+                }));
+
+                if (others.length > 0) {
+                    navItems.push({
+                        name: '单篇教程',
+                        count: others.length,
+                        target: 'collection-section-others'
+                    });
+                }
+
+                const jumpNav = document.createElement('nav');
+                jumpNav.className = 'collection-jump-nav';
+                jumpNav.setAttribute('aria-label', '合集快速跳转');
+                jumpNav.innerHTML = `
+                    <div class="collection-jump-heading">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        <span>项目合集</span>
+                    </div>
+                    <div class="collection-jump-links"></div>
+                `;
+
+                const jumpLinks = jumpNav.querySelector('.collection-jump-links');
+                navItems.forEach((item, index) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'collection-jump-link';
+                    button.dataset.target = item.target;
+                    button.setAttribute('aria-label', `跳转到${item.name}，共${item.count}篇文章`);
+
+                    const name = document.createElement('span');
+                    name.className = 'collection-jump-name';
+                    name.textContent = item.name;
+
+                    const count = document.createElement('span');
+                    count.className = 'collection-jump-count';
+                    count.textContent = item.count;
+
+                    button.appendChild(name);
+                    button.appendChild(count);
+                    if (index === 0) {
+                        button.classList.add('active');
+                        button.setAttribute('aria-current', 'true');
+                    }
+                    jumpLinks.appendChild(button);
+                });
+
+                const collectionSections = document.createElement('div');
+                collectionSections.className = 'collection-sections';
+                postList.classList.add('has-collection-nav');
+                postList.appendChild(jumpNav);
+                postList.appendChild(collectionSections);
 
                 // 渲染合集
-                for (const [collName, collPosts] of Object.entries(collections)) {
+                collectionEntries.forEach(([collName, collPosts], collectionIndex) => {
                     const header = document.createElement('div');
                     header.className = 'collection-header';
+                    header.id = `collection-section-${collectionIndex}`;
+                    header.dataset.collectionSection = collName;
                     header.innerHTML = `
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                         合集：${collName}
                     `;
                     header.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${delayIndex * 0.1}s`;
-                    postList.appendChild(header);
+                    collectionSections.appendChild(header);
                     delayIndex++;
 
                     const collList = document.createElement('div');
@@ -295,29 +419,29 @@
                     collPosts.forEach(post => {
                         collList.appendChild(createPostCard(post, delayIndex++));
                     });
-                    postList.appendChild(collList);
-                }
+                    collectionSections.appendChild(collList);
+                });
 
                 // 渲染单篇技术文章
                 if (others.length > 0) {
-                    if (Object.keys(collections).length > 0) {
-                        const header = document.createElement('div');
-                        header.className = 'collection-header';
-                        header.innerHTML = `
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                            单篇教程
-                        `;
-                        header.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${delayIndex * 0.1}s`;
-                        postList.appendChild(header);
-                        delayIndex++;
-                    }
+                    const header = document.createElement('div');
+                    header.className = 'collection-header';
+                    header.id = 'collection-section-others';
+                    header.dataset.collectionSection = '单篇教程';
+                    header.innerHTML = `
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        单篇教程
+                    `;
+                    header.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${delayIndex * 0.1}s`;
+                    collectionSections.appendChild(header);
+                    delayIndex++;
                     
                     const collList = document.createElement('div');
                     collList.className = 'collection-list';
                     others.forEach(post => {
                         collList.appendChild(createPostCard(post, delayIndex++));
                     });
-                    postList.appendChild(collList);
+                    collectionSections.appendChild(collList);
                 }
 
             } else {
@@ -326,6 +450,8 @@
                     postList.appendChild(createPostCard(post, index));
                 });
             }
+
+            setupCollectionNavigation();
         }
 
         // 标签切换逻辑
@@ -343,6 +469,18 @@
 
         // ====== 文章卡片点击：缓存列表 DOM，导航到 post.html ======
         document.getElementById('post-list').addEventListener('click', (e) => {
+            const jumpLink = e.target.closest('.collection-jump-link');
+            if (jumpLink) {
+                const target = document.getElementById(jumpLink.dataset.target);
+                if (!target) return;
+                setActiveCollection(target.id, true);
+                target.scrollIntoView({
+                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+                    block: 'start'
+                });
+                return;
+            }
+
             const card = e.target.closest('.post-item');
             if (!card) return;
             e.preventDefault();
@@ -352,6 +490,7 @@
             sessionStorage.setItem('cachedScrollY', window.scrollY);
             sessionStorage.setItem('cachedTab', document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all');
             sessionStorage.setItem('cachedPostsSignature', getPostsSignature(document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all'));
+            sessionStorage.setItem('cachedListVersion', _listCacheVersion);
             sessionStorage.setItem('pendingListRestore', '1');
 
             window.location.href = card.href;
