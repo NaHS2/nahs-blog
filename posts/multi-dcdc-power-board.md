@@ -16,15 +16,15 @@
 
 如果开关在一个周期内有`5/12`的时间接通，有`7/12`的时间断开，那么负载两端电压的平均值就是：
 
-**V<sub>AVG</sub> = 12 × 5/12 + 0 × 7/12 = 5 V**
+<div class="formula">V<sub>AVG</sub> = 12 × 5/12 + 0 × 7/12 = 5 V</div>
 
 也可以写成：
 
-**V<sub>OUT</sub> ≈ D × V<sub>IN</sub>**
+<div class="formula">V<sub>OUT</sub> ≈ D × V<sub>IN</sub></div>
 
 其中**D**是开关接通时间占整个周期的比例，也叫占空比。对于`12V`降到`5V`，理想占空比就是：
 
-**D = V<sub>OUT</sub> / V<sub>IN</sub> = 5 / 12 ≈ 41.7%**
+<div class="formula">D = V<sub>OUT</sub> / V<sub>IN</sub> = 5 / 12 ≈ 41.7%</div>
 
 这就是开关型降压电源的基本思想：不是把多余的`7V`直接烧掉，而是用开关控制“输入能量送过来的时间比例”。开关本身只有导通和关断两种状态，理想情况下功耗很小，所以效率比线性降压高。
 
@@ -41,7 +41,7 @@
 
 电容两端电压不能突变，基本关系是：
 
-**i<sub>C</sub> = C × dv<sub>C</sub>/dt**
+<div class="formula">i<sub>C</sub> = C × dv<sub>C</sub>/dt</div>
 
 当开关节点突然升高时，电容先充电；当开关节点突然降低时，电容释放之前储存的能量。因此，电容可以把脉冲电压“撑住”，抑制电压突变。
 
@@ -58,7 +58,7 @@
 
 电感两端电压与电流变化率的关系是：
 
-**v<sub>L</sub> = L × di<sub>L</sub>/dt**
+<div class="formula">v<sub>L</sub> = L × di<sub>L</sub>/dt</div>
 
 电感电流不能突变。开关导通时，输入电压给电感充能，电感电流逐渐上升；开关关断时，电感会继续推动原来的电流流向负载，电流逐渐下降，而不会立刻变成零。
 
@@ -85,7 +85,7 @@
 
 板上的降压支路使用`SS54`肖特基二极管，是因为它具有较低的正向压降和较快的开关速度。二极管损耗大致为：
 
-**P<sub>D</sub> ≈ V<sub>F</sub> × I<sub>D</sub>**
+<div class="formula">P<sub>D</sub> ≈ V<sub>F</sub> × I<sub>D</sub></div>
 
 所以选型时要同时看正向电流、反向耐压、正向压降和温升，不能只看“额定电流够不够”。
 
@@ -142,15 +142,15 @@ TI数据手册给出的固定输出典型应用电路也是这个结构：输入
 
 另一种直观方法是串联一个晶体管或线性稳压器，把多余电压变成热量。例如用线性方式把`12V`降到`5V`，负载电流为`1A`时，稳压器需要消耗：
 
-**P<sub>LOSS</sub> = (12 − 5) × 1 = 7 W**
+<div class="formula">P<sub>LOSS</sub> = (12 − 5) × 1 = 7 W</div>
 
 这`7W`全部变成热量。输出功率只有：
 
-**P<sub>OUT</sub> = 5 × 1 = 5 W**
+<div class="formula">P<sub>OUT</sub> = 5 × 1 = 5 W</div>
 
 效率约为：
 
-**η = 5 / 12 ≈ 41.7%**
+<div class="formula">η = 5 / 12 ≈ 41.7%</div>
 
 线性稳压的优点是电路简单、噪声较低、没有开关节点；缺点是输入输出压差越大、负载电流越大，发热越严重。因此，低电流、低噪声场合可以考虑线性稳压；大压差、大电流场合更适合开关电源。
 
@@ -172,7 +172,7 @@ TI数据手册给出的固定输出典型应用电路也是这个结构：输入
 
 反馈关系可以写成：
 
-**V<sub>OUT</sub> = V<sub>FB</sub> × (1 + R<sub>TOP</sub> / R<sub>BOT</sub>)**
+<div class="formula">V<sub>OUT</sub> = V<sub>FB</sub> × (1 + R<sub>TOP</sub> / R<sub>BOT</sub>)</div>
 
 R1、R2和电位器的作用不是“限制电流”，而是“告诉芯片当前输出电压是多少”。调节电位器相当于改变分压比例，芯片会把输出调节到新的目标值。C16并联在反馈网络上，用于抑制反馈线上的高频干扰、改善环路响应。输出侧使用`L4=68uH`，最终仍要结合负载电流和开关频率核算。
 
@@ -193,19 +193,19 @@ R1、R2和电位器的作用不是“限制电流”，而是“告诉芯片当�
 
 理想连续电流模式下：
 
-**V<sub>OUT</sub> ≈ V<sub>IN</sub> / (1 − D)**
+<div class="formula">V<sub>OUT</sub> ≈ V<sub>IN</sub> / (1 − D)</div>
 
 例如输入`12V`、输出`36V`时：
 
-**D ≈ 1 − 12 / 36 = 66.7%**
+<div class="formula">D ≈ 1 − 12 / 36 = 66.7%</div>
 
 升压不能只看输出电流，因为输入电流会变大。功率守恒并考虑效率后：
 
-**I<sub>IN</sub> ≈ (V<sub>OUT</sub> × I<sub>OUT</sub>) / (η × V<sub>IN</sub>)**
+<div class="formula">I<sub>IN</sub> ≈ (V<sub>OUT</sub> × I<sub>OUT</sub>) / (η × V<sub>IN</sub>)</div>
 
 假设输出`36V/1A`、效率按`85%`估算：
 
-**I<sub>IN</sub> ≈ (36 × 1) / (0.85 × 12) = 3.53 A**
+<div class="formula">I<sub>IN</sub> ≈ (36 × 1) / (0.85 × 12) = 3.53 A</div>
 
 所以升压模块的输入端、电感、保险丝和输入电容，都要按约`3.53A`以上的实际工作电流进行校核。
 
@@ -233,15 +233,15 @@ TI给出的LM2577-ADJ典型电路也遵循同一条升压逻辑：输入电容�
 
 降压电感纹波电流可估算为：
 
-**ΔI<sub>L</sub> = (V<sub>IN</sub> − V<sub>OUT</sub>) × D / (L × f<sub>s</sub>)**
+<div class="formula">ΔI<sub>L</sub> = (V<sub>IN</sub> − V<sub>OUT</sub>) × D / (L × f<sub>s</sub>)</div>
 
 反过来可以根据允许的纹波电流选电感：
 
-**L = (V<sub>IN</sub> − V<sub>OUT</sub>) × D / (ΔI<sub>L</sub> × f<sub>s</sub>)**
+<div class="formula">L = (V<sub>IN</sub> − V<sub>OUT</sub>) × D / (ΔI<sub>L</sub> × f<sub>s</sub>)</div>
 
 一般可以把**ΔI<sub>L</sub>**取最大负载电流的`20%~40%`作为初始设计值。电感峰值电流为：
 
-**I<sub>L,PEAK</sub> = I<sub>OUT</sub> + ΔI<sub>L</sub> / 2**
+<div class="formula">I<sub>L,PEAK</sub> = I<sub>OUT</sub> + ΔI<sub>L</sub> / 2</div>
 
 电感饱和电流必须高于这个峰值，并且还要考虑启动和负载突变。
 
@@ -249,11 +249,11 @@ TI给出的LM2577-ADJ典型电路也遵循同一条升压逻辑：输入电容�
 
 忽略ESR时，电容导致的输出纹波近似为：
 
-**ΔV<sub>C</sub> ≈ ΔI<sub>L</sub> / (8 × f<sub>s</sub> × C<sub>OUT</sub>)**
+<div class="formula">ΔV<sub>C</sub> ≈ ΔI<sub>L</sub> / (8 × f<sub>s</sub> × C<sub>OUT</sub>)</div>
 
 ESR造成的纹波约为：
 
-**ΔV<sub>ESR</sub> ≈ ΔI<sub>L</sub> × ESR**
+<div class="formula">ΔV<sub>ESR</sub> ≈ ΔI<sub>L</sub> × ESR</div>
 
 因此输出电容不是容量越大越好，还要看耐压、纹波电流、ESR以及芯片数据手册允许的范围。
 
@@ -263,11 +263,11 @@ ESR造成的纹波约为：
 
 电源指示LED需要串联限流电阻：
 
-**R = (V<sub>RAIL</sub> − V<sub>F</sub>) / I<sub>LED</sub>**
+<div class="formula">R = (V<sub>RAIL</sub> − V<sub>F</sub>) / I<sub>LED</sub></div>
 
 例如在`12V`轨上使用正向压降约`2V`、工作电流约`2mA`的LED：
 
-**R ≈ (12 − 2) / 0.002 = 5 kΩ**
+<div class="formula">R ≈ (12 − 2) / 0.002 = 5 kΩ</div>
 
 ---
 
@@ -336,11 +336,11 @@ LM2596、LM2577、肖特基二极管和电感都是主要发热源，器件周�
 
 器件功耗可以先粗略估算：
 
-**P<sub>LOSS</sub> = P<sub>IN</sub> − P<sub>OUT</sub>**
+<div class="formula">P<sub>LOSS</sub> = P<sub>IN</sub> − P<sub>OUT</sub></div>
 
 如果转换效率为**η**，则：
 
-**P<sub>LOSS</sub> = P<sub>OUT</sub> × (1 / η − 1)**
+<div class="formula">P<sub>LOSS</sub> = P<sub>OUT</sub> × (1 / η − 1)</div>
 
 功耗最终会转化为热量，所以布局阶段就要为散热留出条件，而不是等到实物发烫后再补救。
 
