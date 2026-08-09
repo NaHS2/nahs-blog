@@ -829,12 +829,12 @@ body.pure-reading .water-splash {
   display: block;
   margin: 1.35em 0 1.45em;
   padding: 0.15em 0.5em;
-  color: var(--gray-900);
-  font-family: Georgia, "Times New Roman", "Noto Serif SC", serif;
+  color: var(--gray-900) !important;
+  font-family: Georgia, "Times New Roman", "Noto Serif SC", serif !important;
   font-size: 1.12em;
-  font-weight: 400;
+  font-weight: 400 !important;
   line-height: 1.7;
-  text-align: center;
+  text-align: center !important;
   letter-spacing: 0.01em;
   white-space: normal;
 }
