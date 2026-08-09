@@ -1,5 +1,14 @@
 [
   {
+    "id": "multi-dcdc-power-board",
+    "title": "多路DCDC电源板：一块系统电源板的设计思路",
+    "date": "2026-05-01",
+    "tags": ["硬件", "电源设计", "DCDC", "LM2596", "LM2577", "PCB", "嘉立创EDA"],
+    "collection": "硬件实践",
+    "readTime": "大约 10 分钟",
+    "excerpt": "从12V降到5V的占空比出发，解释开关型Buck/Boost电源为什么需要电感、电容和肖特基二极管，再结合LM2596、LM2577和实际PCB布局说明每个器件的选型与摆放逻辑。"
+  },
+  {
     "id": "auto-clock-in",
     "title": "某定位签到系统认证流程分析与安全研究",
     "date": "2026-06-02",
