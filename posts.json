@@ -1,5 +1,14 @@
 [
   {
+    "id": "light-integrated-control-board",
+    "title": "灯光集成控制板：双单片机、PWM调光与继电器驱动设计",
+    "date": "2026-05-03",
+    "tags": ["硬件", "控制板", "ESP8266", "Arduino Nano", "PWM", "继电器", "PCB"],
+    "collection": "硬件实践",
+    "readTime": "大约 10 分钟",
+    "excerpt": "一块控制板如何协调ESP8266、Arduino Nano、PWM灯光、继电器、A4988电机驱动和霍尔回零？从真实原理图出发，拆解双单片机分工以及灯光和执行机构的完整信号链。"
+  },
+  {
     "id": "multi-dcdc-power-board",
     "title": "多路DCDC电源板：一块系统电源板的设计思路",
     "date": "2026-05-01",
