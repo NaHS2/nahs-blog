@@ -1,5 +1,14 @@
 [
   {
+    "id": "niu-g0-iot-system",
+    "title": "给老款电动车加上一套完整的物联网系统：ESP32、4G网关、Android App与管理后台",
+    "date": "2026-08-09",
+    "tags": ["物联网", "ESP32", "Android", "Python", "4G", "蓝牙", "OTA", "独立项目"],
+    "collection": "独立项目",
+    "readTime": "大约 18 分钟",
+    "excerpt": "从老款小牛 G0 的硬件控制，到 ESP32-S3、M100MG-B1 4G/定位、Python 云端网关、Android App 和 Web 管理后台，完整拆解一套车辆物联网系统的需求、分层、协议、状态机、地图、OTA 与安全设计。"
+  },
+  {
     "id": "light-integrated-control-board",
     "title": "灯光集成控制板：双单片机、PWM调光与继电器驱动设计",
     "date": "2026-05-03",
