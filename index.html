@@ -287,7 +287,7 @@
             let filteredPosts = allPosts;
             if (category === 'tech') {
                 // 定义属于“技术”的标签关键词
-                const techTags = ['单片机', '嵌入式', '物联网', '开发', '硬件', '焊接', '课程设计', '工具', '开源', 'PCB', 'C语言', '算法'];
+                const techTags = ['单片机', '嵌入式', '物联网', '开发', '硬件', '焊接', '课程设计', '工具', '开源', 'PCB', 'C语言', '算法', '安全研究', '逆向', '数据结构', '独立项目', '开发工具'];
                 filteredPosts = allPosts.filter(p => p.tags && p.tags.some(t => techTags.some(keyword => t.includes(keyword))));
             } else if (category === 'life') {
                 // 定义属于“生活”的标签关键词
