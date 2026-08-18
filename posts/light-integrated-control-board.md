@@ -69,9 +69,17 @@ ESP8266和Arduino Nano通过TX/RX串口通信。ESP8266是上层控制器，Nano
 
 ![双主控串口通信电路](../assets/light-integrated-control-board/dual-mcu-uart.png)
 
-图3：双主控串口通信电路。ESP8266侧信号命名为`E8_TX`和`E8_RX`，Nano侧命名为`AN_RX`和`AN_TX`，通过P_COMM接口连接。
+图3：双主控串口通信电路。ESP8266侧信号命名为`E8_TX`和`E8_RX`，Nano侧命名为`AN_RX`和`AN_TX`，通过P_COMM（PZ254V-12-4P 4针接插件）连接。
 
-图中R7为`15kΩ`、R8为`33kΩ`，组成电平处理网络。ESP8266是`3.3V`逻辑，Arduino Nano通常工作在`5V`逻辑，串口连接时不能只把TX和RX直接短接，需要确认电平兼容关系。发送方向采用电阻网络降低进入ESP8266端的电压风险，同时保留串口通信所需的高低电平识别。
+ESP8266是`3.3V`逻辑，Arduino Nano是`5V`逻辑，两者串口不能直接短接，需要处理电平兼容问题。电路用 R7（`15kΩ`）和 R8（`33kΩ`）解决这个问题，但两个方向的处理策略不同：
+
+- **AN_TX → E8_RX（Nano发、ESP8266收）**：Arduino Nano 的 TX 输出 5V 高电平，直接接入 ESP8266 的 RX 会超出其 3.3V 容限。R7 串联在这条线上，R8 从该节点接 GND，构成分压网络。高电平时 ESP8266 RX 端电压约为：
+
+  `5V × 33 / (15 + 33) ≈ 3.44V`
+
+  降至 3.3V 附近，保护 ESP8266 的 RX 引脚不被 5V 信号损坏。
+
+- **E8_TX → AN_RX（ESP8266发、Arduino收）**：ESP8266 的 TX 输出 3.3V 高电平。Arduino Nano 的 RX 引脚采用 5V 逻辑，但 3.3V 已超过 Arduino 判断高电平的阈值（通常约 `0.6 × VCC = 3V`），可以被正确识别，因此这一方向无需升压，直接连接即可。
 
 软件上可以把通信内容分成两类：
 
