@@ -1,5 +1,14 @@
 [
   {
+    "id": "iot-competition-hardware-architecture",
+    "title": "一条滑轨，三个灯位：智能美学追光系统的整体架构设计",
+    "date": "2026-08-24",
+    "tags": ["物联网", "智能照明", "视觉感知", "ESP8266", "ESP32-CAM", "Arduino Nano", "AI识别", "硬件"],
+    "collection": "从零到一物联网项目实战",
+    "readTime": "大约 18 分钟",
+    "excerpt": "一条后滑轨带着ESP32-CAM在三个服装位置定点拍摄，三个前滑轨灯节点负责照明执行；从顾客触发、服装识别、YOLO人流检测到亮度、色温、直射/漫射和云台坐标下发，完整梳理智能美学追光系统的硬件与项目架构。"
+  },
+  {
     "id": "niu-g0-iot-system",
     "title": "给老款电动车加上一套完整的物联网系统：ESP32、4G网关、Android App与管理后台",
     "date": "2026-08-09",
