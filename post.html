@@ -109,9 +109,16 @@
             fetch('posts.json')
                 .then(res => res.json())
                 .then(posts => {
-                    const currentPost = posts.find(p => p.id === postId);
+                    const currentPost = posts.find(p => p.id === postId || p.legacyId === postId);
                     if (!currentPost) {
                         throw new Error('文章未找到');
+                    }
+
+                    // 旧链接继续可用，并自动替换为更短的规范URL。
+                    if (currentPost.id !== postId) {
+                        const canonicalUrl = new URL(window.location.href);
+                        canonicalUrl.searchParams.set('id', currentPost.id);
+                        window.history.replaceState(null, '', canonicalUrl);
                     }
 
                     document.title = `${currentPost.title} - 硫氢化钠`;

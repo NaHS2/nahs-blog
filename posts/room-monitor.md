@@ -1,6 +1,7 @@
 # 从零搭建分布式机房监控系统：STM32 + ESP32 + OneNET + 全平台应用
 
-> 源码：[github.com/NaHSIT/computer-room-monitoring-system](https://github.com/NaHSIT/computer-room-monitoring-system)  
+> 源码：[github.com/NaHSIT/computer-room-monitoring-system](https://github.com/NaHSIT/computer-room-monitoring-system)<br>
+> App源码：[github.com/NaHSIT/IOT_Application](https://github.com/NaHSIT/IOT_Application)<br>
 > 在线演示：[iot-nahs.netlify.app](https://iot-nahs.netlify.app)
 
 机房里的设备不怕用，就怕环境出问题——温度高了服务器降频，湿度大了主板腐蚀，漏水更是灾难性的。市面上的动环监控系统动不动就是五位数的报价，对于学生实验室和创业团队的微型机房来说实在不划算。
@@ -8,6 +9,8 @@
 于是我给自己定了一个目标：用最便宜的物料，从零搭一套能用的分布式机房监控系统。
 
 整个过程全部一个人搞定——原理图自己画、PCB 自己 layout 投板、元件自己焊、外壳打孔自己装、固件自己调、服务器自己配、网页和 App 自己写。几个月下来完整跑通了物联网开发的整个链路，回头看，每个环节学到的东西都比课堂深刻得多。
+
+后来我把 Android App 的源码也开源了，想了解移动端如何接入 OneNET、展示监控数据和下发控制指令，可以直接看[App源码](https://github.com/NaHSIT/IOT_Application)。我还录了两期配套的B站教学视频：[视频1](https://www.bilibili.com/video/BV14JSUBBESR/) 和[视频2](https://www.bilibili.com/video/BV1zwXDBBEmF/)。
 
 ---
 
