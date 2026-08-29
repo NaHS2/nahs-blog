@@ -1,6 +1,7 @@
 [
   {
-    "id": "iot-competition-hardware-architecture",
+    "id": "track-light",
+    "legacyId": "iot-competition-hardware-architecture",
     "title": "一条滑轨，三个灯位：智能美学追光系统的整体架构设计",
     "date": "2026-08-24",
     "tags": ["物联网", "智能照明", "视觉感知", "ESP8266", "ESP32-CAM", "Arduino Nano", "AI识别", "硬件"],
@@ -9,7 +10,8 @@
     "excerpt": "一条后滑轨带着ESP32-CAM在三个服装位置定点拍摄，三个前滑轨灯节点负责照明执行；从顾客触发、服装识别、YOLO人流检测到亮度、色温、直射/漫射和云台坐标下发，完整梳理智能美学追光系统的硬件与项目架构。"
   },
   {
-    "id": "niu-g0-iot-system",
+    "id": "niu-g0-iot",
+    "legacyId": "niu-g0-iot-system",
     "title": "给老款电动车加上一套完整的物联网系统：ESP32、4G网关、Android App与管理后台",
     "date": "2026-08-09",
     "tags": ["物联网", "ESP32", "Android", "Python", "4G", "蓝牙", "OTA", "独立项目"],
@@ -18,7 +20,8 @@
     "excerpt": "从老款小牛 G0 的硬件控制，到 ESP32-S3、M100MG-B1 4G/定位、Python 云端网关、Android App 和 Web 管理后台，完整拆解一套车辆物联网系统的需求、分层、协议、状态机、地图、OTA 与安全设计。"
   },
   {
-    "id": "multi-dcdc-power-board",
+    "id": "dcdc-power",
+    "legacyId": "multi-dcdc-power-board",
     "title": "多路DCDC电源板：一块系统电源板的设计思路",
     "date": "2026-05-01",
     "tags": ["硬件", "电源设计", "DCDC", "LM2596", "LM2577", "PCB", "嘉立创EDA"],
@@ -27,7 +30,8 @@
     "excerpt": "从12V降到5V的占空比出发，解释开关型Buck/Boost电源为什么需要电感、电容和肖特基二极管，再结合LM2596、LM2577和实际PCB布局说明每个器件的选型与摆放逻辑。"
   },
   {
-    "id": "auto-clock-in",
+    "id": "checkin-security",
+    "legacyId": "auto-clock-in",
     "title": "某定位签到系统认证流程分析与安全研究",
     "date": "2026-06-02",
     "tags": ["安全研究", "逆向", "Python", "FastAPI", "小程序", "开发"],
@@ -36,7 +40,8 @@
     "excerpt": "高校定位签到系统的安全性如何？通过反编译、协议分析、签名还原和定位校验机制分析，深入研究了某签到系统的认证流程，并针对发现的安全风险提出了具体的防护建议。"
   },
   {
-    "id": "huffman-coding",
+    "id": "huffman",
+    "legacyId": "huffman-coding",
     "title": "用 C 语言手写哈夫曼编码：从堆排序到文件压缩",
     "date": "2026-05-31",
     "tags": ["数据结构", "C语言", "算法", "开发"],
@@ -45,7 +50,8 @@
     "excerpt": "数据结构课上学完哈夫曼编码理论，用纯C语言手写了一套完整压缩系统——最小堆构建、DFS遍历生成前缀码、动态内存扩容、文件I/O与日志管理。算法从课本到工程落地，踩的坑远比想象的多。"
   },
   {
-    "id": "computer-room-monitoring",
+    "id": "room-monitor",
+    "legacyId": "computer-room-monitoring",
     "title": "从零搭建分布式机房监控系统：STM32 + ESP32 + OneNET + 全平台应用",
     "date": "2026-03-20",
     "tags": ["嵌入式", "物联网", "开发", "开源", "STM32", "ESP32"],
@@ -54,7 +60,8 @@
     "excerpt": "一套完整的物联网全链路实战项目：STM32主从机采集控制 + ESP32-CAM视觉识别 + OneNET云平台 + PC网页 + Android App。覆盖传感器驱动、通信协议、云平台对接、前端可视化的全流程设计思路。"
   },
   {
-    "id": "campus-card-pcb",
+    "id": "nfc-card",
+    "legacyId": "campus-card-pcb",
     "title": "用嘉立创 EDA 画了一张支持 NFC 的 PCB 校园卡",
     "date": "2025-08-15",
     "tags": ["PCB", "NFC", "嘉立创EDA", "硬件"],
@@ -63,7 +70,8 @@
     "excerpt": "对NFC原理好奇，用嘉立创EDA免费打板画了一张PCB校园卡。环形铜线圈做天线，NXP NTAG芯片，手机一扫就能读写。从天线阻抗匹配到FR-4介电特性，一张卡片把NFC物理链路完整跑通了。"
   },
   {
-    "id": "stm32-button-pwm-controller",
+    "id": "button-pwm",
+    "legacyId": "stm32-button-pwm-controller",
     "title": "一个按键控制LED亮度：短按调光，长按呼吸",
     "date": "2025-08-14",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "PWM", "按键", "状态机"],
@@ -72,7 +80,8 @@
     "excerpt": "用一枚按键同时完成五档调光和呼吸模式切换。通过10ms状态机区分短按与长按，去掉长时间阻塞和goto，让TIM3 PWM与按键交互始终保持响应。"
   },
   {
-    "id": "stm32-lcd-multimedia-player",
+    "id": "lcd-player",
+    "legacyId": "stm32-lcd-multimedia-player",
     "title": "在STM32上播放彩色动画和声音：LCD、DMA与PCM联动",
     "date": "2025-08-09",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "LCD", "DMA", "PCM", "FSMC"],
@@ -81,7 +90,8 @@
     "excerpt": "在240×320 LCD上绘图、显示RGB565图片，并用DMA播放RGB332动画和8kHz PCM音频。从Flash容量计算到中断节拍优化，把显示、搬运和声音组合成一个完整项目。"
   },
   {
-    "id": "stm32-pwm-signal-analyzer",
+    "id": "pwm-analyzer",
+    "legacyId": "stm32-pwm-signal-analyzer",
     "title": "自己生成再自己测：STM32 PWM波形分析仪",
     "date": "2025-08-04",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "PWM", "输入捕获", "定时器"],
@@ -90,7 +100,8 @@
     "excerpt": "TIM3从PB5生成PWM，TIM5在PA0测回频率和占空比。结合测周法、500ms闸门测频和迟滞切换，处理输入捕获与计数器溢出同时发生的边界。"
   },
   {
-    "id": "stm32-pulse-width-meter",
+    "id": "pulse-meter",
+    "legacyId": "stm32-pulse-width-meter",
     "title": "用TIM5量出按键按了多久：1us分辨率输入捕获",
     "date": "2025-07-30",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "输入捕获", "TIM5", "定时器"],
@@ -99,7 +110,8 @@
     "excerpt": "用TIM5_CH1交替捕获按键的上升沿和下降沿，以1us分辨率测量高电平宽度。通过溢出次数与CCR组合时间戳，修复边沿撞上计数器回绕时的竞态。"
   },
   {
-    "id": "stm32-pwm-breathing-led",
+    "id": "breathing-led",
+    "legacyId": "stm32-pwm-breathing-led",
     "title": "不用Delay调亮度：TIM3 PWM做一个平滑呼吸灯",
     "date": "2025-07-25",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "PWM", "TIM3", "LED"],
@@ -108,7 +120,8 @@
     "excerpt": "把TIM3_CH2重映射到PB5，用1kHz PWM和1000级分辨率驱动板载LED。弄清低电平有效带来的极性关系，并用预装载寄存器做平滑呼吸效果。"
   },
   {
-    "id": "stm32-dac-loopback-calibrator",
+    "id": "adc-dac-calibration",
+    "legacyId": "stm32-dac-loopback-calibrator",
     "title": "从数字量到电压再采回来：STM32 ADC/DAC闭环校准",
     "date": "2025-07-22",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "ADC", "DAC", "串口"],
@@ -117,7 +130,8 @@
     "excerpt": "串口输入0-4095，DAC从PA4输出模拟电压，再由PA1的ADC回采。用整帧输入校验和16次均值采样观察设定值、测量值与真实硬件误差。"
   },
   {
-    "id": "stm32-adc-voltage-monitor",
+    "id": "adc-voltage",
+    "legacyId": "stm32-adc-voltage-monitor",
     "title": "把模拟电压变成串口数据：STM32 ADC采样与均值滤波",
     "date": "2025-07-17",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "ADC", "模拟信号", "串口"],
@@ -126,7 +140,8 @@
     "excerpt": "用ADC1采集PA1上的电位器电压，经过校准和十次均值滤波后每秒从串口输出。把ADC时钟、采样时间、参考电压与读数抖动逐项理清。"
   },
   {
-    "id": "voting-circuit",
+    "id": "voting-7",
+    "legacyId": "voting-circuit",
     "title": "基于 51 单片机的七人表决电路设计",
     "date": "2025-07-15",
     "tags": ["单片机", "51单片机", "EDA", "课程设计", "数字逻辑"],
@@ -135,7 +150,8 @@
     "excerpt": "7个拨动开关投票，2个数码管显示赞成/反对票，绿灯通过红灯否决。30行单片机代码替代了一堆逻辑门芯片，第一次直观感受「软件定义硬件」。"
   },
   {
-    "id": "stm32-uart-command-console",
+    "id": "uart-console",
+    "legacyId": "stm32-uart-command-console",
     "title": "给STM32做一个串口命令控制台：帧协议、状态机与LED控制",
     "date": "2025-07-14",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "USART", "串口", "状态机"],
@@ -144,7 +160,8 @@
     "excerpt": "为USART1设计@payload帧协议和中断接收状态机，用串口命令控制两盏LED并回报状态。修复8位接收索引绕回、缓冲区越界和不受限格式化输出问题。"
   },
   {
-    "id": "stm32-exti-event-controller",
+    "id": "exti-events",
+    "legacyId": "stm32-exti-event-controller",
     "title": "让按键不再轮询：STM32外部中断事件控制器",
     "date": "2025-07-09",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "EXTI", "中断", "按键"],
@@ -153,7 +170,8 @@
     "excerpt": "把PA0和PE2/PE3/PE4映射到四条EXTI线路，中断只投递按键事件，主循环统一消费。再用TIM2节拍推进闪烁任务，让输入和长动作互不阻塞。"
   },
   {
-    "id": "stm32-timer-scheduler",
+    "id": "timer-scheduler",
+    "legacyId": "stm32-timer-scheduler",
     "title": "告别Delay：用TIM2中断做一个1秒任务调度器",
     "date": "2025-07-04",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "TIM2", "定时器", "中断"],
@@ -162,7 +180,8 @@
     "excerpt": "用TIM2把72MHz时钟分出准确的1秒节拍，中断里只设置volatile标志，主循环负责翻转LED。从清除首次伪更新到理解单标志方案的边界。"
   },
   {
-    "id": "stm32-button-led-controller",
+    "id": "button-led",
+    "legacyId": "stm32-button-led-controller",
     "title": "四个按键控制两盏LED：从消抖到事件触发",
     "date": "2025-07-01",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "GPIO", "按键", "状态机"],
@@ -171,7 +190,8 @@
     "excerpt": "用四个板载按键控制两盏LED，分别处理上拉与下拉输入、软件消抖和按下边沿。把五次闪烁拆成10ms状态机，避免主循环被阻塞五秒。"
   },
   {
-    "id": "stm32-dual-led-runner",
+    "id": "dual-led",
+    "legacyId": "stm32-dual-led-runner",
     "title": "用STM32F103ZET6做双LED流水灯：封装第一个GPIO驱动",
     "date": "2025-06-28",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "GPIO", "LED", "驱动"],
@@ -180,7 +200,8 @@
     "excerpt": "把PB5和PE5的GPIO操作封装为独立LED驱动，让主函数只保留流水灯动作。顺手理清低电平有效、输出速度和初始化默认状态这些基础细节。"
   },
   {
-    "id": "stm32-gpio-board-check",
+    "id": "gpio-check",
+    "legacyId": "stm32-gpio-board-check",
     "title": "从GPIO配置到第一盏灯：STM32F103ZET6板卡自检",
     "date": "2025-06-25",
     "tags": ["STM32", "STM32F103ZET6", "嵌入式", "GPIO", "SysTick", "入门"],
@@ -189,7 +210,8 @@
     "excerpt": "从最小启动流程开始，验证72MHz系统时钟、GPIO时钟、板载LED和下载链路。两盏灯交替闪烁背后，是第一次完整走通STM32从复位到输出的路径。"
   },
   {
-    "id": "eda-traffic-light",
+    "id": "traffic-light",
+    "legacyId": "eda-traffic-light",
     "title": "基于 51 单片机的智能红绿灯系统设计",
     "date": "2025-06-20",
     "tags": ["单片机", "51单片机", "嵌入式", "课程设计", "超声波", "传感器"],
@@ -198,7 +220,8 @@
     "excerpt": "基于51单片机的十字路口红绿灯，加了超声波测距检测支干道车辆，实现智能调度。主干道绿灯45s，支干道有车才切换，无车时主干道常绿。状态机 + 传感器融合的第一次完整实践。"
   },
   {
-    "id": "mcu-calendar",
+    "id": "calendar",
+    "legacyId": "mcu-calendar",
     "title": "基于 51 单片机的电子万年历设计",
     "date": "2025-02-20",
     "tags": ["单片机", "51单片机", "嵌入式", "课程设计", "LCD1602", "DS1302"],
@@ -207,7 +230,8 @@
     "excerpt": "用STC89C52 + LCD1602 + DS1302做了一个电子日历时钟。从Proteus仿真到实物焊接调试，第一次完整走通硬件开发链路。"
   },
   {
-    "id": "electronic-circuit-course-design",
+    "id": "0-99-counter",
+    "legacyId": "electronic-circuit-course-design",
     "title": "从 100 个焊点到 0-99 计数器：电子线路课设的两块万用板",
     "date": "2024-06-15",
     "tags": ["课程设计", "模拟电路", "数字电路", "焊接", "LM358P", "NE555", "CD40110"],
@@ -216,7 +240,8 @@
     "excerpt": "大二下电子线路课设：LM358P双运放两级放大驱动LED，NE555+CD40110实现0-99计数器。从Multisim仿真到万用板焊接，从100个焊点练手到20秒锁存复位时序，模拟与数字的第一次完整实践。"
   },
   {
-    "id": "quiet-sitting",
+    "id": "sitting",
+    "legacyId": "quiet-sitting",
     "title": "静坐",
     "date": "2024-06-11",
     "tags": ["随笔", "生活感悟", "大学", "读书"],
@@ -233,7 +258,8 @@
     "excerpt": "Keil 是一个常用的嵌入式开发环境，而 VS Code 是一个功能强大的代码编辑器。将它们配合使用，可以提高开发效率。"
   },
   {
-    "id": "school-life",
+    "id": "campus-life",
+    "legacyId": "school-life",
     "title": "开学季：不仅是代码，还有生活",
     "date": "2024-03-01",
     "tags": ["校园", "生活感悟", "随想"],
@@ -241,7 +267,8 @@
     "excerpt": "新的学期开始了，除了钻研技术，这里也会记录我的校园日常和成长感悟。今天天气不错，阳光正好。"
   },
   {
-    "id": "first-rain",
+    "id": "rain",
+    "legacyId": "first-rain",
     "title": "第一场雨",
     "date": "2024-01-15",
     "tags": ["随笔", "生活感悟", "大学", "青春"],
@@ -249,7 +276,8 @@
     "excerpt": "走在清晨六点的路上，看着路边绿了黄了落了的叶子。雨节少有，而每一场雨都弥漫着清新的味道。从少年到撑伞的成年人，回头看看，时空是一个圆圈。"
   },
   {
-    "id": "willow-catkin",
+    "id": "willow",
+    "legacyId": "willow-catkin",
     "title": "柳絮",
     "date": "2024-01-15",
     "tags": ["随笔", "生活感悟", "大学", "青春", "离别"],
@@ -257,7 +285,8 @@
     "excerpt": "高考如一阵风，冲破了少年心中的阴霾。我们如同柳絮般于四处飘扬，不熟悉的地方，熟悉的你们。原来，站在原地的我，也在阔步的向前走着。"
   },
   {
-    "id": "mid-autumn",
+    "id": "moon-home",
+    "legacyId": "mid-autumn",
     "title": "月是故乡明",
     "date": "2024-01-15",
     "tags": ["随笔", "生活感悟", "大学", "中秋", "思乡"],
@@ -265,7 +294,8 @@
     "excerpt": "第一次离开家乡，离开父母。以前团圆的概念总是很模糊。一个人走在路上，看着天空中的一轮圆月，闻着身边淡淡的桂花香。风吹到小溪流间，一艘小船缓缓驶着，月光照耀下它渐渐远离，远离的，是我的心愁。"
   },
   {
-    "id": "hello-world",
+    "id": "hello",
+    "legacyId": "hello-world",
     "title": "我的第一篇博客：分享生活，记录学习",
     "date": "2024-01-15",
     "tags": ["随笔", "生活感悟", "大学"],
