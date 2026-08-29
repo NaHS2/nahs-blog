@@ -1,7 +1,8 @@
 [
   {
-    "id": "track-light",
+    "id": "vision-light",
     "legacyId": "iot-competition-hardware-architecture",
+    "legacyIds": ["track-light"],
     "title": "一条滑轨，三个灯位：智能美学追光系统的整体架构设计",
     "date": "2026-08-24",
     "tags": ["物联网", "智能照明", "视觉感知", "ESP8266", "ESP32-CAM", "Arduino Nano", "AI识别", "硬件"],

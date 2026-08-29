@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章详情 - 硫氢化钠</title>
+    <link rel="stylesheet" href="/styles.css?v=20260809-formula">
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+    <p style="padding: 2rem; text-align: center; color: #64748b;">文章加载中...</p>
+    <script>
+        // GitHub Pages没有服务端重写：使用自定义404承载 /文章ID/ 目录式URL。
+        fetch('/post.html')
+            .then(response => {
+                if (!response.ok) throw new Error('文章页面模板加载失败');
+                return response.text();
+            })
+            .then(template => {
+                const documentTemplate = new DOMParser().parseFromString(template, 'text/html');
+                document.body.className = documentTemplate.body.className;
+                document.body.innerHTML = documentTemplate.body.innerHTML;
+
+                document.body.querySelectorAll('script:not([src])').forEach(script => {
+                    const executableScript = document.createElement('script');
+                    executableScript.textContent = script.textContent;
+                    script.replaceWith(executableScript);
+                });
+            })
+            .catch(error => {
+                document.body.innerHTML = '<p style="padding: 2rem; text-align: center; color: #ef4444;">文章加载失败，请返回首页重试。</p>';
+                console.error(error);
+            });
+    </script>
+</body>
+</html>

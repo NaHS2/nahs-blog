@@ -267,7 +267,7 @@
                 var params = new URLSearchParams(window.location.search);
                 var initialPost = params.get('post');
                 if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(initialPost || '')) {
-                    window.location.replace('post.html?id=' + initialPost);
+                    window.location.replace(initialPost + '/');
                 }
             })
             .catch(function(error) {
@@ -303,7 +303,7 @@
             // 辅助函数：创建卡片 DOM 元素
             const createPostCard = (post, delayIndex) => {
                 const a = document.createElement('a');
-                a.href = `post.html?id=${post.id}`;
+                a.href = `${post.id}/`;
                 a.className = 'post-item';
                 a.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${delayIndex * 0.1}s`;
                 
@@ -467,7 +467,7 @@
             });
         });
 
-        // ====== 文章卡片点击：缓存列表 DOM，导航到 post.html ======
+        // ====== 文章卡片点击：缓存列表 DOM，导航到文章目录URL ======
         document.getElementById('post-list').addEventListener('click', (e) => {
             const jumpLink = e.target.closest('.collection-jump-link');
             if (jumpLink) {

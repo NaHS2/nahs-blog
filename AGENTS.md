@@ -46,6 +46,7 @@ git commit --allow-empty -m "chore: re-trigger pages deployment" && git push
 ```
 index.html      — 首页：文章列表 + 侧边栏 + 日月轮转进度条（时间驱动）
 post.html       — 文章详情页：Markdown 渲染 + 日月轮转进度条（滚动驱动）
+404.html        — GitHub Pages 自定义 404 路由：承载 `/文章id/` 目录式文章 URL
 downloads.html  — 资料下载页：静态资源外链集合
 styles.css      — 全局样式（~1340 行）：布局、天空系统、markdown 排版、响应式
 posts.json      — 文章元数据数组，新文章加在最前面（日期倒序）
@@ -59,14 +60,15 @@ drafts/         — 草稿目录（gitignored），不参与部署
 
 ## 技术架构
 
-### 三页面体系
+### 页面体系
 
-站点只有三个 HTML 页面，各自独立加载所需的 JS 逻辑（无共享 JS 文件，全部内联 `<script>`）：
+站点由首页、文章模板、GitHub Pages 路由兜底页和下载页组成，各自独立加载所需的 JS 逻辑（无构建工具）：
 
 | 页面 | 主要职责 |
 |------|----------|
 | `index.html` | 从 `posts.json` 拉取元数据 → 渲染文章卡片列表 → 按分类（全部/实践心得/生活随笔）过滤 → 技术分类下按 collection 分组展示合集 |
-| `post.html` | 从 URL `?id=xxx` 获取文章 id → `fetch(posts/{id}.md)` → `marked.js` 渲染 Markdown → `highlight.js` 高亮代码块 |
+| `post.html` | 文章详情页模板，同时兼容旧的 `post.html?id=xxx` 入口并跳转到目录式 URL |
+| `404.html` | GitHub Pages 的文章路由入口，从当前路径 `/文章id/` 识别文章并复用 `post.html` 模板 |
 | `downloads.html` | 纯静态资料下载页，无 JS 逻辑 |
 
 ### 日月轮转天空系统（核心交互）
