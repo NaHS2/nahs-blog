@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <defs>
+    <style>
+      .title { font: 700 30px "Microsoft YaHei", "Segoe UI", sans-serif; fill: #202124; }
+      .label { font: 600 21px "Microsoft YaHei", "Segoe UI", sans-serif; fill: #202124; }
+      .desc { font: 400 17px "Microsoft YaHei", "Segoe UI", sans-serif; fill: #657080; }
+      .tag { font: 600 15px "Microsoft YaHei", "Segoe UI", sans-serif; }
+      .line { stroke: #8a94a3; stroke-width: 3; fill: none; }
+      .card { fill: #fff; stroke: #dfe3e8; stroke-width: 2; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8a94a3"/>
+    </marker>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbfcfd"/>
+      <stop offset="1" stop-color="#f3f7f4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="760" rx="28" fill="url(#bg)"/>
+  <text x="60" y="64" class="title">实时配额同步：本地优先，OAuth回退</text>
+
+  <rect x="80" y="108" width="270" height="112" rx="18" class="card"/>
+  <text x="110" y="154" class="label">触发刷新</text>
+  <text x="110" y="188" class="desc">启动 / 30秒 / 点击 / 聚焦</text>
+
+  <rect x="455" y="108" width="290" height="112" rx="18" class="card"/>
+  <text x="485" y="154" class="label">发现本地语言服务器</text>
+  <text x="485" y="188" class="desc">进程、CSRF令牌、监听端口</text>
+
+  <rect x="850" y="108" width="270" height="112" rx="18" fill="#eef5eb" stroke="#cadbc5" stroke-width="2"/>
+  <text x="880" y="154" class="label">请求本地配额接口</text>
+  <text x="880" y="188" class="desc">RetrieveUserQuotaSummary</text>
+
+  <path d="M350 164 H445" class="line" marker-end="url(#arrow)"/>
+  <path d="M745 164 H840" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="850" y="302" width="270" height="112" rx="18" class="card"/>
+  <text x="880" y="348" class="label">解析四组额度</text>
+  <text x="880" y="382" class="desc">周额度、5h、重置时间</text>
+  <path d="M985 220 V292" class="line" marker-end="url(#arrow)"/>
+  <rect x="1018" y="238" width="72" height="28" rx="14" fill="#e7f2e3"/>
+  <text x="1034" y="258" class="tag" fill="#58864c">成功</text>
+
+  <rect x="455" y="302" width="290" height="112" rx="18" fill="#fff8e8" stroke="#ead9ab" stroke-width="2"/>
+  <text x="485" y="348" class="label">远程OAuth回退</text>
+  <text x="485" y="382" class="desc">daily端点 → prod端点</text>
+  <path d="M850 196 C800 246 800 358 755 358" class="line" marker-end="url(#arrow)"/>
+  <rect x="770" y="269" width="72" height="28" rx="14" fill="#fff1ce"/>
+  <text x="783" y="289" class="tag" fill="#a47714">失败</text>
+
+  <rect x="80" y="302" width="270" height="112" rx="18" fill="#fff0ee" stroke="#e7c4bf" stroke-width="2"/>
+  <text x="110" y="348" class="label">401：授权已失效</text>
+  <text x="110" y="382" class="desc">提示重新连接Google账户</text>
+  <path d="M455 358 H360" class="line" marker-end="url(#arrow)"/>
+  <rect x="374" y="322" width="72" height="28" rx="14" fill="#fde1dd"/>
+  <text x="387" y="342" class="tag" fill="#a94e42">401</text>
+
+  <rect x="455" y="508" width="290" height="112" rx="18" fill="#eef3fa" stroke="#ccd8e8" stroke-width="2"/>
+  <text x="485" y="554" class="label">统一UsageData</text>
+  <text x="485" y="588" class="desc">realtime / cached / fallback</text>
+  <path d="M850 382 C800 432 800 564 755 564" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="850" y="508" width="270" height="112" rx="18" class="card"/>
+  <text x="880" y="554" class="label">更新两个界面</text>
+  <text x="880" y="588" class="desc">状态栏 + 侧边栏Webview</text>
+  <path d="M745 564 H840" class="line" marker-end="url(#arrow)"/>
+
+  <rect x="80" y="508" width="270" height="112" rx="18" class="card"/>
+  <text x="110" y="554" class="label">保留最近有效结果</text>
+  <text x="110" y="588" class="desc">失败时不伪装成实时数据</text>
+  <path d="M455 586 H360" class="line" marker-end="url(#arrow)"/>
+
+  <text x="60" y="700" class="desc">本地服务可用时不依赖过期OAuth Token；本地关闭后才进入远程授权链路。</text>
+</svg>

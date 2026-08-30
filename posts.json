@@ -21,6 +21,15 @@
     "excerpt": "从老款小牛 G0 的硬件控制，到 ESP32-S3、M100MG-B1 4G/定位、Python 云端网关、Android App 和 Web 管理后台，完整拆解一套车辆物联网系统的需求、分层、协议、状态机、地图、OTA 与安全设计。"
   },
   {
+    "id": "antigravity-usage-monitor",
+    "title": "给Antigravity做一个实时用量监控插件：从本地缓存到官方配额接口",
+    "date": "2026-08-05",
+    "tags": ["Antigravity", "VS Code", "TypeScript", "插件开发", "OAuth", "开源"],
+    "collection": "独立项目",
+    "readTime": "大约 12 分钟",
+    "excerpt": "为了在编辑器里直接查看Gemini、Claude和GPT的周额度与五小时额度，我用TypeScript写了一个Antigravity扩展，并把数据源从停滞的本地缓存一路改到语言服务器实时接口与OAuth回退。"
+  },
+  {
     "id": "dcdc-power",
     "legacyId": "multi-dcdc-power-board",
     "title": "多路DCDC电源板：一块系统电源板的设计思路",
