@@ -11,6 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body class="post-page">
     <!-- 顶部进度条：日月轮转 + 行舟 -->
@@ -71,6 +72,25 @@
             <div id="content" class="markdown-body">
                 <p style="color: var(--gray-400);">文章解析中...</p>
             </div>
+
+            <section class="article-share" id="article-share" aria-labelledby="article-share-title" hidden>
+                <div class="article-share-copy">
+                    <span class="article-share-kicker">分享文章</span>
+                    <h2 id="article-share-title">扫码继续阅读</h2>
+                    <p>用手机扫描，或保存二维码分享给朋友。</p>
+                    <div class="article-share-actions">
+                        <button type="button" class="article-share-btn article-share-btn-primary" id="save-article-qr">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            保存二维码
+                        </button>
+                        <button type="button" class="article-share-btn" id="copy-article-link">复制链接</button>
+                    </div>
+                    <p class="article-share-status" id="article-share-status" aria-live="polite"></p>
+                </div>
+                <div class="article-qr-frame">
+                    <canvas id="article-qr-canvas" width="1200" height="1200" aria-label="当前文章二维码"></canvas>
+                </div>
+            </section>
             
             <footer class="footer">
                 <p>&copy; 2026 硫氢化钠. Crafted with focus.</p>
@@ -151,6 +171,8 @@
                         ${tagsHtml}
                     `;
 
+                    initArticleShare(currentPost);
+
                     return fetch(`/posts/${currentPost.id}.md`);
                 })
                 .then(response => {
@@ -177,6 +199,150 @@
             
         } else {
             document.getElementById('content').innerHTML = '<p>未提供有效的文章 ID</p>';
+        }
+
+        // ---- 文章分享二维码：固定使用正式域名，避免本地预览地址被编码进去 ----
+        function initArticleShare(currentPost) {
+            const shareCard = document.getElementById('article-share');
+            const canvas = document.getElementById('article-qr-canvas');
+            const saveButton = document.getElementById('save-article-qr');
+            const copyButton = document.getElementById('copy-article-link');
+            const status = document.getElementById('article-share-status');
+            const shareUrl = new URL(`/${currentPost.id}/`, 'https://nahsit.com').href;
+
+            copyButton.addEventListener('click', async () => {
+                try {
+                    await copyText(shareUrl);
+                    setShareStatus('链接已复制');
+                } catch (error) {
+                    setShareStatus('复制失败，请从地址栏复制');
+                    console.error('Copy article link failed:', error);
+                }
+            });
+
+            if (typeof QRCode === 'undefined') {
+                saveButton.hidden = true;
+                document.querySelector('.article-qr-frame').hidden = true;
+                shareCard.hidden = false;
+                setShareStatus('二维码加载失败，仍可复制文章链接');
+                return;
+            }
+
+            const qrHost = document.createElement('div');
+            qrHost.className = 'article-qr-source';
+            document.body.appendChild(qrHost);
+
+            new QRCode(qrHost, {
+                text: shareUrl,
+                width: 1024,
+                height: 1024,
+                colorDark: '#0f172a',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            const sourceCanvas = qrHost.querySelector('canvas');
+            if (!sourceCanvas) {
+                qrHost.remove();
+                saveButton.hidden = true;
+                document.querySelector('.article-qr-frame').hidden = true;
+                shareCard.hidden = false;
+                setShareStatus('二维码生成失败，仍可复制文章链接');
+                return;
+            }
+
+            const context = canvas.getContext('2d');
+            const margin = 88;
+            context.fillStyle = '#ffffff';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.imageSmoothingEnabled = false;
+            context.drawImage(sourceCanvas, margin, margin, canvas.width - margin * 2, canvas.height - margin * 2);
+            qrHost.remove();
+
+            drawSiteLogo(context, canvas).finally(() => {
+                shareCard.hidden = false;
+            });
+
+            saveButton.addEventListener('click', () => {
+                canvas.toBlob(blob => {
+                    if (!blob) {
+                        setShareStatus('保存失败，请长按二维码保存');
+                        return;
+                    }
+                    const link = document.createElement('a');
+                    const objectUrl = URL.createObjectURL(blob);
+                    link.href = objectUrl;
+                    link.download = `${currentPost.id}-qrcode.png`;
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+                    setShareStatus('二维码已保存');
+                }, 'image/png');
+            });
+
+            function setShareStatus(message) {
+                status.textContent = message;
+                clearTimeout(setShareStatus.timer);
+                setShareStatus.timer = setTimeout(() => {
+                    status.textContent = '';
+                }, 2600);
+            }
+        }
+
+        async function copyText(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text);
+            }
+            const input = document.createElement('textarea');
+            input.value = text;
+            input.setAttribute('readonly', '');
+            input.style.position = 'fixed';
+            input.style.opacity = '0';
+            document.body.appendChild(input);
+            input.select();
+            const copied = document.execCommand('copy');
+            input.remove();
+            if (!copied) throw new Error('Copy command was rejected');
+        }
+
+        function drawSiteLogo(context, canvas) {
+            const logoSize = 184;
+            const tileSize = 224;
+            const tileX = (canvas.width - tileSize) / 2;
+            const tileY = (canvas.height - tileSize) / 2;
+
+            context.imageSmoothingEnabled = true;
+            context.fillStyle = '#ffffff';
+            roundedRect(context, tileX, tileY, tileSize, tileSize, 38);
+            context.fill();
+            context.strokeStyle = '#e2e8f0';
+            context.lineWidth = 4;
+            context.stroke();
+
+            const logoSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20 L22 20"/><path d="M5 20 C5 20, 8 23, 14 23 C17 23, 19 20, 19 20"/><path d="M9 20 L9 9"/><path d="M9 9 L17 15 L9 17"/><path d="M10 2 A 4 4 0 0 0 5 5 A 5 5 0 0 1 10 2"/></svg>`;
+            const logo = new Image();
+
+            return new Promise(resolve => {
+                logo.onload = () => {
+                    const logoX = (canvas.width - logoSize) / 2;
+                    const logoY = (canvas.height - logoSize) / 2;
+                    context.drawImage(logo, logoX, logoY, logoSize, logoSize);
+                    resolve();
+                };
+                logo.onerror = resolve;
+                logo.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(logoSvg)}`;
+            });
+        }
+
+        function roundedRect(context, x, y, width, height, radius) {
+            context.beginPath();
+            context.moveTo(x + radius, y);
+            context.arcTo(x + width, y, x + width, y + height, radius);
+            context.arcTo(x + width, y + height, x, y + height, radius);
+            context.arcTo(x, y + height, x, y, radius);
+            context.arcTo(x, y, x + width, y, radius);
+            context.closePath();
         }
 
         // ---- 图片排版：连续两张图片自动横排 ----

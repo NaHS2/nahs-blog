@@ -588,6 +588,156 @@ body {
   font-size: 0.8rem;
 }
 
+/* ====== 文章二维码分享 ====== */
+.article-share {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  margin-top: 56px;
+  padding: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid var(--page-accent, var(--gray-200));
+  border-radius: 18px;
+  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.045);
+}
+
+.article-share[hidden],
+.article-qr-frame[hidden] {
+  display: none;
+}
+
+.article-share-copy {
+  width: 100%;
+  text-align: center;
+}
+
+.article-share-kicker {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--gray-400);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.article-share h2 {
+  margin: 0;
+  color: var(--gray-900);
+  font-size: 1.18rem;
+  line-height: 1.4;
+}
+
+.article-share-copy > p:not(.article-share-status) {
+  margin: 8px 0 0;
+  color: var(--gray-500);
+  font-size: 0.85rem;
+}
+
+.article-share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.article-share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 8px 16px;
+  color: var(--gray-700);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1;
+  background: #ffffff;
+  border: 1px solid var(--gray-200);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.article-share-btn:hover {
+  border-color: var(--gray-300);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
+}
+
+.article-share-btn:active {
+  transform: scale(0.94);
+}
+
+.article-share-btn-primary {
+  color: #ffffff;
+  background: var(--gray-900);
+  border-color: var(--gray-900);
+}
+
+.article-share-btn-primary:hover {
+  border-color: var(--gray-800);
+  background: var(--gray-800);
+}
+
+.article-share-status {
+  min-height: 1.4em;
+  margin: 10px 0 0;
+  color: var(--gray-500);
+  font-size: 0.76rem;
+}
+
+.article-qr-frame {
+  width: 176px;
+  padding: 10px;
+  flex: 0 0 auto;
+  line-height: 0;
+  background: #ffffff;
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+}
+
+.article-qr-frame canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 7px;
+}
+
+.article-qr-source {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 1024px;
+  height: 1024px;
+  pointer-events: none;
+}
+
+body.pure-reading .article-share {
+  background: #ffffff;
+  border-color: var(--gray-200);
+  box-shadow: none;
+}
+
+@media (min-width: 640px) {
+  .article-share {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 26px 30px;
+  }
+
+  .article-share-copy {
+    max-width: 420px;
+    text-align: left;
+  }
+
+  .article-share-actions {
+    justify-content: flex-start;
+  }
+}
+
 /* ====== 有顶部进度条的页面 ====== */
 .app-wrapper.has-header {
   padding-top: 64px;
