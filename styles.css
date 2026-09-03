@@ -665,7 +665,7 @@ body {
   position: relative;
   width: min(100%, 350px);
   max-height: calc(100vh - 40px);
-  padding: 28px 24px 22px;
+  padding: 44px 24px 20px;
   overflow-y: auto;
   color: var(--gray-900);
   text-align: center;
@@ -706,28 +706,6 @@ body {
 
 .article-share-close:active {
   transform: scale(0.88);
-}
-
-.article-share-kicker {
-  display: block;
-  margin-bottom: 5px;
-  color: var(--gray-400);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-}
-
-.article-share-dialog h2 {
-  margin: 0;
-  color: var(--gray-900);
-  font-size: 1.16rem;
-  line-height: 1.4;
-}
-
-.article-share-description {
-  margin: 7px 0 18px;
-  color: var(--gray-500);
-  font-size: 0.8rem;
 }
 
 .article-qr-frame {
@@ -821,7 +799,7 @@ body.pure-reading .article-share-dialog {
 
 @media (max-width: 420px) {
   .article-share-dialog {
-    padding: 26px 18px 20px;
+    padding: 44px 18px 18px;
   }
 
   .article-share-actions {
