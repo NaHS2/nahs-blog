@@ -588,71 +588,182 @@ body {
   font-size: 0.8rem;
 }
 
-/* ====== 文章二维码分享 ====== */
-.article-share {
+/* ====== 文章分享按钮与二维码弹层 ====== */
+.article-header-meta-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 22px;
-  margin-top: 56px;
-  padding: 24px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid var(--page-accent, var(--gray-200));
-  border-radius: 18px;
-  box-shadow: 0 10px 32px rgba(15, 23, 42, 0.045);
+  align-items: flex-start;
+  gap: 14px;
 }
 
-.article-share[hidden],
+.article-header-meta-row .post-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+.article-share-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 30px;
+  padding: 5px 10px;
+  flex: 0 0 auto;
+  color: var(--gray-500);
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 500;
+  line-height: 1;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--page-accent, var(--gray-200));
+  border-radius: 15px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.article-share-trigger[hidden],
+.article-share-modal[hidden],
 .article-qr-frame[hidden] {
   display: none;
 }
 
-.article-share-copy {
-  width: 100%;
+.article-share-trigger:hover {
+  color: var(--gray-900);
+  background: #ffffff;
+  border-color: var(--gray-300);
+}
+
+.article-share-trigger:active {
+  transform: scale(0.92);
+}
+
+.article-share-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1600;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.article-share-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.article-share-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.38);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.article-share-dialog {
+  position: relative;
+  width: min(100%, 350px);
+  max-height: calc(100vh - 40px);
+  padding: 28px 24px 22px;
+  overflow-y: auto;
+  color: var(--gray-900);
   text-align: center;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.2);
+  transform: translateY(10px) scale(0.98);
+  transition: transform 0.18s ease;
+}
+
+.article-share-modal.open .article-share-dialog {
+  transform: translateY(0) scale(1);
+}
+
+.article-share-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--gray-400);
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.article-share-close:hover {
+  color: var(--gray-900);
+  background: var(--gray-100);
+}
+
+.article-share-close:active {
+  transform: scale(0.88);
 }
 
 .article-share-kicker {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   color: var(--gray-400);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.14em;
 }
 
-.article-share h2 {
+.article-share-dialog h2 {
   margin: 0;
   color: var(--gray-900);
-  font-size: 1.18rem;
+  font-size: 1.16rem;
   line-height: 1.4;
 }
 
-.article-share-copy > p:not(.article-share-status) {
-  margin: 8px 0 0;
+.article-share-description {
+  margin: 7px 0 18px;
   color: var(--gray-500);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+}
+
+.article-qr-frame {
+  width: 190px;
+  margin: 0 auto;
+  padding: 10px;
+  line-height: 0;
+  background: #ffffff;
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+}
+
+.article-qr-frame canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 7px;
 }
 
 .article-share-actions {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin-top: 18px;
+  margin-top: 20px;
 }
 
 .article-share-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 6px;
   min-height: 38px;
-  padding: 8px 16px;
+  padding: 8px 15px;
   color: var(--gray-700);
   font-family: inherit;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 500;
   line-height: 1;
   background: #ffffff;
@@ -678,32 +789,15 @@ body {
 }
 
 .article-share-btn-primary:hover {
-  border-color: var(--gray-800);
   background: var(--gray-800);
+  border-color: var(--gray-800);
 }
 
 .article-share-status {
   min-height: 1.4em;
   margin: 10px 0 0;
   color: var(--gray-500);
-  font-size: 0.76rem;
-}
-
-.article-qr-frame {
-  width: 176px;
-  padding: 10px;
-  flex: 0 0 auto;
-  line-height: 0;
-  background: #ffffff;
-  border: 1px solid var(--gray-200);
-  border-radius: 16px;
-}
-
-.article-qr-frame canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 7px;
+  font-size: 0.74rem;
 }
 
 .article-qr-source {
@@ -715,26 +809,28 @@ body {
   pointer-events: none;
 }
 
-body.pure-reading .article-share {
-  background: #ffffff;
-  border-color: var(--gray-200);
-  box-shadow: none;
+body.share-modal-open {
+  overflow: hidden;
 }
 
-@media (min-width: 640px) {
-  .article-share {
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 26px 30px;
-  }
+body.pure-reading .article-share-trigger,
+body.pure-reading .article-share-dialog {
+  background: #ffffff;
+  border-color: var(--gray-200);
+}
 
-  .article-share-copy {
-    max-width: 420px;
-    text-align: left;
+@media (max-width: 420px) {
+  .article-share-dialog {
+    padding: 26px 18px 20px;
   }
 
   .article-share-actions {
-    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .article-share-btn {
+    padding-right: 12px;
+    padding-left: 12px;
   }
 }
 

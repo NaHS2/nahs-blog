@@ -64,8 +64,14 @@
             
             <article class="article-header">
                 <h1 id="post-title">加载中...</h1>
-                <div class="post-meta" id="post-meta">
-                    <!-- 动态插入 -->
+                <div class="article-header-meta-row">
+                    <div class="post-meta" id="post-meta">
+                        <!-- 动态插入 -->
+                    </div>
+                    <button type="button" class="article-share-trigger" id="article-share-trigger" aria-haspopup="dialog" aria-controls="article-share-modal" aria-expanded="false" hidden>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        <span>分享</span>
+                    </button>
                 </div>
             </article>
 
@@ -73,29 +79,33 @@
                 <p style="color: var(--gray-400);">文章解析中...</p>
             </div>
 
-            <section class="article-share" id="article-share" aria-labelledby="article-share-title" hidden>
-                <div class="article-share-copy">
-                    <span class="article-share-kicker">分享文章</span>
-                    <h2 id="article-share-title">扫码继续阅读</h2>
-                    <p>用手机扫描，或保存二维码分享给朋友。</p>
-                    <div class="article-share-actions">
-                        <button type="button" class="article-share-btn article-share-btn-primary" id="save-article-qr">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            保存二维码
-                        </button>
-                        <button type="button" class="article-share-btn" id="copy-article-link">复制链接</button>
-                    </div>
-                    <p class="article-share-status" id="article-share-status" aria-live="polite"></p>
-                </div>
-                <div class="article-qr-frame">
-                    <canvas id="article-qr-canvas" width="1200" height="1200" aria-label="当前文章二维码"></canvas>
-                </div>
-            </section>
-            
             <footer class="footer">
                 <p>&copy; 2026 硫氢化钠. Crafted with focus.</p>
             </footer>
         </main>
+    </div>
+
+    <div class="article-share-modal" id="article-share-modal" hidden>
+        <div class="article-share-backdrop" data-share-close></div>
+        <section class="article-share-dialog" role="dialog" aria-modal="true" aria-labelledby="article-share-title" tabindex="-1">
+            <button type="button" class="article-share-close" aria-label="关闭分享窗口" data-share-close>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <span class="article-share-kicker">分享文章</span>
+            <h2 id="article-share-title">扫码打开这篇文章</h2>
+            <p class="article-share-description">二维码使用文章的固定网址，可以放心保存。</p>
+            <div class="article-qr-frame">
+                <canvas id="article-qr-canvas" width="1200" height="1200" aria-label="当前文章二维码"></canvas>
+            </div>
+            <div class="article-share-actions">
+                <button type="button" class="article-share-btn article-share-btn-primary" id="copy-article-link">复制链接</button>
+                <button type="button" class="article-share-btn" id="save-article-qr">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    保存二维码
+                </button>
+            </div>
+            <p class="article-share-status" id="article-share-status" aria-live="polite"></p>
+        </section>
     </div>
 
     <script>
@@ -203,12 +213,25 @@
 
         // ---- 文章分享二维码：固定使用正式域名，避免本地预览地址被编码进去 ----
         function initArticleShare(currentPost) {
-            const shareCard = document.getElementById('article-share');
+            const trigger = document.getElementById('article-share-trigger');
+            const modal = document.getElementById('article-share-modal');
+            const dialog = modal.querySelector('.article-share-dialog');
             const canvas = document.getElementById('article-qr-canvas');
             const saveButton = document.getElementById('save-article-qr');
             const copyButton = document.getElementById('copy-article-link');
             const status = document.getElementById('article-share-status');
+            const description = modal.querySelector('.article-share-description');
             const shareUrl = new URL(`/${currentPost.id}/`, 'https://nahsit.com').href;
+            let closeTimer;
+
+            trigger.hidden = false;
+            trigger.addEventListener('click', openShareModal);
+            modal.querySelectorAll('[data-share-close]').forEach(element => {
+                element.addEventListener('click', closeShareModal);
+            });
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape' && !modal.hidden) closeShareModal();
+            });
 
             copyButton.addEventListener('click', async () => {
                 try {
@@ -222,9 +245,8 @@
 
             if (typeof QRCode === 'undefined') {
                 saveButton.hidden = true;
-                document.querySelector('.article-qr-frame').hidden = true;
-                shareCard.hidden = false;
-                setShareStatus('二维码加载失败，仍可复制文章链接');
+                modal.querySelector('.article-qr-frame').hidden = true;
+                description.textContent = '二维码暂时无法加载，你仍然可以复制文章链接。';
                 return;
             }
 
@@ -245,9 +267,8 @@
             if (!sourceCanvas) {
                 qrHost.remove();
                 saveButton.hidden = true;
-                document.querySelector('.article-qr-frame').hidden = true;
-                shareCard.hidden = false;
-                setShareStatus('二维码生成失败，仍可复制文章链接');
+                modal.querySelector('.article-qr-frame').hidden = true;
+                description.textContent = '二维码暂时无法生成，你仍然可以复制文章链接。';
                 return;
             }
 
@@ -259,9 +280,7 @@
             context.drawImage(sourceCanvas, margin, margin, canvas.width - margin * 2, canvas.height - margin * 2);
             qrHost.remove();
 
-            drawSiteLogo(context, canvas).finally(() => {
-                shareCard.hidden = false;
-            });
+            drawSiteLogo(context, canvas);
 
             saveButton.addEventListener('click', () => {
                 canvas.toBlob(blob => {
@@ -287,6 +306,27 @@
                 setShareStatus.timer = setTimeout(() => {
                     status.textContent = '';
                 }, 2600);
+            }
+
+            function openShareModal() {
+                clearTimeout(closeTimer);
+                modal.hidden = false;
+                document.body.classList.add('share-modal-open');
+                trigger.setAttribute('aria-expanded', 'true');
+                requestAnimationFrame(() => {
+                    modal.classList.add('open');
+                    dialog.focus({ preventScroll: true });
+                });
+            }
+
+            function closeShareModal() {
+                modal.classList.remove('open');
+                document.body.classList.remove('share-modal-open');
+                trigger.setAttribute('aria-expanded', 'false');
+                closeTimer = setTimeout(() => {
+                    modal.hidden = true;
+                    trigger.focus({ preventScroll: true });
+                }, 180);
             }
         }
 
