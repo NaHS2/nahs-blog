@@ -6,7 +6,10 @@
     <title>硫氢化钠 - 行舟梦将至，采撷繁星愁</title>
     <!-- 网页标签图标 (Favicon) - 极简几何帆船与明显的弯月 (高空悬挂) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 20 L22 20'/%3E%3Cpath d='M5 20 C5 20, 8 23, 14 23 C17 23, 19 20, 19 20'/%3E%3Cpath d='M9 20 L9 9'/%3E%3Cpath d='M9 9 L17 15 L9 17'/%3E%3Cpath d='M10 2 A 4 4 0 0 0 5 5 A 5 5 0 0 1 10 2'/%3E%3C/svg%3E">
-    <link rel="stylesheet" href="styles.css?v=20260809-formula">
+    <link rel="stylesheet" href="styles.css?v=20260905-performance">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 </head>
 <body class="home-page">
     <!-- 顶部进度条：日月轮转（时间驱动） -->
@@ -88,36 +91,48 @@
     </div>
 
     <script>
+// Storage can be unavailable or full; caching must never block navigation or reading.
+function optionalStorage(name) {
+    return {
+        getItem(key) { try { return window[name].getItem(key); } catch { return null; } },
+        setItem(key, value) { try { window[name].setItem(key, value); } catch {} },
+        removeItem(key) { try { window[name].removeItem(key); } catch {} }
+    };
+}
+const sessionStore = optionalStorage('sessionStorage');
         // iOS Safari 必须注册 touchstart 才能让 :active 伪类生效
         document.addEventListener('touchstart', function() {}, { passive: true });
 
         var allPosts = [];
         var _restoredFromBfcache = false;
-        var _pendingListRestore = sessionStorage.getItem('pendingListRestore') === '1';
-        var _cachedList = sessionStorage.getItem('cachedList');
-        var _cachedScrollY = sessionStorage.getItem('cachedScrollY');
-        var _cachedTab = sessionStorage.getItem('cachedTab');
-        var _cachedSignature = sessionStorage.getItem('cachedPostsSignature');
+        var _pendingListRestore = sessionStore.getItem('pendingListRestore') === '1';
+        var _cachedList = sessionStore.getItem('cachedList');
+        var _cachedScrollY = sessionStore.getItem('cachedScrollY');
+        var _cachedTab = sessionStore.getItem('cachedTab');
+        var _cachedSignature = sessionStore.getItem('cachedPostsSignature');
         var _listCacheVersion = 'collection-jump-nav-v1';
-        var _cachedListVersion = sessionStorage.getItem('cachedListVersion');
-        var _currentCategory = _cachedTab || sessionStorage.getItem('indexTab') || 'all';
+        var _cachedListVersion = sessionStore.getItem('cachedListVersion');
+        var _currentCategory = _cachedTab || sessionStore.getItem('indexTab') || 'all';
         if (!['all', 'tech', 'life'].includes(_currentCategory)) _currentCategory = 'all';
 
         // DOM 结构升级后不复用旧缓存，避免返回时缺少合集导航。
         if (_cachedList && _cachedListVersion !== _listCacheVersion) {
             _cachedList = null;
             _pendingListRestore = false;
-            sessionStorage.removeItem('pendingListRestore');
-            sessionStorage.removeItem('cachedList');
+            sessionStore.removeItem('pendingListRestore');
+            sessionStore.removeItem('cachedList');
         }
 
+        var _listRestored = false;
         function restoreListFromCache() {
             if (!_pendingListRestore || !_cachedList) return false;
+            if (_listRestored) return true;
 
             var listEl = document.getElementById('post-list');
             if (!listEl) return false;
 
             listEl.innerHTML = _cachedList;
+            _listRestored = true;
             listEl.querySelectorAll('.post-item, .collection-header').forEach(function(el) {
                 el.style.animation = 'none';
                 el.style.opacity = '1';
@@ -147,7 +162,7 @@
                 }
             }
 
-            restoreListFromCache();
+            if (!e.persisted) restoreListFromCache();
         });
 
         function getPostsSignature(category) {
@@ -182,6 +197,7 @@
 
         function setActiveCollection(targetId, centerLink) {
             var hasChanged = _activeCollectionId !== targetId;
+            if (!hasChanged) return;
             _activeCollectionId = targetId;
             var links = document.querySelectorAll('.collection-jump-link');
             links.forEach(function(link) {
@@ -222,7 +238,7 @@
 
         function setupCollectionNavigation() {
             _collectionHeaders = Array.from(document.querySelectorAll('.collection-header[data-collection-section]'));
-            if (_collectionHeaders.length === 0) _activeCollectionId = '';
+            _activeCollectionId = '';
             requestCollectionNavigationUpdate();
         }
 
@@ -239,8 +255,8 @@
         }
 
         // ====== 后台拉最新数据，静默更新（用户无感知） ======
-        fetch('posts.json?t=' + new Date().getTime())
-            .then(function(response) { return response.json(); })
+        fetch('/posts.json', { cache: 'no-cache' })
+            .then(function(response) { if (!response.ok) throw new Error('文章索引加载失败'); return response.json(); })
             .then(function(posts) {
                 allPosts = posts;
                 allPosts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
@@ -250,14 +266,13 @@
                 setActiveTab(_currentCategory);
                 if (_cachedList) {
                     var latestSignature = getPostsSignature(_currentCategory);
-                    if (_cachedSignature && _cachedSignature !== latestSignature) {
+                    if (!_pendingListRestore || _cachedSignature !== latestSignature) {
                         renderPosts(_currentCategory);
                     }
-                    restoreListFromCache();
-                    sessionStorage.removeItem('pendingListRestore');
-                    sessionStorage.removeItem('cachedList');
-                    sessionStorage.removeItem('cachedScrollY');
-                    sessionStorage.removeItem('cachedPostsSignature');
+                    sessionStore.removeItem('pendingListRestore');
+                    sessionStore.removeItem('cachedList');
+                    sessionStore.removeItem('cachedScrollY');
+                    sessionStore.removeItem('cachedPostsSignature');
                     _pendingListRestore = false;
                     _cachedList = null;
                 } else {
@@ -305,7 +320,7 @@
                 const a = document.createElement('a');
                 a.href = `${post.id}/`;
                 a.className = 'post-item';
-                a.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${delayIndex * 0.1}s`;
+                a.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${Math.min(delayIndex, 3) * 0.1}s`;
                 
                 let tagsHtml = '';
                 if (post.tags && post.tags.length > 0) {
@@ -410,7 +425,7 @@
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                         合集：${collName}
                     `;
-                    header.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${delayIndex * 0.1}s`;
+                    header.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${Math.min(delayIndex, 3) * 0.1}s`;
                     collectionSections.appendChild(header);
                     delayIndex++;
 
@@ -432,7 +447,7 @@
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                         单篇教程
                     `;
-                    header.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${delayIndex * 0.1}s`;
+                    header.style.animation = `fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${Math.min(delayIndex, 3) * 0.1}s`;
                     collectionSections.appendChild(header);
                     delayIndex++;
                     
@@ -457,11 +472,12 @@
         // 标签切换逻辑
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                if (!allPosts.length) return;
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
                 const category = e.target.getAttribute('data-category');
-                sessionStorage.setItem('indexTab', category);
-                sessionStorage.setItem('cachedTab', category);
+                sessionStore.setItem('indexTab', category);
+                sessionStore.setItem('cachedTab', category);
                 _currentCategory = category;
                 renderPosts(category);
             });
@@ -482,23 +498,23 @@
             }
 
             const card = e.target.closest('.post-item');
-            if (!card) return;
+            if (!card || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
             e.preventDefault();
 
             // 缓存整个列表的 DOM 和滚动位置——返回时瞬间恢复，不等 fetch
-            sessionStorage.setItem('cachedList', document.getElementById('post-list').innerHTML);
-            sessionStorage.setItem('cachedScrollY', window.scrollY);
-            sessionStorage.setItem('cachedTab', document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all');
-            sessionStorage.setItem('cachedPostsSignature', getPostsSignature(document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all'));
-            sessionStorage.setItem('cachedListVersion', _listCacheVersion);
-            sessionStorage.setItem('pendingListRestore', '1');
+            sessionStore.setItem('cachedList', document.getElementById('post-list').innerHTML);
+            sessionStore.setItem('cachedScrollY', window.scrollY);
+            sessionStore.setItem('cachedTab', document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all');
+            sessionStore.setItem('cachedPostsSignature', getPostsSignature(document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all'));
+            sessionStore.setItem('cachedListVersion', _listCacheVersion);
+            sessionStore.setItem('pendingListRestore', '1');
 
             window.location.href = card.href;
         });
 
         function saveListScrollState() {
-            sessionStorage.setItem('cachedScrollY', String(window.scrollY || 0));
-            sessionStorage.setItem('cachedTab', document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all');
+            sessionStore.setItem('cachedScrollY', String(window.scrollY || 0));
+            sessionStore.setItem('cachedTab', document.querySelector('.tab-btn.active')?.getAttribute('data-category') || 'all');
         }
 
         window.addEventListener('pagehide', saveListScrollState);
@@ -522,7 +538,9 @@
 
             function pad(n) { return n < 10 ? '0' + n : '' + n; }
 
+            let lastVisualKey = '';
             function updateClock() {
+                if (document.hidden) return;
                 const now = new Date();
                 const h = now.getHours() + now.getMinutes() / 60;
 
@@ -531,9 +549,12 @@
                     pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
 
                 // 拖拽期间不更新头像环色和日月点，避免冲突
-                if (window._boatDragging) return;
+                if (window._boatDragging) { lastVisualKey = ''; return; }
+                const visualKey = Math.floor(now.getTime() / 60000) + ':' + window.innerWidth;
+                if (lastVisualKey === visualKey) return;
+                lastVisualKey = visualKey;
 
-                // 头像环色+日月点(每秒更新，所有值硬编码防跳)
+                // 头像环色+日月点（按分钟或窗口尺寸更新）
                 const aw = document.getElementById('avatar');
                 const dot = document.getElementById('avatar-celestial');
                 const SIZE = window.innerWidth >= 768 ? 100 : 72;
@@ -591,6 +612,8 @@
 
             updateClock();
             setInterval(updateClock, 1000);
+            document.addEventListener('visibilitychange', updateClock);
+            window.addEventListener('resize', updateClock, { passive: true });
         })();
 
         // ==== 日月轮转进度条（时间驱动，非滚动） ==========================
@@ -705,7 +728,7 @@
 
             // 水花飞溅
             function splash(){
-                if(!header)return;
+                if(!header || document.hidden)return;
                 const bx=parseFloat(boat.style.left)||0;
                 const dot=document.createElement('div');
                 dot.className='water-splash';
@@ -841,7 +864,8 @@
             boat.getBoundingClientRect();
             boat.style.transition = '';
 
-            setInterval(() => { if (!dragging) update(); }, 60000);
+            setInterval(() => { if (!dragging && !document.hidden) update(); }, 60000);
+            document.addEventListener('visibilitychange', () => { if (!document.hidden && !dragging) update(); });
             setInterval(splash, 10000);
         })();
 
