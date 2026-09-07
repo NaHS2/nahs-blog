@@ -106,6 +106,9 @@ if (isValidPostId(postId)) {
             // 图片排版优化：连续图片横排展示
             wrapConsecutiveImages();
 
+            // 视频支持响应式播放与横屏全屏
+            initArticleVideos();
+
             // 初始化日月轮转 + 行舟滚动
             initScrollSky();
         })
@@ -319,6 +322,51 @@ function wrapConsecutiveImages() {
         p.replaceWith(row);
         next.remove();
     }
+}
+
+// ---- 文章视频：保留原生控件，并补充横屏全屏入口 ----
+function initArticleVideos() {
+    const videos = document.querySelectorAll('.article-video video');
+    if (!videos.length) return;
+
+    for (const video of videos) {
+        const actions = document.createElement('div');
+        actions.className = 'article-video-actions';
+
+        const fullscreenButton = document.createElement('button');
+        fullscreenButton.type = 'button';
+        fullscreenButton.className = 'article-video-fullscreen';
+        fullscreenButton.setAttribute('aria-label', '横屏全屏播放');
+        fullscreenButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 3 3 3 3 8"></polyline><line x1="3" y1="3" x2="9" y2="9"></line><polyline points="16 3 21 3 21 8"></polyline><line x1="21" y1="3" x2="15" y2="9"></line><polyline points="8 21 3 21 3 16"></polyline><line x1="3" y1="21" x2="9" y2="15"></line><polyline points="16 21 21 21 21 16"></polyline><line x1="21" y1="21" x2="15" y2="15"></line></svg><span>横屏全屏</span>';
+
+        fullscreenButton.addEventListener('click', async () => {
+            try {
+                if (typeof video.webkitEnterFullscreen === 'function') {
+                    video.webkitEnterFullscreen();
+                    return;
+                }
+                if (video.requestFullscreen) {
+                    await video.requestFullscreen();
+                } else if (video.closest('.article-video')?.requestFullscreen) {
+                    await video.closest('.article-video').requestFullscreen();
+                }
+                if (screen.orientation?.lock) {
+                    await screen.orientation.lock('landscape').catch(() => {});
+                }
+            } catch (error) {
+                console.warn('Fullscreen video is unavailable:', error);
+            }
+        });
+
+        actions.appendChild(fullscreenButton);
+        video.insertAdjacentElement('afterend', actions);
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement && screen.orientation?.unlock) {
+            screen.orientation.unlock();
+        }
+    });
 }
 
 // ---- 日月轮转 + 孤舟进度条 ----

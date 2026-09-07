@@ -54,7 +54,7 @@
     ]).then(results => {
         const failed = results.find(result => result.status === 'rejected');
         if (failed) throw failed.reason;
-        return window.loadArticleScript('/post.js?v=20260905');
+        return window.loadArticleScript('/post.js?v=20260907-video');
     })
         .catch(error => {
             const content = document.getElementById('content') || document.body;

@@ -1189,6 +1189,70 @@ body.pure-reading .water-splash {
   transform: scale(1.01);
 }
 
+/* 文章功能演示视频 */
+.article-video {
+  overflow: hidden;
+  margin: 2em 0;
+  border: 1px solid var(--gray-200);
+  border-radius: 14px;
+  background: #070b12;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.12);
+}
+
+.markdown-body .article-video video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #070b12;
+  object-fit: contain;
+}
+
+.article-video-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 10px;
+  background: #111827;
+}
+
+.article-video-fullscreen {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.article-video-fullscreen:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.article-video figcaption {
+  padding: 12px 15px 14px;
+  background: #f8fafc;
+  color: var(--gray-600);
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.article-video figcaption strong {
+  color: var(--gray-800);
+}
+
+.markdown-body .article-video video:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
 /* 图片横排容器 — JS 自动包裹连续两张图片 */
 .image-row {
   display: flex;
